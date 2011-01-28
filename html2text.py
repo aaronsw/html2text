@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-__version__ = "2.39"
+__version__ = "2.40"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
 __copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
 __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes", "Kevin Jay North"]
@@ -10,9 +10,8 @@ __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes", "Kevin Jay North"]
 
 if not hasattr(__builtins__, 'True'): True, False = 1, 0
 import re, sys, urllib, htmlentitydefs, codecs, StringIO, types
-import sgmllib
 import urlparse
-sgmllib.charref = re.compile('&#([xX]?[0-9a-fA-F]+)[^0-9a-fA-F]')
+import HTMLParser
 
 try: from textwrap import wrap
 except: pass
@@ -83,14 +82,6 @@ def replaceEntities(s):
 r_unescape = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
 def unescape(s):
     return r_unescape.sub(replaceEntities, s)
-    
-def fixattrs(attrs):
-    # Fix bug in sgmllib.py
-    if not attrs: return attrs
-    newattrs = []
-    for attr in attrs:
-        newattrs.append((attr[0], unescape(attr[1])))
-    return newattrs
 
 ### End Entity Nonsense ###
 
@@ -133,9 +124,9 @@ def hn(tag):
             if n in range(1, 10): return n
         except ValueError: return 0
 
-class _html2text(sgmllib.SGMLParser):
+class _html2text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl=''):
-        sgmllib.SGMLParser.__init__(self)
+        HTMLParser.HTMLParser.__init__(self)
         
         if out is None: self.out = self.outtextf
         else: self.out = out
@@ -162,7 +153,7 @@ class _html2text(sgmllib.SGMLParser):
         self.outtext += s
     
     def close(self):
-        sgmllib.SGMLParser.close(self)
+        HTMLParser.HTMLParser.close(self)
         
         self.pbr()
         self.o('', 0, 'end')
@@ -175,10 +166,10 @@ class _html2text(sgmllib.SGMLParser):
     def handle_entityref(self, c):
         self.o(entityref(c))
             
-    def unknown_starttag(self, tag, attrs):
+    def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
     
-    def unknown_endtag(self, tag):
+    def handle_endtag(self, tag):
         self.handle_tag(tag, None, 0)
         
     def previousIndex(self, attrs):
@@ -205,7 +196,7 @@ class _html2text(sgmllib.SGMLParser):
             if match: return i
 
     def handle_tag(self, tag, attrs, start):
-        attrs = fixattrs(attrs)
+        #attrs = fixattrs(attrs)
     
         if hn(tag):
             self.p()
