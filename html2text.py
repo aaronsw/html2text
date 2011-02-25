@@ -479,7 +479,11 @@ if __name__ == "__main__":
         else:
             data = open(file_, 'rb').read()
             if encoding is None:
-                encoding = 'utf-8'
+                try:
+                    from chardet import detect
+                except ImportError:
+                    detect = lambda x: {'encoding': 'utf-8'}
+                encoding = detect(data)['encoding']
             data = data.decode(encoding)
     else:
         data = sys.stdin.read()
