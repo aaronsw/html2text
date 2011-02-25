@@ -433,7 +433,12 @@ class _html2text(HTMLParser.HTMLParser):
     
     def unknown_decl(self, data): pass
 
-def wrapwrite(text): sys.stdout.write(text)
+def wrapwrite(text):
+    text = text.encode('utf-8')
+    try: #Python3
+        sys.stdout.buffer.write(text)
+    except AttributeError:
+        sys.stdout.write(text)
 
 def html2text_file(html, out=wrapwrite, baseurl=''):
     h = _html2text(out, baseurl)
