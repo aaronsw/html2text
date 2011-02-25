@@ -30,7 +30,7 @@ try: #Python3
     import urllib.request as urllib
 except:
     import urllib
-import re, sys, codecs, types
+import optparse, re, sys, codecs, types
 
 try: from textwrap import wrap
 except: pass
@@ -446,10 +446,20 @@ def html2text(html, baseurl=''):
 
 if __name__ == "__main__":
     baseurl = ''
-    if sys.argv[1:]:
-        arg = sys.argv[1]
-        if arg.startswith('http://') or arg.startswith('https://'):
-            baseurl = arg
+
+    p = optparse.OptionParser('%prog [file [encoding]|url]')
+    args = p.parse_args()[1]
+    if len(args) > 0:
+        file_ = args[0]
+        url = file_.startswith('http://') or file_.startswith('https://')
+        if url and len(args) > 1:
+            p.error('Encoding not accepted for URLs, determinded by headers')
+        if len(args) > 2:
+            p.error('Too many arguments')
+
+    if len(args) > 0:
+        if url:
+            baseurl = file_
             j = urllib.urlopen(baseurl)
             try:
                 from feedparser import _getCharacterEncoding as enc
@@ -462,12 +472,12 @@ if __name__ == "__main__":
 
         else:
             encoding = 'utf8'
-            if len(sys.argv) > 2:
-                encoding = sys.argv[2]
+            if len(args) > 1:
+                encoding = args[1]
             try: #Python3
-                data = open(arg, 'r', encoding=encoding).read()
+                data = open(file_, 'r', encoding=encoding).read()
             except TypeError:
-                data = open(arg, 'r').read().decode(encoding)
+                data = open(file_, 'r').read().decode(encoding)
     else:
         data = sys.stdin.read()
     wrapwrite(html2text(data, baseurl))
