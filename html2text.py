@@ -452,37 +452,35 @@ def html2text(html, baseurl=''):
 if __name__ == "__main__":
     baseurl = ''
 
-    p = optparse.OptionParser('%prog [file [encoding]|url]')
+    p = optparse.OptionParser('%prog [(filename|url) [encoding]]')
     args = p.parse_args()[1]
     if len(args) > 0:
         file_ = args[0]
-        url = file_.startswith('http://') or file_.startswith('https://')
-        if url and len(args) > 1:
-            p.error('Encoding not accepted for URLs, determinded by headers')
+        encoding = None
+        if len(args) == 2:
+            encoding = args[1]
         if len(args) > 2:
             p.error('Too many arguments')
 
-    if len(args) > 0:
-        if url:
+        if file_.startswith('http://') or file_.startswith('https://'):
             baseurl = file_
             j = urllib.urlopen(baseurl)
-            try:
-                from feedparser import _getCharacterEncoding as enc
-            except ImportError:
-                   enc = lambda x, y: ('utf-8', 1)
             text = j.read()
-            encoding = enc(j.headers, text)[0]
-            if encoding == 'us-ascii': encoding = 'utf-8'
+            if encoding is None:
+                try:
+                    from feedparser import _getCharacterEncoding as enc
+                except ImportError:
+                    enc = lambda x, y: ('utf-8', 1)
+                encoding = enc(j.headers, text)[0]
+                if encoding == 'us-ascii':
+                    encoding = 'utf-8'
             data = text.decode(encoding)
 
         else:
-            encoding = 'utf8'
-            if len(args) > 1:
-                encoding = args[1]
-            try: #Python3
-                data = open(file_, 'r', encoding=encoding).read()
-            except TypeError:
-                data = open(file_, 'r').read().decode(encoding)
+            data = open(file_, 'rb').read()
+            if encoding is None:
+                encoding = 'utf-8'
+            data = data.decode(encoding)
     else:
         data = sys.stdin.read()
     wrapwrite(html2text(data, baseurl))
