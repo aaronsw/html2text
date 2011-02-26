@@ -452,7 +452,8 @@ def html2text(html, baseurl=''):
 if __name__ == "__main__":
     baseurl = ''
 
-    p = optparse.OptionParser('%prog [(filename|url) [encoding]]')
+    p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
+                              version='%prog ' + __version__)
     args = p.parse_args()[1]
     if len(args) > 0:
         file_ = args[0]
