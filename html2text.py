@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-__version__ = "3.01"
+__version__ = "3.02"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
 __copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
 __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes", "Kevin Jay North"]
