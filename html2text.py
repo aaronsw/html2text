@@ -48,8 +48,8 @@ BODY_WIDTH = 78
 # won't be visible in the plain text file anyway.
 SKIP_INTERNAL_LINKS = False
 
-IGNORE_ANCHORS = True
-IGNORE_IMAGES = True
+IGNORE_ANCHORS = False
+IGNORE_IMAGES = False
 
 ### Entity Nonsense ###
 
