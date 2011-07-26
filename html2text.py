@@ -48,6 +48,9 @@ BODY_WIDTH = 78
 # won't be visible in the plain text file anyway.
 SKIP_INTERNAL_LINKS = False
 
+IGNORE_ANCHORS = True
+IGNORE_IMAGES = True
+
 ### Entity Nonsense ###
 
 def name2cp(k):
@@ -274,7 +277,7 @@ class _html2text(HTMLParser.HTMLParser):
                     self.abbr_title = None
                 self.abbr_data = ''
         
-        if tag == "a":
+        if tag == "a" and not IGNORE_ANCHORS:
             if start:
                 attrsD = {}
                 for (x, y) in attrs: attrsD[x] = y
@@ -298,7 +301,7 @@ class _html2text(HTMLParser.HTMLParser):
                             self.a.append(a)
                         self.o("][" + str(a['count']) + "]")
         
-        if tag == "img" and start:
+        if tag == "img" and start and not IGNORE_IMAGES:
             attrsD = {}
             for (x, y) in attrs: attrsD[x] = y
             attrs = attrsD
