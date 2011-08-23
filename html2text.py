@@ -46,7 +46,10 @@ BODY_WIDTH = 78
 
 # Don't show internal links (href="#local-anchor") -- corresponding link targets
 # won't be visible in the plain text file anyway.
-SKIP_INTERNAL_LINKS = False
+SKIP_INTERNAL_LINKS = True
+
+# Use inline, rather than reference, formatting for images and links
+INLINE_LINKS = True
 
 ### Entity Nonsense ###
 
@@ -288,15 +291,18 @@ class _html2text(HTMLParser.HTMLParser):
                 if self.astack:
                     a = self.astack.pop()
                     if a:
-                        i = self.previousIndex(a)
-                        if i is not None:
-                            a = self.a[i]
+                        if INLINE_LINKS:
+                            self.o("](" + a['href'] + ")")
                         else:
-                            self.acount += 1
-                            a['count'] = self.acount
-                            a['outcount'] = self.outcount
-                            self.a.append(a)
-                        self.o("][" + str(a['count']) + "]")
+                            i = self.previousIndex(a)
+                            if i is not None:
+                                a = self.a[i]
+                            else:
+                                self.acount += 1
+                                a['count'] = self.acount
+                                a['outcount'] = self.outcount
+                                self.a.append(a)
+                            self.o("][" + str(a['count']) + "]")
         
         if tag == "img" and start:
             attrsD = {}
@@ -305,17 +311,22 @@ class _html2text(HTMLParser.HTMLParser):
             if has_key(attrs, 'src'):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
-                i = self.previousIndex(attrs)
-                if i is not None:
-                    attrs = self.a[i]
+                if INLINE_LINKS:
+                    self.o("![")
+                    self.o(alt)
+                    self.o("]("+ attrs['href'] +")")
                 else:
-                    self.acount += 1
-                    attrs['count'] = self.acount
-                    attrs['outcount'] = self.outcount
-                    self.a.append(attrs)
-                self.o("![")
-                self.o(alt)
-                self.o("]["+ str(attrs['count']) +"]")
+                    i = self.previousIndex(attrs)
+                    if i is not None:
+                        attrs = self.a[i]
+                    else:
+                        self.acount += 1
+                        attrs['count'] = self.acount
+                        attrs['outcount'] = self.outcount
+                        self.a.append(attrs)
+                    self.o("![")
+                    self.o(alt)
+                    self.o("]["+ str(attrs['count']) +"]")
         
         if tag == 'dl' and start: self.p()
         if tag == 'dt' and not start: self.pbr()
