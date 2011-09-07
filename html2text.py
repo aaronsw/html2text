@@ -153,6 +153,14 @@ def hn(tag):
             if n in range(1, 10): return n
         except ValueError: return 0
 
+def dumb_css_parser(data):
+    elements =  [x for x in data.split('}') if x.strip() != '']
+    elements = [x.split('{') for x in elements]
+    elements = {a.strip() : 
+        {x.strip() : y.strip() for x, y in [z.split(':') for z in b.split(';')]} 
+        for a, b in elements}
+    return elements
+
 class _html2text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl=''):
         HTMLParser.HTMLParser.__init__(self)
@@ -176,6 +184,7 @@ class _html2text(HTMLParser.HTMLParser):
         self.pre = 0
         self.startpre = 0
         self.lastWasNL = 0
+        self.style = 0
         self.abbr_title = None # current abbreviation definition
         self.abbr_data = None # last inner HTML (for abbr being defined)
         self.abbr_list = {} # stack of abbreviations to write later
@@ -246,6 +255,10 @@ class _html2text(HTMLParser.HTMLParser):
         if tag in ["head", "style", 'script']: 
             if start: self.quiet += 1
             else: self.quiet -= 1
+
+        if tag == "style":
+            if start: self.style += 1
+            else: self.style -= 1
 
         if tag in ["body"]:
             self.quiet = 0 # sites like 9rules.com never close <head>
@@ -440,6 +453,14 @@ class _html2text(HTMLParser.HTMLParser):
 
     def handle_data(self, data):
         if r'\/script>' in data: self.quiet -= 1
+
+        if self.style:
+          self.styleDef = dumb_css_parser(data)
+          print("styleDef")
+          print(self.styleDef)
+          for x in self.styleDef:
+            print(len(x))
+
         self.o(data, 1)
     
     def unknown_decl(self, data): pass
