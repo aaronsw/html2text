@@ -374,7 +374,7 @@ class _html2text(HTMLParser.HTMLParser):
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
                 self.o("  "*len(self.list)) #TODO: line up <ol><li>s > 9 correctly.
-                if li['name'] == "ul": self.o("* ")
+                if li['name'] == "ul": self.o("- ")
                 elif li['name'] == "ol":
                     li['num'] += 1
                     self.o(str(li['num'])+". ")
