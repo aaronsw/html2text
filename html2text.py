@@ -154,12 +154,21 @@ def hn(tag):
         except ValueError: return 0
 
 def dumb_css_parser(data):
-    elements =  [x for x in data.split('}') if x.strip() != '']
-    elements = [x.split('{') for x in elements]
+    # returns a hash of css selectors, each of which contains a hash of css attributes
+    elements =  [x.split('{') for x in data.split('}') if x.strip() != '']
     elements = {a.strip() : 
         {x.strip() : y.strip() for x, y in [z.split(':') for z in b.split(';')]} 
         for a, b in elements}
     return elements
+
+def google_list_style(attrs, style_def):
+    # finds out wether this is an ordered or unordered list
+    x = dict(attrs)
+    list_style = style_def['.' + x['class']]['list-style-type']
+    if list_style in ['disc', 'circle']:
+        return 'ul'
+    else:
+        return 'ol'
 
 class _html2text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl=''):
@@ -185,6 +194,7 @@ class _html2text(HTMLParser.HTMLParser):
         self.startpre = 0
         self.lastWasNL = 0
         self.style = 0
+        self.style_def = {}
         self.abbr_title = None # current abbreviation definition
         self.abbr_data = None # last inner HTML (for abbr being defined)
         self.abbr_list = {} # stack of abbreviations to write later
@@ -348,7 +358,11 @@ class _html2text(HTMLParser.HTMLParser):
         
         if tag in ["ol", "ul"]:
             if start:
-                self.list.append({'name':tag, 'num':0})
+                if options.google_doc:
+                    list_style = google_list_style(attrs, self.style_def)
+                else:
+                    list_style = tag
+                self.list.append({'name':list_style, 'num':0})
             else:
                 if self.list: self.list.pop()
             
@@ -455,11 +469,7 @@ class _html2text(HTMLParser.HTMLParser):
         if r'\/script>' in data: self.quiet -= 1
 
         if self.style:
-          self.styleDef = dumb_css_parser(data)
-          print("styleDef")
-          print(self.styleDef)
-          for x in self.styleDef:
-            print(len(x))
+          self.style_def = dumb_css_parser(data)
 
         self.o(data, 1)
     
@@ -484,9 +494,12 @@ def html2text(html, baseurl=''):
 if __name__ == "__main__":
     baseurl = ''
 
+    global options
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
-    args = p.parse_args()[1]
+    p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
+        default=False, help="convert an html-exported Google Document")
+    (options, args) = p.parse_args()
     if len(args) > 0:
         file_ = args[0]
         encoding = None
