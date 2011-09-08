@@ -170,6 +170,12 @@ def google_list_style(attrs, style_def):
     else:
         return 'ol'
 
+def google_nest_count(attrs, style_def):
+    # finds out wether this is an ordered or unordered list
+    x = dict(attrs)
+    nest_count = int(style_def['.' + x['class']]['margin-left'][:-2]) / 36
+    return nest_count
+
 class _html2text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl=''):
         HTMLParser.HTMLParser.__init__(self)
@@ -193,6 +199,7 @@ class _html2text(HTMLParser.HTMLParser):
         self.pre = 0
         self.startpre = 0
         self.lastWasNL = 0
+        self.lastWasList = False
         self.style = 0
         self.style_def = {}
         self.abbr_title = None # current abbreviation definition
@@ -357,7 +364,8 @@ class _html2text(HTMLParser.HTMLParser):
         if tag == 'dd' and not start: self.pbr()
         
         if tag in ["ol", "ul"]:
-            if not self.list:
+            # Google Docs create sub lists as top level lists
+            if (not self.list) and (not self.lastWasList):
                 self.p()
             if start:
                 if options.google_doc:
@@ -367,13 +375,20 @@ class _html2text(HTMLParser.HTMLParser):
                 self.list.append({'name':list_style, 'num':0})
             else:
                 if self.list: self.list.pop()
+            self.lastWasList = True
+        else:
+            self.lastWasList = False
         
         if tag == 'li':
             self.pbr()
             if start:
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
-                self.o("  "*len(self.list)) #TODO: line up <ol><li>s > 9 correctly.
+                if options.google_doc:
+                    nest_count = google_nest_count(attrs, self.style_def)
+                else:
+                    nest_count = len(self.list)
+                self.o("  " * nest_count) #TODO: line up <ol><li>s > 9 correctly.
                 if li['name'] == "ul": self.o(options.ul_item_mark + " ")
                 elif li['name'] == "ol":
                     li['num'] += 1
