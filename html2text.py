@@ -165,7 +165,7 @@ def google_list_style(attrs, style_def):
     # finds out wether this is an ordered or unordered list
     x = dict(attrs)
     list_style = style_def['.' + x['class']]['list-style-type']
-    if list_style in ['disc', 'circle']:
+    if list_style in ['disc', 'circle', 'square', 'none']:
         return 'ul'
     else:
         return 'ol'
@@ -181,7 +181,7 @@ class _html2text(HTMLParser.HTMLParser):
         except NameError: # Python3
             self.outtext = str()
         self.quiet = 0
-        self.p_p = 0
+        self.p_p = 0 # number of newline character to print before next output
         self.outcount = 0
         self.start = 1
         self.space = 0
@@ -357,6 +357,8 @@ class _html2text(HTMLParser.HTMLParser):
         if tag == 'dd' and not start: self.pbr()
         
         if tag in ["ol", "ul"]:
+            if not self.list:
+                self.p()
             if start:
                 if options.google_doc:
                     list_style = google_list_style(attrs, self.style_def)
@@ -365,12 +367,10 @@ class _html2text(HTMLParser.HTMLParser):
                 self.list.append({'name':list_style, 'num':0})
             else:
                 if self.list: self.list.pop()
-            
-            self.p()
         
         if tag == 'li':
+            self.pbr()
             if start:
-                self.pbr()
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
                 self.o("  "*len(self.list)) #TODO: line up <ol><li>s > 9 correctly.
@@ -379,8 +379,6 @@ class _html2text(HTMLParser.HTMLParser):
                     li['num'] += 1
                     self.o(str(li['num'])+". ")
                 self.start = 1
-            else:
-                self.pbr()
         
         if tag in ["table", "tr"] and start: self.p()
         if tag == 'td': self.pbr()
