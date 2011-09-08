@@ -374,7 +374,7 @@ class _html2text(HTMLParser.HTMLParser):
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
                 self.o("  "*len(self.list)) #TODO: line up <ol><li>s > 9 correctly.
-                if li['name'] == "ul": self.o("- ")
+                if li['name'] == "ul": self.o(options.ul_item_mark + " ")
                 elif li['name'] == "ol":
                     li['num'] += 1
                     self.o(str(li['num'])+". ")
@@ -499,7 +499,15 @@ if __name__ == "__main__":
                               version='%prog ' + __version__)
     p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
         default=False, help="convert an html-exported Google Document")
+    p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
+        default=False, help="use a dash rather than a star for unordered list items")
     (options, args) = p.parse_args()
+
+    if options.ul_style_dash:
+        options.ul_item_mark = '-'
+    else:
+        options.ul_item_mark = '*'
+
     if len(args) > 0:
         file_ = args[0]
         encoding = None
