@@ -171,10 +171,18 @@ def google_list_style(attrs, style_def):
         return 'ol'
 
 def google_nest_count(attrs, style_def):
-    # finds out wether this is an ordered or unordered list
+    # calculate the nesting count of google doc lists
     x = dict(attrs)
     nest_count = int(style_def['.' + x['class']]['margin-left'][:-2]) / 36
     return nest_count
+
+def list_numbering_start(attrs, style_def):
+    # extract numbering from list element attributes
+    x = dict(attrs)
+    if 'start' in x:
+        return int(x['start']) - 1
+    else:
+        return 0
 
 class _html2text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl=''):
@@ -372,7 +380,8 @@ class _html2text(HTMLParser.HTMLParser):
                     list_style = google_list_style(attrs, self.style_def)
                 else:
                     list_style = tag
-                self.list.append({'name':list_style, 'num':0})
+                numbering_start = list_numbering_start(attrs, self.style_def)
+                self.list.append({'name':list_style, 'num':numbering_start})
             else:
                 if self.list: self.list.pop()
             self.lastWasList = True
