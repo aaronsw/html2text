@@ -154,30 +154,42 @@ def hn(tag):
         except ValueError: return 0
 
 def dumb_css_parser(data):
-    # returns a hash of css selectors, each of which contains a hash of css attributes
+    """returns a hash of css selectors, each of which contains a hash of css attributes"""
+    # remove @import sentences
+    importIndex = data.find('@import')
+    while importIndex != -1:
+        data = data[0:importIndex] + data[data.find(';', importIndex) + 1:]
+        importIndex = data.find('@import')
+
+    # parse the css
     elements =  [x.split('{') for x in data.split('}') if x.strip() != '']
     elements = {a.strip() : 
         {x.strip() : y.strip() for x, y in [z.split(':') for z in b.split(';')]} 
         for a, b in elements}
+
     return elements
 
 def google_list_style(attrs, style_def):
-    # finds out wether this is an ordered or unordered list
+    """finds out whether this is an ordered or unordered list"""
     x = dict(attrs)
-    list_style = style_def['.' + x['class']]['list-style-type']
-    if list_style in ['disc', 'circle', 'square', 'none']:
-        return 'ul'
-    else:
-        return 'ol'
+    for css_class in x['class'].split():
+        list_style = style_def['.' + css_class]['list-style-type']
+        if list_style in ['disc', 'circle', 'square', 'none']:
+            return 'ul'
+    return 'ol'
 
 def google_nest_count(attrs, style_def):
-    # calculate the nesting count of google doc lists
+    """calculate the nesting count of google doc lists"""
     x = dict(attrs)
-    nest_count = int(style_def['.' + x['class']]['margin-left'][:-2]) / 36
+    nest_count = 0
+    for css_class in x['class'].split():
+        css_style = style_def['.' + css_class]
+        if 'margin-left' in css_style:
+            nest_count = int(css_style['margin-left'][:-2]) / 36
     return nest_count
 
 def list_numbering_start(attrs, style_def):
-    # extract numbering from list element attributes
+    """extract numbering from list element attributes"""
     x = dict(attrs)
     if 'start' in x:
         return int(x['start']) - 1
