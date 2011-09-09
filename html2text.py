@@ -218,6 +218,7 @@ class _html2text(HTMLParser.HTMLParser):
         self.blockquote = 0
         self.pre = 0
         self.startpre = 0
+        self.br_toggle = ''
         self.lastWasNL = 0
         self.lastWasList = False
         self.style = 0
@@ -280,7 +281,11 @@ class _html2text(HTMLParser.HTMLParser):
             self.p()
             if start: self.o(hn(tag)*"#" + ' ')
 
-        if tag in ['p', 'div']: self.p()
+        if tag in ['p', 'div']:
+            if options.google_doc:
+                self.soft_br()
+            else:
+                self.p()
         
         if tag == "br" and start: self.o("  \n")
 
@@ -431,6 +436,10 @@ class _html2text(HTMLParser.HTMLParser):
         if self.p_p == 0: self.p_p = 1
 
     def p(self): self.p_p = 2
+
+    def soft_br(self):
+        self.pbr()
+        self.br_toggle = '  '
     
     def o(self, data, puredata=0, force=0):
         if self.abbr_data is not None: self.abbr_data += data
@@ -467,8 +476,9 @@ class _html2text(HTMLParser.HTMLParser):
 
 
             if self.p_p:
-                self.out(('\n'+bq)*self.p_p)
+                self.out((self.br_toggle+'\n'+bq)*self.p_p)
                 self.space = 0
+                self.br_toggle = ''
                 
             if self.space:
                 if not self.lastWasNL: self.out(' ')
