@@ -535,13 +535,19 @@ if __name__ == "__main__":
         default=False, help="convert an html-exported Google Document")
     p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
         default=False, help="use a dash rather than a star for unordered list items")
+    p.add_option("-b", "--body-width", dest="body_width", action="store", type="int",
+        default=78, help="number of characters per output line, 0 for no wrap")
     (options, args) = p.parse_args()
 
+    # handle options
     if options.ul_style_dash:
         options.ul_item_mark = '-'
     else:
         options.ul_item_mark = '*'
 
+    BODY_WIDTH = options.body_width
+
+    # process input
     if len(args) > 0:
         file_ = args[0]
         encoding = None
