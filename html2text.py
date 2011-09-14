@@ -164,11 +164,11 @@ def dumb_css_parser(data):
         data = data[0:importIndex] + data[data.find(';', importIndex) + 1:]
         importIndex = data.find('@import')
 
-    # parse the css
+    # parse the css. reverted from dictionary compehension in order to support older pythons
     elements =  [x.split('{') for x in data.split('}') if x.strip() != '']
-    elements = {a.strip() : 
-        {x.strip() : y.strip() for x, y in [z.split(':') for z in b.split(';')]} 
-        for a, b in elements}
+    elements = dict([(a.strip(), 
+        dict([(x.strip(), y.strip()) for x, y in [z.split(':') for z in b.split(';')]]))
+        for a, b in elements])
 
     return elements
 
@@ -193,12 +193,25 @@ def google_has_height(attrs, style_def):
     """calculate the nesting count of google doc lists"""
     if not 'class' in attrs:
         return False
-    nest_count = 0
     for css_class in attrs['class'].split():
         css_style = style_def['.' + css_class]
         if 'height' in css_style:
             return True
     return False
+
+def google_text_emphasis(attrs, style_def):
+    """calculate the nesting count of google doc lists"""
+    emphasis = []
+    if 'class' in attrs:
+        for css_class in attrs['class'].split():
+            css_style = style_def['.' + css_class]
+            if 'text-decoration' in css_style:
+                emphasis.append(css_style['text-decoration'])
+            if 'font-style' in css_style:
+                emphasis.append(css_style['font-style'])
+            if 'font-weight' in css_style:
+                emphasis.append(css_style['font-weight'])
+    return emphasis
 
 def list_numbering_start(attrs, style_def):
     """extract numbering from list element attributes"""
@@ -234,6 +247,10 @@ class _html2text(HTMLParser.HTMLParser):
         self.lastWasList = False
         self.style = 0
         self.style_def = {}
+        self.tag_stack = []
+        self.emphasis = 0
+        self.drop_white_space = False
+        self.inheader = False
         self.abbr_title = None # current abbreviation definition
         self.abbr_data = None # last inner HTML (for abbr being defined)
         self.abbr_list = {} # stack of abbreviations to write later
@@ -293,6 +310,10 @@ class _html2text(HTMLParser.HTMLParser):
             attrs = dict(attrs)
     
         if hn(tag):
+            if start:
+                self.inheader = True
+            else:
+                self.inheader = False
             self.p()
             if start: self.o(hn(tag)*"#" + ' ')
 
@@ -333,6 +354,27 @@ class _html2text(HTMLParser.HTMLParser):
         
         if tag in ['em', 'i', 'u']: self.o("_")
         if tag in ['strong', 'b']: self.o("**")
+
+        if options.google_doc:
+            # handle Google's bold and italic
+            if start:
+                self.tag_stack.append((tag, attrs))
+            else:
+                dummy, attrs = self.tag_stack.pop()
+            if not self.inheader:
+                text_emphasis = google_text_emphasis(attrs, self.style_def)
+                if 'bold' in text_emphasis:
+                    self.o("**")
+                if 'italic' in text_emphasis:
+                    self.o("_")
+                if 'bold' in text_emphasis or 'italic' in text_emphasis:
+                    if start:
+                        self.emphasis += 1
+                        self.drop_white_space = True
+                    else:
+                        self.emphasis -= 1
+                        self.o(" ")
+
         if tag == "code" and not self.pre: self.o('`') #TODO: `` `this` ``
         if tag == "abbr":
             if start:
@@ -458,7 +500,16 @@ class _html2text(HTMLParser.HTMLParser):
                 if data and data[0] == ' ':
                     self.space = 1
                     data = data[1:]
+                    if self.emphasis:
+                        self.space = 0
             if not data and not force: return
+
+            if options.google_doc:
+                # prevent white space immediately after emphasis marks ('**' and '_')
+                if self.drop_white_space:
+                    data = data.lstrip()
+                    if data != '':
+                        self.drop_white_space = False
             
             if self.startpre:
                 #self.out(" :") #TODO: not output when already one there
@@ -481,7 +532,6 @@ class _html2text(HTMLParser.HTMLParser):
                 self.p_p = 0
                 self.out("\n")
                 self.space = 0
-
 
             if self.p_p:
                 self.out((self.br_toggle+'\n'+bq)*self.p_p)
