@@ -46,7 +46,13 @@ BODY_WIDTH = 78
 
 # Don't show internal links (href="#local-anchor") -- corresponding link targets
 # won't be visible in the plain text file anyway.
-SKIP_INTERNAL_LINKS = False
+SKIP_INTERNAL_LINKS = True
+
+# Use inline, rather than reference, formatting for images and links
+INLINE_LINKS = True
+
+# Number of pixels Google indents nested lists
+GOOGLE_LIST_INDENT = 36
 
 ### Entity Nonsense ###
 
@@ -150,6 +156,70 @@ def hn(tag):
             if n in range(1, 10): return n
         except ValueError: return 0
 
+def dumb_css_parser(data):
+    """returns a hash of css selectors, each of which contains a hash of css attributes"""
+    # remove @import sentences
+    importIndex = data.find('@import')
+    while importIndex != -1:
+        data = data[0:importIndex] + data[data.find(';', importIndex) + 1:]
+        importIndex = data.find('@import')
+
+    # parse the css. reverted from dictionary compehension in order to support older pythons
+    elements =  [x.split('{') for x in data.split('}') if x.strip() != '']
+    elements = dict([(a.strip(), 
+        dict([(x.strip(), y.strip()) for x, y in [z.split(':') for z in b.split(';')]]))
+        for a, b in elements])
+
+    return elements
+
+def google_list_style(attrs, style_def):
+    """finds out whether this is an ordered or unordered list"""
+    for css_class in attrs['class'].split():
+        list_style = style_def['.' + css_class]['list-style-type']
+        if list_style in ['disc', 'circle', 'square', 'none']:
+            return 'ul'
+    return 'ol'
+
+def google_nest_count(attrs, style_def):
+    """calculate the nesting count of google doc lists"""
+    nest_count = 0
+    for css_class in attrs['class'].split():
+        css_style = style_def['.' + css_class]
+        if 'margin-left' in css_style:
+            nest_count = int(css_style['margin-left'][:-2]) / GOOGLE_LIST_INDENT
+    return nest_count
+
+def google_has_height(attrs, style_def):
+    """calculate the nesting count of google doc lists"""
+    if not 'class' in attrs:
+        return False
+    for css_class in attrs['class'].split():
+        css_style = style_def['.' + css_class]
+        if 'height' in css_style:
+            return True
+    return False
+
+def google_text_emphasis(attrs, style_def):
+    """calculate the nesting count of google doc lists"""
+    emphasis = []
+    if 'class' in attrs:
+        for css_class in attrs['class'].split():
+            css_style = style_def['.' + css_class]
+            if 'text-decoration' in css_style:
+                emphasis.append(css_style['text-decoration'])
+            if 'font-style' in css_style:
+                emphasis.append(css_style['font-style'])
+            if 'font-weight' in css_style:
+                emphasis.append(css_style['font-weight'])
+    return emphasis
+
+def list_numbering_start(attrs, style_def):
+    """extract numbering from list element attributes"""
+    if 'start' in attrs:
+        return int(attrs['start']) - 1
+    else:
+        return 0
+
 class _html2text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl=''):
         HTMLParser.HTMLParser.__init__(self)
@@ -161,7 +231,7 @@ class _html2text(HTMLParser.HTMLParser):
         except NameError: # Python3
             self.outtext = str()
         self.quiet = 0
-        self.p_p = 0
+        self.p_p = 0 # number of newline character to print before next output
         self.outcount = 0
         self.start = 1
         self.space = 0
@@ -172,7 +242,15 @@ class _html2text(HTMLParser.HTMLParser):
         self.blockquote = 0
         self.pre = 0
         self.startpre = 0
+        self.br_toggle = ''
         self.lastWasNL = 0
+        self.lastWasList = False
+        self.style = 0
+        self.style_def = {}
+        self.tag_stack = []
+        self.emphasis = 0
+        self.drop_white_space = False
+        self.inheader = False
         self.abbr_title = None # current abbreviation definition
         self.abbr_data = None # last inner HTML (for abbr being defined)
         self.abbr_list = {} # stack of abbreviations to write later
@@ -226,12 +304,27 @@ class _html2text(HTMLParser.HTMLParser):
 
     def handle_tag(self, tag, attrs, start):
         #attrs = fixattrs(attrs)
+        if attrs is None:
+            attrs = {}
+        else:
+            attrs = dict(attrs)
     
         if hn(tag):
+            if start:
+                self.inheader = True
+            else:
+                self.inheader = False
             self.p()
             if start: self.o(hn(tag)*"#" + ' ')
 
-        if tag in ['p', 'div']: self.p()
+        if tag in ['p', 'div']:
+            if options.google_doc:
+                if google_has_height(attrs, self.style_def):
+                    self.p()
+                else:
+                    self.soft_br()
+            else:
+                self.p()
         
         if tag == "br" and start: self.o("  \n")
 
@@ -243,6 +336,10 @@ class _html2text(HTMLParser.HTMLParser):
         if tag in ["head", "style", 'script']: 
             if start: self.quiet += 1
             else: self.quiet -= 1
+
+        if tag == "style":
+            if start: self.style += 1
+            else: self.style -= 1
 
         if tag in ["body"]:
             self.quiet = 0 # sites like 9rules.com never close <head>
@@ -257,13 +354,30 @@ class _html2text(HTMLParser.HTMLParser):
         
         if tag in ['em', 'i', 'u']: self.o("_")
         if tag in ['strong', 'b']: self.o("**")
+
+        if options.google_doc:
+            # handle Google's bold and italic
+            if start:
+                self.tag_stack.append((tag, attrs))
+            else:
+                dummy, attrs = self.tag_stack.pop()
+            if not self.inheader:
+                text_emphasis = google_text_emphasis(attrs, self.style_def)
+                if 'bold' in text_emphasis:
+                    self.o("**")
+                if 'italic' in text_emphasis:
+                    self.o("_")
+                if 'bold' in text_emphasis or 'italic' in text_emphasis:
+                    if start:
+                        self.emphasis += 1
+                        self.drop_white_space = True
+                    else:
+                        self.emphasis -= 1
+                        self.o(" ")
+
         if tag == "code" and not self.pre: self.o('`') #TODO: `` `this` ``
         if tag == "abbr":
             if start:
-                attrsD = {}
-                for (x, y) in attrs: attrsD[x] = y
-                attrs = attrsD
-                
                 self.abbr_title = None
                 self.abbr_data = ''
                 if has_key(attrs, 'title'):
@@ -276,9 +390,6 @@ class _html2text(HTMLParser.HTMLParser):
         
         if tag == "a":
             if start:
-                attrsD = {}
-                for (x, y) in attrs: attrsD[x] = y
-                attrs = attrsD
                 if has_key(attrs, 'href') and not (SKIP_INTERNAL_LINKS and attrs['href'].startswith('#')): 
                     self.astack.append(attrs)
                     self.o("[")
@@ -288,34 +399,39 @@ class _html2text(HTMLParser.HTMLParser):
                 if self.astack:
                     a = self.astack.pop()
                     if a:
-                        i = self.previousIndex(a)
-                        if i is not None:
-                            a = self.a[i]
+                        if INLINE_LINKS:
+                            self.o("](" + a['href'] + ")")
                         else:
-                            self.acount += 1
-                            a['count'] = self.acount
-                            a['outcount'] = self.outcount
-                            self.a.append(a)
-                        self.o("][" + str(a['count']) + "]")
+                            i = self.previousIndex(a)
+                            if i is not None:
+                                a = self.a[i]
+                            else:
+                                self.acount += 1
+                                a['count'] = self.acount
+                                a['outcount'] = self.outcount
+                                self.a.append(a)
+                            self.o("][" + str(a['count']) + "]")
         
         if tag == "img" and start:
-            attrsD = {}
-            for (x, y) in attrs: attrsD[x] = y
-            attrs = attrsD
             if has_key(attrs, 'src'):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
-                i = self.previousIndex(attrs)
-                if i is not None:
-                    attrs = self.a[i]
+                if INLINE_LINKS:
+                    self.o("![")
+                    self.o(alt)
+                    self.o("]("+ attrs['href'] +")")
                 else:
-                    self.acount += 1
-                    attrs['count'] = self.acount
-                    attrs['outcount'] = self.outcount
-                    self.a.append(attrs)
-                self.o("![")
-                self.o(alt)
-                self.o("]["+ str(attrs['count']) +"]")
+                    i = self.previousIndex(attrs)
+                    if i is not None:
+                        attrs = self.a[i]
+                    else:
+                        self.acount += 1
+                        attrs['count'] = self.acount
+                        attrs['outcount'] = self.outcount
+                        self.a.append(attrs)
+                    self.o("![")
+                    self.o(alt)
+                    self.o("]["+ str(attrs['count']) +"]")
         
         if tag == 'dl' and start: self.p()
         if tag == 'dt' and not start: self.pbr()
@@ -323,26 +439,37 @@ class _html2text(HTMLParser.HTMLParser):
         if tag == 'dd' and not start: self.pbr()
         
         if tag in ["ol", "ul"]:
+            # Google Docs create sub lists as top level lists
+            if (not self.list) and (not self.lastWasList):
+                self.p()
             if start:
-                self.list.append({'name':tag, 'num':0})
+                if options.google_doc:
+                    list_style = google_list_style(attrs, self.style_def)
+                else:
+                    list_style = tag
+                numbering_start = list_numbering_start(attrs, self.style_def)
+                self.list.append({'name':list_style, 'num':numbering_start})
             else:
                 if self.list: self.list.pop()
-            
-            self.p()
+            self.lastWasList = True
+        else:
+            self.lastWasList = False
         
         if tag == 'li':
+            self.pbr()
             if start:
-                self.pbr()
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
-                self.o("  "*len(self.list)) #TODO: line up <ol><li>s > 9 correctly.
-                if li['name'] == "ul": self.o("* ")
+                if options.google_doc:
+                    nest_count = google_nest_count(attrs, self.style_def)
+                else:
+                    nest_count = len(self.list)
+                self.o("  " * nest_count) #TODO: line up <ol><li>s > 9 correctly.
+                if li['name'] == "ul": self.o(options.ul_item_mark + " ")
                 elif li['name'] == "ol":
                     li['num'] += 1
                     self.o(str(li['num'])+". ")
                 self.start = 1
-            else:
-                self.pbr()
         
         if tag in ["table", "tr"] and start: self.p()
         if tag == 'td': self.pbr()
@@ -359,6 +486,10 @@ class _html2text(HTMLParser.HTMLParser):
         if self.p_p == 0: self.p_p = 1
 
     def p(self): self.p_p = 2
+
+    def soft_br(self):
+        self.pbr()
+        self.br_toggle = '  '
     
     def o(self, data, puredata=0, force=0):
         if self.abbr_data is not None: self.abbr_data += data
@@ -369,7 +500,16 @@ class _html2text(HTMLParser.HTMLParser):
                 if data and data[0] == ' ':
                     self.space = 1
                     data = data[1:]
+                    if self.emphasis:
+                        self.space = 0
             if not data and not force: return
+
+            if options.google_doc:
+                # prevent white space immediately after emphasis marks ('**' and '_')
+                if self.drop_white_space:
+                    data = data.lstrip()
+                    if data != '':
+                        self.drop_white_space = False
             
             if self.startpre:
                 #self.out(" :") #TODO: not output when already one there
@@ -393,10 +533,10 @@ class _html2text(HTMLParser.HTMLParser):
                 self.out("\n")
                 self.space = 0
 
-
             if self.p_p:
-                self.out(('\n'+bq)*self.p_p)
+                self.out((self.br_toggle+'\n'+bq)*self.p_p)
                 self.space = 0
+                self.br_toggle = ''
                 
             if self.space:
                 if not self.lastWasNL: self.out(' ')
@@ -429,6 +569,10 @@ class _html2text(HTMLParser.HTMLParser):
 
     def handle_data(self, data):
         if r'\/script>' in data: self.quiet -= 1
+
+        if self.style:
+          self.style_def = dumb_css_parser(data)
+
         self.o(data, 1)
     
     def unknown_decl(self, data): pass
@@ -452,9 +596,29 @@ def html2text(html, baseurl=''):
 if __name__ == "__main__":
     baseurl = ''
 
+    global options
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
-    args = p.parse_args()[1]
+    p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
+        default=False, help="convert an html-exported Google Document")
+    p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
+        default=False, help="use a dash rather than a star for unordered list items")
+    p.add_option("-b", "--body-width", dest="body_width", action="store", type="int",
+        default=78, help="number of characters per output line, 0 for no wrap")
+    p.add_option("-i", "--google-list-indent", dest="list_indent", action="store", type="int",
+        default=GOOGLE_LIST_INDENT, help="number of pixels Google indents nested lists")
+    (options, args) = p.parse_args()
+
+    # handle options
+    if options.ul_style_dash:
+        options.ul_item_mark = '-'
+    else:
+        options.ul_item_mark = '*'
+
+    BODY_WIDTH = options.body_width
+    GOOGLE_LIST_INDENT = options.list_indent
+
+    # process input
     if len(args) > 0:
         file_ = args[0]
         encoding = None
