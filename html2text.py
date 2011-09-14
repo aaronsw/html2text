@@ -171,8 +171,7 @@ def dumb_css_parser(data):
 
 def google_list_style(attrs, style_def):
     """finds out whether this is an ordered or unordered list"""
-    x = dict(attrs)
-    for css_class in x['class'].split():
+    for css_class in attrs['class'].split():
         list_style = style_def['.' + css_class]['list-style-type']
         if list_style in ['disc', 'circle', 'square', 'none']:
             return 'ul'
@@ -180,9 +179,8 @@ def google_list_style(attrs, style_def):
 
 def google_nest_count(attrs, style_def):
     """calculate the nesting count of google doc lists"""
-    x = dict(attrs)
     nest_count = 0
-    for css_class in x['class'].split():
+    for css_class in attrs['class'].split():
         css_style = style_def['.' + css_class]
         if 'margin-left' in css_style:
             nest_count = int(css_style['margin-left'][:-2]) / 36
@@ -190,11 +188,10 @@ def google_nest_count(attrs, style_def):
 
 def google_has_height(attrs, style_def):
     """calculate the nesting count of google doc lists"""
-    if attrs is None:
+    if not 'class' in attrs:
         return False
-    x = dict(attrs)
     nest_count = 0
-    for css_class in x['class'].split():
+    for css_class in attrs['class'].split():
         css_style = style_def['.' + css_class]
         if 'height' in css_style:
             return True
@@ -202,9 +199,8 @@ def google_has_height(attrs, style_def):
 
 def list_numbering_start(attrs, style_def):
     """extract numbering from list element attributes"""
-    x = dict(attrs)
-    if 'start' in x:
-        return int(x['start']) - 1
+    if 'start' in attrs:
+        return int(attrs['start']) - 1
     else:
         return 0
 
@@ -288,6 +284,10 @@ class _html2text(HTMLParser.HTMLParser):
 
     def handle_tag(self, tag, attrs, start):
         #attrs = fixattrs(attrs)
+        if attrs is None:
+            attrs = {}
+        else:
+            attrs = dict(attrs)
     
         if hn(tag):
             self.p()
@@ -333,10 +333,6 @@ class _html2text(HTMLParser.HTMLParser):
         if tag == "code" and not self.pre: self.o('`') #TODO: `` `this` ``
         if tag == "abbr":
             if start:
-                attrsD = {}
-                for (x, y) in attrs: attrsD[x] = y
-                attrs = attrsD
-                
                 self.abbr_title = None
                 self.abbr_data = ''
                 if has_key(attrs, 'title'):
@@ -349,9 +345,6 @@ class _html2text(HTMLParser.HTMLParser):
         
         if tag == "a":
             if start:
-                attrsD = {}
-                for (x, y) in attrs: attrsD[x] = y
-                attrs = attrsD
                 if has_key(attrs, 'href') and not (SKIP_INTERNAL_LINKS and attrs['href'].startswith('#')): 
                     self.astack.append(attrs)
                     self.o("[")
@@ -375,9 +368,6 @@ class _html2text(HTMLParser.HTMLParser):
                             self.o("][" + str(a['count']) + "]")
         
         if tag == "img" and start:
-            attrsD = {}
-            for (x, y) in attrs: attrsD[x] = y
-            attrs = attrsD
             if has_key(attrs, 'src'):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
