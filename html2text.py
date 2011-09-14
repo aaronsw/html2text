@@ -188,6 +188,18 @@ def google_nest_count(attrs, style_def):
             nest_count = int(css_style['margin-left'][:-2]) / 36
     return nest_count
 
+def google_has_height(attrs, style_def):
+    """calculate the nesting count of google doc lists"""
+    if attrs is None:
+        return False
+    x = dict(attrs)
+    nest_count = 0
+    for css_class in x['class'].split():
+        css_style = style_def['.' + css_class]
+        if 'height' in css_style:
+            return True
+    return False
+
 def list_numbering_start(attrs, style_def):
     """extract numbering from list element attributes"""
     x = dict(attrs)
@@ -283,7 +295,10 @@ class _html2text(HTMLParser.HTMLParser):
 
         if tag in ['p', 'div']:
             if options.google_doc:
-                self.soft_br()
+                if google_has_height(attrs, self.style_def):
+                    self.p()
+                else:
+                    self.soft_br()
             else:
                 self.p()
         
