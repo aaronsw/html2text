@@ -51,6 +51,9 @@ SKIP_INTERNAL_LINKS = True
 # Use inline, rather than reference, formatting for images and links
 INLINE_LINKS = True
 
+# Number of pixels Google indents nested lists
+GOOGLE_LIST_INDENT = 36
+
 ### Entity Nonsense ###
 
 def name2cp(k):
@@ -183,7 +186,7 @@ def google_nest_count(attrs, style_def):
     for css_class in attrs['class'].split():
         css_style = style_def['.' + css_class]
         if 'margin-left' in css_style:
-            nest_count = int(css_style['margin-left'][:-2]) / 36
+            nest_count = int(css_style['margin-left'][:-2]) / GOOGLE_LIST_INDENT
     return nest_count
 
 def google_has_height(attrs, style_def):
@@ -552,6 +555,8 @@ if __name__ == "__main__":
         default=False, help="use a dash rather than a star for unordered list items")
     p.add_option("-b", "--body-width", dest="body_width", action="store", type="int",
         default=78, help="number of characters per output line, 0 for no wrap")
+    p.add_option("-i", "--google-list-indent", dest="list_indent", action="store", type="int",
+        default=GOOGLE_LIST_INDENT, help="number of pixels Google indents nested lists")
     (options, args) = p.parse_args()
 
     # handle options
@@ -561,6 +566,7 @@ if __name__ == "__main__":
         options.ul_item_mark = '*'
 
     BODY_WIDTH = options.body_width
+    GOOGLE_LIST_INDENT = options.list_indent
 
     # process input
     if len(args) > 0:
