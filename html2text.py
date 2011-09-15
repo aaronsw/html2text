@@ -593,10 +593,13 @@ def html2text_file(html, out=wrapwrite, baseurl=''):
 def html2text(html, baseurl=''):
     return optwrap(html2text_file(html, None, baseurl))
 
+options = object()
+options.google_doc = False
+options.ul_item_mark = '*'
+
 if __name__ == "__main__":
     baseurl = ''
-
-    global options
+    
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
     p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
