@@ -190,7 +190,7 @@ def google_nest_count(attrs, style_def):
     return nest_count
 
 def google_has_height(attrs, style_def):
-    """calculate the nesting count of google doc lists"""
+    """check if the css style of the element has the 'height' attribute defined"""
     if not 'class' in attrs:
         return False
     for css_class in attrs['class'].split():
@@ -200,7 +200,7 @@ def google_has_height(attrs, style_def):
     return False
 
 def google_text_emphasis(attrs, style_def):
-    """calculate the nesting count of google doc lists"""
+    """return a list of all emphasis modifiers of the element"""
     emphasis = []
     if 'class' in attrs:
         for css_class in attrs['class'].split():
@@ -212,6 +212,18 @@ def google_text_emphasis(attrs, style_def):
             if 'font-weight' in css_style:
                 emphasis.append(css_style['font-weight'])
     return emphasis
+
+def google_fixed_width_font(attrs, style_def):
+    """check if the css of the current element defines a fixed width font"""
+    font_families = []
+    if 'class' in attrs:
+        for css_class in attrs['class'].split():
+            css_style = style_def['.' + css_class]
+            if 'font-family' in css_style:
+                font_families.append(css_style['font-family'])
+    if 'Courier New' in font_families or 'Consolas' in font_families:
+        return True
+    return False
 
 def list_numbering_start(attrs, style_def):
     """extract numbering from list element attributes"""
@@ -356,18 +368,21 @@ class _html2text(HTMLParser.HTMLParser):
         if tag in ['strong', 'b']: self.o("**")
 
         if options.google_doc:
-            # handle Google's bold, italic and crossed-out text. assume well-formed html
+            # the attrs parameter is empty for a closing tag, so we maintain a
+            # stack of tags and attributes. assume that google docs export well
+            # formed html
             if start:
                 self.tag_stack.append((tag, attrs))
             else:
                 dummy, attrs = self.tag_stack.pop()
+            # handle some font attributes, but leave headers clean
             if not self.inheader:
+                # handle crossed-out text. must be handled before other attributes
+                # in order not to output qualifiers unnecessarily
                 text_emphasis = google_text_emphasis(attrs, self.style_def)
-                if 'line-through' in text_emphasis and options.hide_strikethrough:
-                    if start:
-                        self.quiet += 1
-                    else:
-                        self.quiet -= 1
+                if 'line-through' in text_emphasis and options.hide_strikethrough and start:
+                    self.quiet += 1
+                # handle Google's bold and italic
                 if 'bold' in text_emphasis:
                     self.o("**")
                 if 'italic' in text_emphasis:
@@ -379,6 +394,12 @@ class _html2text(HTMLParser.HTMLParser):
                     else:
                         self.emphasis -= 1
                         self.o(" ")
+                # handle fixed-width fonts
+                if google_fixed_width_font(attrs, self.style_def) and not self.pre:
+                    self.o('`')
+                # handle closing of crossed-out text. must be handled last
+                if 'line-through' in text_emphasis and options.hide_strikethrough and not start:
+                    self.quiet -= 1
 
         if tag == "code" and not self.pre: self.o('`') #TODO: `` `this` ``
         if tag == "abbr":
@@ -510,7 +531,7 @@ class _html2text(HTMLParser.HTMLParser):
             if not data and not force: return
 
             if options.google_doc:
-                # prevent white space immediately after emphasis marks ('**' and '_')
+                # prevent white space immediately after 'begin emphasis' marks ('**' and '_')
                 if self.drop_white_space:
                     data = data.lstrip()
                     if data != '':
