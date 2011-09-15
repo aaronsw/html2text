@@ -54,6 +54,9 @@ INLINE_LINKS = True
 # Number of pixels Google indents nested lists
 GOOGLE_LIST_INDENT = 36
 
+IGNORE_ANCHORS = False
+IGNORE_IMAGES = False
+
 ### Entity Nonsense ###
 
 def name2cp(k):
@@ -388,7 +391,7 @@ class _html2text(HTMLParser.HTMLParser):
                     self.abbr_title = None
                 self.abbr_data = ''
         
-        if tag == "a":
+        if tag == "a" and not IGNORE_ANCHORS:
             if start:
                 if has_key(attrs, 'href') and not (SKIP_INTERNAL_LINKS and attrs['href'].startswith('#')): 
                     self.astack.append(attrs)
@@ -412,7 +415,7 @@ class _html2text(HTMLParser.HTMLParser):
                                 self.a.append(a)
                             self.o("][" + str(a['count']) + "]")
         
-        if tag == "img" and start:
+        if tag == "img" and start and not IGNORE_IMAGES:
             if has_key(attrs, 'src'):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
