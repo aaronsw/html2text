@@ -593,7 +593,8 @@ def html2text_file(html, out=wrapwrite, baseurl=''):
 def html2text(html, baseurl=''):
     return optwrap(html2text_file(html, None, baseurl))
 
-options = object()
+class Storage: pass
+options = Storage()
 options.google_doc = False
 options.ul_item_mark = '*'
 
