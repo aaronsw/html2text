@@ -356,13 +356,18 @@ class _html2text(HTMLParser.HTMLParser):
         if tag in ['strong', 'b']: self.o("**")
 
         if options.google_doc:
-            # handle Google's bold and italic
+            # handle Google's bold, italic and crossed-out text. assume well-formed html
             if start:
                 self.tag_stack.append((tag, attrs))
             else:
                 dummy, attrs = self.tag_stack.pop()
             if not self.inheader:
                 text_emphasis = google_text_emphasis(attrs, self.style_def)
+                if 'line-through' in text_emphasis and options.hide_strikethrough:
+                    if start:
+                        self.quiet += 1
+                    else:
+                        self.quiet -= 1
                 if 'bold' in text_emphasis:
                     self.o("**")
                 if 'italic' in text_emphasis:
@@ -607,6 +612,8 @@ if __name__ == "__main__":
         default=78, help="number of characters per output line, 0 for no wrap")
     p.add_option("-i", "--google-list-indent", dest="list_indent", action="store", type="int",
         default=GOOGLE_LIST_INDENT, help="number of pixels Google indents nested lists")
+    p.add_option("-s", "--hide-strikethrough", action="store_true", dest="hide_strikethrough",
+        default=False, help="hide strike-through text. only relevent when -g is specified as well")
     (options, args) = p.parse_args()
 
     # handle options
