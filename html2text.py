@@ -338,12 +338,13 @@ class _html2text(HTMLParser.HTMLParser):
                 dummy, attrs, tag_style = self.tag_stack.pop()
 
         if hn(tag):
+            self.p()
             if start:
                 self.inheader = True
+                self.o(hn(tag)*"#" + ' ')
             else:
                 self.inheader = False
-            self.p()
-            if start: self.o(hn(tag)*"#" + ' ')
+                return # prevent redundant emphasis marks on headers
 
         if tag in ['p', 'div']:
             if options.google_doc:
