@@ -174,9 +174,9 @@ def dumb_css_parser(data):
 
     return elements
 
-def element_style(attrs, style_def):
+def element_style(attrs, style_def, parent_style):
     """returns a hash of the 'final' style attributes of the element"""
-    style = {}
+    style = parent_style.copy()
     if 'class' in attrs:
         for css_class in attrs['class'].split():
             css_style = style_def['.' + css_class]
@@ -186,33 +186,29 @@ def element_style(attrs, style_def):
         style.update(immediate_style)
     return style
 
-def google_list_style(attrs, style_def):
+def google_list_style(style):
     """finds out whether this is an ordered or unordered list"""
-    style = element_style(attrs, style_def)
     if 'list-style-type' in style:
         list_style = style['list-style-type']
         if list_style in ['disc', 'circle', 'square', 'none']:
             return 'ul'
     return 'ol'
 
-def google_nest_count(attrs, style_def):
+def google_nest_count(style):
     """calculate the nesting count of google doc lists"""
-    style = element_style(attrs, style_def)
     nest_count = 0
     if 'margin-left' in style:
         nest_count = int(style['margin-left'][:-2]) / GOOGLE_LIST_INDENT
     return nest_count
 
-def google_has_height(attrs, style_def):
+def google_has_height(style):
     """check if the style of the element has the 'height' attribute explicitly defined"""
-    style = element_style(attrs, style_def)
     if 'height' in style:
         return True
     return False
 
-def google_text_emphasis(attrs, style_def):
+def google_text_emphasis(style):
     """return a list of all emphasis modifiers of the element"""
-    style = element_style(attrs, style_def)
     emphasis = []
     if 'text-decoration' in style:
         emphasis.append(style['text-decoration'])
@@ -222,9 +218,8 @@ def google_text_emphasis(attrs, style_def):
         emphasis.append(style['font-weight'])
     return emphasis
 
-def google_fixed_width_font(attrs, style_def):
+def google_fixed_width_font(style):
     """check if the css of the current element defines a fixed width font"""
-    style = element_style(attrs, style_def)
     font_family = ''
     if 'font-family' in style:
         font_family = style['font-family']
@@ -232,7 +227,7 @@ def google_fixed_width_font(attrs, style_def):
         return True
     return False
 
-def list_numbering_start(attrs, style_def):
+def list_numbering_start(attrs):
     """extract numbering from list element attributes"""
     if 'start' in attrs:
         return int(attrs['start']) - 1
@@ -327,7 +322,21 @@ class _html2text(HTMLParser.HTMLParser):
             attrs = {}
         else:
             attrs = dict(attrs)
-    
+
+        if options.google_doc:
+            # the attrs parameter is empty for a closing tag. in addition, we
+            # need the attributes of the parent nodes in order to get a
+            # complete style description for the current element. we assume
+            # that google docs export well formed html.
+            if start:
+                parent_style = {}
+                if self.tag_stack:
+                    parent_style = self.tag_stack[-1][2]
+                tag_style = element_style(attrs, self.style_def, parent_style)
+                self.tag_stack.append((tag, attrs, tag_style))
+            else:
+                dummy, attrs, tag_style = self.tag_stack.pop()
+
         if hn(tag):
             if start:
                 self.inheader = True
@@ -338,7 +347,7 @@ class _html2text(HTMLParser.HTMLParser):
 
         if tag in ['p', 'div']:
             if options.google_doc:
-                if google_has_height(attrs, self.style_def):
+                if start and google_has_height(tag_style):
                     self.p()
                 else:
                     self.soft_br()
@@ -375,18 +384,11 @@ class _html2text(HTMLParser.HTMLParser):
         if tag in ['strong', 'b']: self.o("**")
 
         if options.google_doc:
-            # the attrs parameter is empty for a closing tag, so we maintain a
-            # stack of tags and attributes. assume that google docs export well
-            # formed html
-            if start:
-                self.tag_stack.append((tag, attrs))
-            else:
-                dummy, attrs = self.tag_stack.pop()
             # handle some font attributes, but leave headers clean
             if not self.inheader:
                 # handle crossed-out text. must be handled before other attributes
                 # in order not to output qualifiers unnecessarily
-                text_emphasis = google_text_emphasis(attrs, self.style_def)
+                text_emphasis = google_text_emphasis(tag_style)
                 if 'line-through' in text_emphasis and options.hide_strikethrough and start:
                     self.quiet += 1
                 # handle Google's bold and italic
@@ -402,7 +404,7 @@ class _html2text(HTMLParser.HTMLParser):
                         self.emphasis -= 1
                         self.o(" ")
                 # handle fixed-width fonts
-                if google_fixed_width_font(attrs, self.style_def) and not self.pre:
+                if google_fixed_width_font(tag_style) and not self.pre:
                     self.o('`')
                 # handle closing of crossed-out text. must be handled last
                 if 'line-through' in text_emphasis and options.hide_strikethrough and not start:
@@ -477,10 +479,10 @@ class _html2text(HTMLParser.HTMLParser):
                 self.p()
             if start:
                 if options.google_doc:
-                    list_style = google_list_style(attrs, self.style_def)
+                    list_style = google_list_style(tag_style)
                 else:
                     list_style = tag
-                numbering_start = list_numbering_start(attrs, self.style_def)
+                numbering_start = list_numbering_start(attrs)
                 self.list.append({'name':list_style, 'num':numbering_start})
             else:
                 if self.list: self.list.pop()
@@ -494,7 +496,7 @@ class _html2text(HTMLParser.HTMLParser):
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
                 if options.google_doc:
-                    nest_count = google_nest_count(attrs, self.style_def)
+                    nest_count = google_nest_count(tag_style)
                 else:
                     nest_count = len(self.list)
                 self.o("  " * nest_count) #TODO: line up <ol><li>s > 9 correctly.
@@ -604,7 +606,7 @@ class _html2text(HTMLParser.HTMLParser):
         if r'\/script>' in data: self.quiet -= 1
 
         if self.style:
-          self.style_def = dumb_css_parser(data)
+            self.style_def.update(dumb_css_parser(data))
 
         self.o(data, 1)
     
