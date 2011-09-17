@@ -328,14 +328,16 @@ class _html2text(HTMLParser.HTMLParser):
             # need the attributes of the parent nodes in order to get a
             # complete style description for the current element. we assume
             # that google docs export well formed html.
+            parent_style = {}
             if start:
-                parent_style = {}
                 if self.tag_stack:
-                    parent_style = self.tag_stack[-1][2]
+                  parent_style = self.tag_stack[-1][2]
                 tag_style = element_style(attrs, self.style_def, parent_style)
                 self.tag_stack.append((tag, attrs, tag_style))
             else:
                 dummy, attrs, tag_style = self.tag_stack.pop()
+                if self.tag_stack:
+                    parent_style = self.tag_stack[-1][2]
 
         if hn(tag):
             self.p()
@@ -389,15 +391,19 @@ class _html2text(HTMLParser.HTMLParser):
             if not self.inheader:
                 # handle crossed-out text. must be handled before other attributes
                 # in order not to output qualifiers unnecessarily
-                text_emphasis = google_text_emphasis(tag_style)
-                if 'line-through' in text_emphasis and options.hide_strikethrough and start:
+                tag_emphasis = google_text_emphasis(tag_style)
+                parent_emphasis = google_text_emphasis(parent_style)
+                in_emphasis = False
+                if 'line-through' in tag_emphasis and options.hide_strikethrough and start:
                     self.quiet += 1
                 # handle Google's bold and italic
-                if 'bold' in text_emphasis:
+                if 'bold' in tag_emphasis and not 'bold' in parent_emphasis:
                     self.o("**")
-                if 'italic' in text_emphasis:
+                    in_emphasis = True
+                if 'italic' in tag_emphasis and not 'italic' in parent_emphasis:
                     self.o("_")
-                if 'bold' in text_emphasis or 'italic' in text_emphasis:
+                    in_emphasis = True
+                if in_emphasis:
                     if start:
                         self.emphasis += 1
                         self.drop_white_space = True
@@ -408,7 +414,7 @@ class _html2text(HTMLParser.HTMLParser):
                 if google_fixed_width_font(tag_style) and not self.pre:
                     self.o('`')
                 # handle closing of crossed-out text. must be handled last
-                if 'line-through' in text_emphasis and options.hide_strikethrough and not start:
+                if 'line-through' in tag_emphasis and options.hide_strikethrough and not start:
                     self.quiet -= 1
 
         if tag == "code" and not self.pre: self.o('`') #TODO: `` `this` ``
