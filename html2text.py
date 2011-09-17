@@ -156,6 +156,10 @@ def hn(tag):
             if n in range(1, 10): return n
         except ValueError: return 0
 
+def dumb_property_dict(style):
+    """returns a hash of css attributes"""
+    return dict([(x.strip(), y.strip()) for x, y in [z.split(':') for z in style.split(';')]]);
+
 def dumb_css_parser(data):
     """returns a hash of css selectors, each of which contains a hash of css attributes"""
     # remove @import sentences
@@ -166,62 +170,65 @@ def dumb_css_parser(data):
 
     # parse the css. reverted from dictionary compehension in order to support older pythons
     elements =  [x.split('{') for x in data.split('}') if x.strip() != '']
-    elements = dict([(a.strip(), 
-        dict([(x.strip(), y.strip()) for x, y in [z.split(':') for z in b.split(';')]]))
-        for a, b in elements])
+    elements = dict([(a.strip(), dumb_property_dict(b)) for a, b in elements])
 
     return elements
 
+def element_style(attrs, style_def):
+    """returns a hash of the 'final' style attributes of the element"""
+    style = {}
+    if 'class' in attrs:
+        for css_class in attrs['class'].split():
+            css_style = style_def['.' + css_class]
+            style.update(css_style)
+    if 'style' in attrs:
+        immediate_style = dumb_property_dict(attrs['style'])
+        style.update(immediate_style)
+    return style
+
 def google_list_style(attrs, style_def):
     """finds out whether this is an ordered or unordered list"""
-    for css_class in attrs['class'].split():
-        list_style = style_def['.' + css_class]['list-style-type']
+    style = element_style(attrs, style_def)
+    if 'list-style-type' in style:
+        list_style = style['list-style-type']
         if list_style in ['disc', 'circle', 'square', 'none']:
             return 'ul'
     return 'ol'
 
 def google_nest_count(attrs, style_def):
     """calculate the nesting count of google doc lists"""
+    style = element_style(attrs, style_def)
     nest_count = 0
-    for css_class in attrs['class'].split():
-        css_style = style_def['.' + css_class]
-        if 'margin-left' in css_style:
-            nest_count = int(css_style['margin-left'][:-2]) / GOOGLE_LIST_INDENT
+    if 'margin-left' in style:
+        nest_count = int(style['margin-left'][:-2]) / GOOGLE_LIST_INDENT
     return nest_count
 
 def google_has_height(attrs, style_def):
-    """check if the css style of the element has the 'height' attribute defined"""
-    if not 'class' in attrs:
-        return False
-    for css_class in attrs['class'].split():
-        css_style = style_def['.' + css_class]
-        if 'height' in css_style:
-            return True
+    """check if the style of the element has the 'height' attribute explicitly defined"""
+    style = element_style(attrs, style_def)
+    if 'height' in style:
+        return True
     return False
 
 def google_text_emphasis(attrs, style_def):
     """return a list of all emphasis modifiers of the element"""
+    style = element_style(attrs, style_def)
     emphasis = []
-    if 'class' in attrs:
-        for css_class in attrs['class'].split():
-            css_style = style_def['.' + css_class]
-            if 'text-decoration' in css_style:
-                emphasis.append(css_style['text-decoration'])
-            if 'font-style' in css_style:
-                emphasis.append(css_style['font-style'])
-            if 'font-weight' in css_style:
-                emphasis.append(css_style['font-weight'])
+    if 'text-decoration' in style:
+        emphasis.append(style['text-decoration'])
+    if 'font-style' in style:
+        emphasis.append(style['font-style'])
+    if 'font-weight' in style:
+        emphasis.append(style['font-weight'])
     return emphasis
 
 def google_fixed_width_font(attrs, style_def):
     """check if the css of the current element defines a fixed width font"""
-    font_families = []
-    if 'class' in attrs:
-        for css_class in attrs['class'].split():
-            css_style = style_def['.' + css_class]
-            if 'font-family' in css_style:
-                font_families.append(css_style['font-family'])
-    if 'Courier New' in font_families or 'Consolas' in font_families:
+    style = element_style(attrs, style_def)
+    font_family = ''
+    if 'font-family' in style:
+        font_family = style['font-family']
+    if 'Courier New' == font_family or 'Consolas' == font_family:
         return True
     return False
 
