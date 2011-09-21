@@ -263,7 +263,7 @@ class _html2text(HTMLParser.HTMLParser):
         self.style_def = {}
         self.tag_stack = []
         self.emphasis = 0
-        self.drop_white_space = False
+        self.drop_white_space = 0
         self.inheader = False
         self.abbr_title = None # current abbreviation definition
         self.abbr_data = None # last inner HTML (for abbr being defined)
@@ -389,33 +389,53 @@ class _html2text(HTMLParser.HTMLParser):
         if options.google_doc:
             # handle some font attributes, but leave headers clean
             if not self.inheader:
-                # handle crossed-out text. must be handled before other attributes
-                # in order not to output qualifiers unnecessarily
                 tag_emphasis = google_text_emphasis(tag_style)
                 parent_emphasis = google_text_emphasis(parent_style)
-                in_emphasis = False
-                if 'line-through' in tag_emphasis and options.hide_strikethrough and start:
-                    self.quiet += 1
-                # handle Google's bold and italic
-                if 'bold' in tag_emphasis and not 'bold' in parent_emphasis:
-                    self.o("**")
-                    in_emphasis = True
-                if 'italic' in tag_emphasis and not 'italic' in parent_emphasis:
-                    self.o("_")
-                    in_emphasis = True
-                if in_emphasis:
-                    if start:
+
+                # handle Google's text emphasis
+                strikethrough =  'line-through' in tag_emphasis and options.hide_strikethrough
+                bold = 'bold' in tag_emphasis and not 'bold' in parent_emphasis
+                italic = 'italic' in tag_emphasis and not 'italic' in parent_emphasis
+
+                if start:
+                    # crossed-out text must be handled before other attributes
+                    # in order not to output qualifiers unnecessarily
+                    if strikethrough:
+                        self.quiet += 1
+                    if italic:
+                        self.o("_")
                         self.emphasis += 1
-                        self.drop_white_space = True
-                    else:
+                        self.drop_white_space += 1
+                    if bold:
+                        self.o("**")
+                        self.emphasis += 1
+                        self.drop_white_space += 1
+                    if google_fixed_width_font(tag_style) and not self.pre:
+                        self.o('`')
+                else:
+                    if google_fixed_width_font(tag_style) and not self.pre:
+                        self.o('`')
+                    if bold:
+                        if self.drop_white_space:
+                            # empty emphasis, drop it
+                            self.outtext = self.outtext[:-2]
+                            self.drop_white_space -= 1
+                        else:
+                            self.o("**")
                         self.emphasis -= 1
-                        self.o(" ")
-                # handle fixed-width fonts
-                if google_fixed_width_font(tag_style) and not self.pre:
-                    self.o('`')
-                # handle closing of crossed-out text. must be handled last
-                if 'line-through' in tag_emphasis and options.hide_strikethrough and not start:
-                    self.quiet -= 1
+                    if italic:
+                        if self.drop_white_space:
+                            # empty emphasis, drop it
+                            self.outtext = self.outtext[:-2]
+                            self.drop_white_space -= 1
+                        else:
+                            self.o("_")
+                        self.emphasis -= 1
+                    # space is only allowed after *all* emphasis marks
+                    if (bold or italic) and not self.emphasis:
+                            self.o(" ")
+                    if strikethrough:
+                        self.quiet -= 1
 
         if tag == "code" and not self.pre: self.o('`') #TODO: `` `this` ``
         if tag == "abbr":
@@ -551,7 +571,7 @@ class _html2text(HTMLParser.HTMLParser):
                 if self.drop_white_space:
                     data = data.lstrip()
                     if data != '':
-                        self.drop_white_space = False
+                        self.drop_white_space = 0
             
             if self.startpre:
                 #self.out(" :") #TODO: not output when already one there
