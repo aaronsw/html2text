@@ -72,7 +72,8 @@ unifiable = {'rsquo':"'", 'lsquo':"'", 'rdquo':'"', 'ldquo':'"',
 'egrave':'e', 'eacute':'e', 'ecirc':'e', 'euml':'e', 
 'igrave':'i', 'iacute':'i', 'icirc':'i', 'iuml':'i',
 'ograve':'o', 'oacute':'o', 'ocirc':'o', 'otilde':'o', 'ouml':'o', 
-'ugrave':'u', 'uacute':'u', 'ucirc':'u', 'uuml':'u'}
+'ugrave':'u', 'uacute':'u', 'ucirc':'u', 'uuml':'u',
+'lrm':'', 'rlm':''}
 
 unifiable_n = {}
 
@@ -272,6 +273,7 @@ class _html2text(HTMLParser.HTMLParser):
     
     def outtextf(self, s): 
         self.outtext += s
+        self.lastWasNL = self.outtext[-1] == '\n'
     
     def close(self):
         HTMLParser.HTMLParser.close(self)
@@ -282,10 +284,10 @@ class _html2text(HTMLParser.HTMLParser):
         return self.outtext
         
     def handle_charref(self, c):
-        self.o(charref(c))
+        self.o(charref(c), 1)
 
     def handle_entityref(self, c):
-        self.o(entityref(c))
+        self.o(entityref(c), 1)
             
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
@@ -315,6 +317,60 @@ class _html2text(HTMLParser.HTMLParser):
                     match = True
 
             if match: return i
+
+    def handle_emphasis(self, start, tag_style, parent_style):
+        """handles various text emphases"""
+        tag_emphasis = google_text_emphasis(tag_style)
+        parent_emphasis = google_text_emphasis(parent_style)
+
+        # handle Google's text emphasis
+        strikethrough =  'line-through' in tag_emphasis and options.hide_strikethrough
+        bold = 'bold' in tag_emphasis and not 'bold' in parent_emphasis
+        italic = 'italic' in tag_emphasis and not 'italic' in parent_emphasis
+        fixed = google_fixed_width_font(tag_style) and not self.pre
+
+        if start:
+            # crossed-out text must be handled before other attributes
+            # in order not to output qualifiers unnecessarily
+            if strikethrough:
+                self.quiet += 1
+            if italic:
+                self.o("_")
+                self.emphasis += 1
+                self.drop_white_space += 1
+            if bold:
+                self.o("**")
+                self.emphasis += 1
+                self.drop_white_space += 1
+            if fixed:
+                self.o('`')
+        else:
+            if bold or italic:
+                # there must not be whitespace before closing emphasis mark
+                self.outtext = self.outtext.rstrip()
+            if fixed:
+                self.o('`')
+            if bold:
+                if self.drop_white_space:
+                    # empty emphasis, drop it
+                    self.outtext = self.outtext[:-2]
+                    self.drop_white_space -= 1
+                else:
+                    self.o("**")
+                self.emphasis -= 1
+            if italic:
+                if self.drop_white_space:
+                    # empty emphasis, drop it
+                    self.outtext = self.outtext[:-2]
+                    self.drop_white_space -= 1
+                else:
+                    self.o("_")
+                self.emphasis -= 1
+            # space is only allowed after *all* emphasis marks
+            if (bold or italic) and not self.emphasis:
+                    self.o(" ")
+            if strikethrough:
+                self.quiet -= 1
 
     def handle_tag(self, tag, attrs, start):
         #attrs = fixattrs(attrs)
@@ -387,55 +443,9 @@ class _html2text(HTMLParser.HTMLParser):
         if tag in ['strong', 'b']: self.o("**")
 
         if options.google_doc:
-            # handle some font attributes, but leave headers clean
             if not self.inheader:
-                tag_emphasis = google_text_emphasis(tag_style)
-                parent_emphasis = google_text_emphasis(parent_style)
-
-                # handle Google's text emphasis
-                strikethrough =  'line-through' in tag_emphasis and options.hide_strikethrough
-                bold = 'bold' in tag_emphasis and not 'bold' in parent_emphasis
-                italic = 'italic' in tag_emphasis and not 'italic' in parent_emphasis
-
-                if start:
-                    # crossed-out text must be handled before other attributes
-                    # in order not to output qualifiers unnecessarily
-                    if strikethrough:
-                        self.quiet += 1
-                    if italic:
-                        self.o("_")
-                        self.emphasis += 1
-                        self.drop_white_space += 1
-                    if bold:
-                        self.o("**")
-                        self.emphasis += 1
-                        self.drop_white_space += 1
-                    if google_fixed_width_font(tag_style) and not self.pre:
-                        self.o('`')
-                else:
-                    if google_fixed_width_font(tag_style) and not self.pre:
-                        self.o('`')
-                    if bold:
-                        if self.drop_white_space:
-                            # empty emphasis, drop it
-                            self.outtext = self.outtext[:-2]
-                            self.drop_white_space -= 1
-                        else:
-                            self.o("**")
-                        self.emphasis -= 1
-                    if italic:
-                        if self.drop_white_space:
-                            # empty emphasis, drop it
-                            self.outtext = self.outtext[:-2]
-                            self.drop_white_space -= 1
-                        else:
-                            self.o("_")
-                        self.emphasis -= 1
-                    # space is only allowed after *all* emphasis marks
-                    if (bold or italic) and not self.emphasis:
-                            self.o(" ")
-                    if strikethrough:
-                        self.quiet -= 1
+                # handle some font attributes, but leave headers clean
+                self.handle_emphasis(start, tag_style, parent_style)
 
         if tag == "code" and not self.pre: self.o('`') #TODO: `` `this` ``
         if tag == "abbr":
@@ -626,7 +636,6 @@ class _html2text(HTMLParser.HTMLParser):
 
             self.p_p = 0
             self.out(data)
-            self.lastWasNL = data and data[-1] == '\n'
             self.outcount += 1
 
     def handle_data(self, data):
