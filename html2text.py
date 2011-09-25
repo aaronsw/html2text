@@ -257,6 +257,7 @@ class _html2text(HTMLParser.HTMLParser):
         self.blockquote = 0
         self.pre = 0
         self.startpre = 0
+        self.code = False
         self.br_toggle = ''
         self.lastWasNL = 0
         self.lastWasList = False
@@ -318,6 +319,10 @@ class _html2text(HTMLParser.HTMLParser):
 
             if match: return i
 
+    def drop_last(self, nLetters):
+        if not self.quiet:
+            self.outtext = self.outtext[:-nLetters]
+           
     def handle_emphasis(self, start, tag_style, parent_style):
         """handles various text emphases"""
         tag_emphasis = google_text_emphasis(tag_style)
@@ -327,7 +332,8 @@ class _html2text(HTMLParser.HTMLParser):
         strikethrough =  'line-through' in tag_emphasis and options.hide_strikethrough
         bold = 'bold' in tag_emphasis and not 'bold' in parent_emphasis
         italic = 'italic' in tag_emphasis and not 'italic' in parent_emphasis
-        fixed = google_fixed_width_font(tag_style) and not self.pre
+        fixed = google_fixed_width_font(tag_style) and not \
+                google_fixed_width_font(parent_style) and not self.pre
 
         if start:
             # crossed-out text must be handled before other attributes
@@ -344,16 +350,27 @@ class _html2text(HTMLParser.HTMLParser):
                 self.drop_white_space += 1
             if fixed:
                 self.o('`')
+                self.emphasis += 1
+                self.drop_white_space += 1
+                self.code = True
         else:
-            if bold or italic:
+            if bold or italic or fixed:
                 # there must not be whitespace before closing emphasis mark
+                self.space = 0
                 self.outtext = self.outtext.rstrip()
             if fixed:
-                self.o('`')
+                if self.drop_white_space:
+                    # empty emphasis, drop it
+                    self.drop_last(1)
+                    self.drop_white_space -= 1
+                else:
+                    self.o('`')
+                self.emphasis -= 1
+                self.code = False
             if bold:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.outtext = self.outtext[:-2]
+                    self.drop_last(2)
                     self.drop_white_space -= 1
                 else:
                     self.o("**")
@@ -361,7 +378,7 @@ class _html2text(HTMLParser.HTMLParser):
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.outtext = self.outtext[:-2]
+                    self.drop_last(1)
                     self.drop_white_space -= 1
                 else:
                     self.o("_")
@@ -567,22 +584,21 @@ class _html2text(HTMLParser.HTMLParser):
         if self.abbr_data is not None: self.abbr_data += data
         
         if not self.quiet: 
+            if options.google_doc:
+                # prevent white space immediately after 'begin emphasis' marks ('**' and '_')
+                lstripped_data = data.lstrip()
+                if self.drop_white_space and not (self.pre or self.code):
+                    data = lstripped_data
+                if lstripped_data != '':
+                    self.drop_white_space = 0
+            
             if puredata and not self.pre:
                 data = re.sub('\s+', ' ', data)
                 if data and data[0] == ' ':
                     self.space = 1
                     data = data[1:]
-                    if self.emphasis:
-                        self.space = 0
             if not data and not force: return
 
-            if options.google_doc:
-                # prevent white space immediately after 'begin emphasis' marks ('**' and '_')
-                if self.drop_white_space:
-                    data = data.lstrip()
-                    if data != '':
-                        self.drop_white_space = 0
-            
             if self.startpre:
                 #self.out(" :") #TODO: not output when already one there
                 self.startpre = 0
