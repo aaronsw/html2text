@@ -338,24 +338,24 @@ class _html2text(HTMLParser.HTMLParser):
         if start:
             # crossed-out text must be handled before other attributes
             # in order not to output qualifiers unnecessarily
+            if bold or italic or fixed:
+                self.emphasis += 1
             if strikethrough:
                 self.quiet += 1
             if italic:
                 self.o("_")
-                self.emphasis += 1
                 self.drop_white_space += 1
             if bold:
                 self.o("**")
-                self.emphasis += 1
                 self.drop_white_space += 1
             if fixed:
                 self.o('`')
-                self.emphasis += 1
                 self.drop_white_space += 1
                 self.code = True
         else:
             if bold or italic or fixed:
                 # there must not be whitespace before closing emphasis mark
+                self.emphasis -= 1
                 self.space = 0
                 self.outtext = self.outtext.rstrip()
             if fixed:
@@ -365,7 +365,6 @@ class _html2text(HTMLParser.HTMLParser):
                     self.drop_white_space -= 1
                 else:
                     self.o('`')
-                self.emphasis -= 1
                 self.code = False
             if bold:
                 if self.drop_white_space:
@@ -374,7 +373,6 @@ class _html2text(HTMLParser.HTMLParser):
                     self.drop_white_space -= 1
                 else:
                     self.o("**")
-                self.emphasis -= 1
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
@@ -382,7 +380,6 @@ class _html2text(HTMLParser.HTMLParser):
                     self.drop_white_space -= 1
                 else:
                     self.o("_")
-                self.emphasis -= 1
             # space is only allowed after *all* emphasis marks
             if (bold or italic) and not self.emphasis:
                     self.o(" ")
