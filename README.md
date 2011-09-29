@@ -2,8 +2,6 @@
 
 Converts html documents to markdown format.
 
-*Handling Google Docs documents is currently work-in-progress.*
-
 #Copyright
 
 Originally written by Aaron Swartz.
