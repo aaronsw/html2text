@@ -284,6 +284,8 @@ class _html2text(HTMLParser.HTMLParser):
         
         self.pbr()
         self.o('', 0, 'end')
+
+        self.outtext = self.outtext.replace('&nbsp_place_holder;', ' ');
         
         return self.outtext
         
@@ -707,6 +709,10 @@ if __name__ == "__main__":
         options.ul_item_mark = '-'
     else:
         options.ul_item_mark = '*'
+
+    if options.google_doc:
+        del unifiable_n[name2cp('nbsp')]
+        unifiable['nbsp'] = '&nbsp_place_holder;'
 
     BODY_WIDTH = options.body_width
     GOOGLE_LIST_INDENT = options.list_indent
