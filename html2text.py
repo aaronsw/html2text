@@ -274,6 +274,10 @@ class _html2text(HTMLParser.HTMLParser):
         self.abbr_data = None # last inner HTML (for abbr being defined)
         self.abbr_list = {} # stack of abbreviations to write later
         self.baseurl = baseurl
+
+        if options.google_doc:
+            del unifiable_n[name2cp('nbsp')]
+            unifiable['nbsp'] = '&nbsp_place_holder;'
     
     def outtextf(self, s): 
         self.outtext += s
@@ -710,10 +714,6 @@ if __name__ == "__main__":
         options.ul_item_mark = '-'
     else:
         options.ul_item_mark = '*'
-
-    if options.google_doc:
-        del unifiable_n[name2cp('nbsp')]
-        unifiable['nbsp'] = '&nbsp_place_holder;'
 
     BODY_WIDTH = options.body_width
     GOOGLE_LIST_INDENT = options.list_indent
