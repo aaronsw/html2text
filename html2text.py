@@ -274,6 +274,10 @@ class _html2text(HTMLParser.HTMLParser):
         self.abbr_data = None # last inner HTML (for abbr being defined)
         self.abbr_list = {} # stack of abbreviations to write later
         self.baseurl = baseurl
+
+        if options.google_doc:
+            del unifiable_n[name2cp('nbsp')]
+            unifiable['nbsp'] = '&nbsp_place_holder;'
     
     def outtextf(self, s): 
         self.outtext += s
@@ -284,6 +288,9 @@ class _html2text(HTMLParser.HTMLParser):
         
         self.pbr()
         self.o('', 0, 'end')
+
+        if options.google_doc:
+            self.outtext = self.outtext.replace('&nbsp_place_holder;', ' ');
         
         return self.outtext
         
