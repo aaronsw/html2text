@@ -282,7 +282,7 @@ class _html2text(HTMLParser.HTMLParser):
     
     def outtextf(self, s): 
         self.outtextlist.append(s)
-        self.lastWasNL = s[-1] == '\n'
+        if s: self.lastWasNL = s[-1] == '\n'
     
     def close(self):
         HTMLParser.HTMLParser.close(self)
