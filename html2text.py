@@ -244,6 +244,7 @@ class _html2text(HTMLParser.HTMLParser):
         
         if out is None: self.out = self.outtextf
         else: self.out = out
+        self.outtextlist = [] # empty list to store output characters before they are  "joined"
         try:
             self.outtext = unicode()
         except NameError: # Python3
@@ -280,8 +281,8 @@ class _html2text(HTMLParser.HTMLParser):
             unifiable['nbsp'] = '&nbsp_place_holder;'
     
     def outtextf(self, s): 
-        self.outtext += s
-        self.lastWasNL = self.outtext[-1] == '\n'
+        self.outtextlist.append(s)
+        self.lastWasNL = s[-1] == '\n'
     
     def close(self):
         HTMLParser.HTMLParser.close(self)
@@ -289,6 +290,8 @@ class _html2text(HTMLParser.HTMLParser):
         self.pbr()
         self.o('', 0, 'end')
 
+        self.outtext = self.outtext.join(self.outtestlist)
+        
         if options.google_doc:
             self.outtext = self.outtext.replace('&nbsp_place_holder;', ' ');
         
