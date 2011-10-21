@@ -290,7 +290,7 @@ class _html2text(HTMLParser.HTMLParser):
         self.pbr()
         self.o('', 0, 'end')
 
-        self.outtext = self.outtext.join(self.outtestlist)
+        self.outtext = self.outtext.join(self.outtextlist)
         
         if options.google_doc:
             self.outtext = self.outtext.replace('&nbsp_place_holder;', ' ');
