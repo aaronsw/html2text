@@ -173,7 +173,7 @@ def dumb_css_parser(data):
         importIndex = data.find('@import')
 
     # parse the css. reverted from dictionary compehension in order to support older pythons
-    elements =  [x.split('{') for x in data.split('}') if x.strip() != '']
+    elements =  [x.split('{') for x in data.split('}') if '{' in x.strip()]
     elements = dict([(a.strip(), dumb_property_dict(b)) for a, b in elements])
 
     return elements
