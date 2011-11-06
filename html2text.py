@@ -709,6 +709,10 @@ if __name__ == "__main__":
     
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
+    p.add_option("--ignore-links", dest="ignore_links", action="store_true", 
+        default=IGNORE_ANCHORS, help="don't include any formatting for links")
+    p.add_option("--ignore-images", dest="ignore_images", action="store_true", 
+        default=IGNORE_IMAGES, help="don't include any formatting for images")
     p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
         default=False, help="convert an html-exported Google Document")
     p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
@@ -729,6 +733,8 @@ if __name__ == "__main__":
 
     BODY_WIDTH = options.body_width
     GOOGLE_LIST_INDENT = options.list_indent
+    IGNORE_ANCHORS = options.ignore_links
+    IGNORE_IMAGES = options.ignore_images
 
     # process input
     if len(args) > 0:
