@@ -83,42 +83,6 @@ unifiable_n = {}
 for k in unifiable.keys():
     unifiable_n[name2cp(k)] = unifiable[k]
 
-def charref(name):
-    if name[0] in ['x','X']:
-        c = int(name[1:], 16)
-    else:
-        c = int(name)
-    
-    if not UNICODE_SNOB and c in unifiable_n.keys():
-        return unifiable_n[c]
-    else:
-        try:
-            return unichr(c)
-        except NameError: #Python3
-            return chr(c)
-
-def entityref(c):
-    if not UNICODE_SNOB and c in unifiable.keys():
-        return unifiable[c]
-    else:
-        try: name2cp(c)
-        except KeyError: return "&" + c + ';'
-        else:
-            try:
-                return unichr(name2cp(c))
-            except NameError: #Python3
-                return chr(name2cp(c))
-
-def replaceEntities(s):
-    s = s.group(1)
-    if s[0] == "#": 
-        return charref(s[1:])
-    else: return entityref(s)
-
-r_unescape = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
-def unescape(s):
-    return r_unescape.sub(replaceEntities, s)
-
 ### End Entity Nonsense ###
 
 def onlywhite(line):
@@ -172,13 +136,6 @@ def google_list_style(style):
         if list_style in ['disc', 'circle', 'square', 'none']:
             return 'ul'
     return 'ol'
-
-def google_nest_count(style):
-    """calculate the nesting count of google doc lists"""
-    nest_count = 0
-    if 'margin-left' in style:
-        nest_count = int(style['margin-left'][:-2]) / GOOGLE_LIST_INDENT
-    return nest_count
 
 def google_has_height(style):
     """check if the style of the element has the 'height' attribute explicitly defined"""
@@ -295,10 +252,10 @@ class HTML2Text(HTMLParser.HTMLParser):
         return self.outtext
         
     def handle_charref(self, c):
-        self.o(charref(c), 1)
+        self.o(self.charref(c), 1)
 
     def handle_entityref(self, c):
-        self.o(entityref(c), 1)
+        self.o(self.entityref(c), 1)
             
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
@@ -489,9 +446,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.abbr_title = None
                 self.abbr_data = ''
         
-        if tag == "a" and not IGNORE_ANCHORS:
+        if tag == "a" and not self.ignore_links:
             if start:
-                if has_key(attrs, 'href') and not (SKIP_INTERNAL_LINKS and attrs['href'].startswith('#')): 
+                if has_key(attrs, 'href') and not (self.skip_internal_links and attrs['href'].startswith('#')): 
                     self.astack.append(attrs)
                     self.o("[")
                 else:
@@ -500,7 +457,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if self.astack:
                     a = self.astack.pop()
                     if a:
-                        if INLINE_LINKS:
+                        if self.inline_links:
                             self.o("](" + a['href'] + ")")
                         else:
                             i = self.previousIndex(a)
@@ -513,11 +470,11 @@ class HTML2Text(HTMLParser.HTMLParser):
                                 self.a.append(a)
                             self.o("][" + str(a['count']) + "]")
         
-        if tag == "img" and start and not IGNORE_IMAGES:
+        if tag == "img" and start and not self.ignore_images:
             if has_key(attrs, 'src'):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
-                if INLINE_LINKS:
+                if self.inline_links:
                     self.o("![")
                     self.o(alt)
                     self.o("]("+ attrs['href'] +")")
@@ -562,7 +519,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
                 if self.google_doc:
-                    nest_count = google_nest_count(tag_style)
+                    nest_count = self.google_nest_count(tag_style)
                 else:
                     nest_count = len(self.list)
                 self.o("  " * nest_count) #TODO: line up <ol><li>s > 9 correctly.
@@ -642,7 +599,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if not self.lastWasNL: self.out(' ')
                 self.space = 0
 
-            if self.a and ((self.p_p == 2 and LINKS_EACH_PARAGRAPH) or force == "end"):
+            if self.a and ((self.p_p == 2 and self.links_each_paragraph) or force == "end"):
                 if force == "end": self.out("\n")
 
                 newa = []
@@ -675,6 +632,51 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.o(data, 1)
     
     def unknown_decl(self, data): pass
+    
+    def charref(self, name):
+        if name[0] in ['x','X']:
+            c = int(name[1:], 16)
+        else:
+            c = int(name)
+
+        if not self.unicode_snob and c in unifiable_n.keys():
+            return unifiable_n[c]
+        else:
+            try:
+                return unichr(c)
+            except NameError: #Python3
+                return chr(c)
+
+    def entityref(self, c):
+        if not self.unicode_snob and c in unifiable.keys():
+            return unifiable[c]
+        else:
+            try: name2cp(c)
+            except KeyError: return "&" + c + ';'
+            else:
+                try:
+                    return unichr(name2cp(c))
+                except NameError: #Python3
+                    return chr(name2cp(c))
+
+    def replaceEntities(self, s):
+        s = s.group(1)
+        if s[0] == "#": 
+            return self.charref(s[1:])
+        else: return self.entityref(s)
+    
+    # @@nobody calls this function?
+    r_unescape = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
+    def unescape(self, s):
+        return self.r_unescape.sub(self.replaceEntities, s)
+    
+    def google_nest_count(self, style):
+        """calculate the nesting count of google doc lists"""
+        nest_count = 0
+        if 'margin-left' in style:
+            nest_count = int(style['margin-left'][:-2]) / self.google_list_indent
+        return nest_count
+
     
     def optwrap(self, text):
         """Wrap all paragraphs in the provided text."""
