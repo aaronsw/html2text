@@ -128,31 +128,6 @@ def onlywhite(line):
             return c is ' '
     return line
 
-def optwrap(text):
-    """Wrap all paragraphs in the provided text."""
-    if not BODY_WIDTH:
-        return text
-    
-    assert wrap, "Requires Python 2.3."
-    result = ''
-    newlines = 0
-    for para in text.split("\n"):
-        if len(para) > 0:
-            if para[0] != ' ' and para[0] != '-' and para[0] != '*':
-                for line in wrap(para, BODY_WIDTH):
-                    result += line + "\n"
-                result += "\n"
-                newlines = 2
-            else:
-                if not onlywhite(para):
-                    result += para + "\n"
-                    newlines = 1
-        else:
-            if newlines < 2:
-                result += "\n"
-                newlines += 1
-    return result
-
 def hn(tag):
     if tag[0] == 'h' and len(tag) == 2:
         try:
@@ -238,9 +213,21 @@ def list_numbering_start(attrs):
     else:
         return 0
 
-class _html2text(HTMLParser.HTMLParser):
+class HTML2Text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl=''):
         HTMLParser.HTMLParser.__init__(self)
+        
+        # Config options
+        self.unicode_snob = UNICODE_SNOB
+        self.links_each_paragraph = LINKS_EACH_PARAGRAPH
+        self.body_width = BODY_WIDTH
+        self.skip_internal_links = SKIP_INTERNAL_LINKS
+        self.inline_links = INLINE_LINKS
+        self.google_list_indent = GOOGLE_LIST_INDENT
+        self.ignore_links = IGNORE_ANCHORS
+        self.ignore_images = IGNORE_IMAGES
+        self.google_doc = False
+        self.ul_item_mark = '*'
         
         if out is None: self.out = self.outtextf
         else: self.out = out
@@ -276,13 +263,19 @@ class _html2text(HTMLParser.HTMLParser):
         self.abbr_list = {} # stack of abbreviations to write later
         self.baseurl = baseurl
 
-        if options.google_doc:
-            del unifiable_n[name2cp('nbsp')]
-            unifiable['nbsp'] = '&nbsp_place_holder;'
+        try: del unifiable_n[name2cp('nbsp')]
+        except KeyError: pass
+        unifiable['nbsp'] = '&nbsp_place_holder;'
     
+
     def feed(self, data):
         data = data.replace("</' + 'script>", "</ignore>")
         HTMLParser.HTMLParser.feed(self, data)
+
+    def handle(self, data):
+        self.feed(data)
+        self.feed("")
+        return self.optwrap(self.close())
     
     def outtextf(self, s): 
         self.outtextlist.append(s)
@@ -296,7 +289,7 @@ class _html2text(HTMLParser.HTMLParser):
 
         self.outtext = self.outtext.join(self.outtextlist)
         
-        if options.google_doc:
+        if self.google_doc:
             self.outtext = self.outtext.replace('&nbsp_place_holder;', ' ');
         
         return self.outtext
@@ -346,7 +339,7 @@ class _html2text(HTMLParser.HTMLParser):
         parent_emphasis = google_text_emphasis(parent_style)
 
         # handle Google's text emphasis
-        strikethrough =  'line-through' in tag_emphasis and options.hide_strikethrough
+        strikethrough =  'line-through' in tag_emphasis and self.hide_strikethrough
         bold = 'bold' in tag_emphasis and not 'bold' in parent_emphasis
         italic = 'italic' in tag_emphasis and not 'italic' in parent_emphasis
         fixed = google_fixed_width_font(tag_style) and not \
@@ -410,7 +403,7 @@ class _html2text(HTMLParser.HTMLParser):
         else:
             attrs = dict(attrs)
 
-        if options.google_doc:
+        if self.google_doc:
             # the attrs parameter is empty for a closing tag. in addition, we
             # need the attributes of the parent nodes in order to get a
             # complete style description for the current element. we assume
@@ -436,7 +429,7 @@ class _html2text(HTMLParser.HTMLParser):
                 return # prevent redundant emphasis marks on headers
 
         if tag in ['p', 'div']:
-            if options.google_doc:
+            if self.google_doc:
                 if start and google_has_height(tag_style):
                     self.p()
                 else:
@@ -478,7 +471,7 @@ class _html2text(HTMLParser.HTMLParser):
             else:
                 self.o("</"+tag+">")
 
-        if options.google_doc:
+        if self.google_doc:
             if not self.inheader:
                 # handle some font attributes, but leave headers clean
                 self.handle_emphasis(start, tag_style, parent_style)
@@ -551,7 +544,7 @@ class _html2text(HTMLParser.HTMLParser):
             if (not self.list) and (not self.lastWasList):
                 self.p()
             if start:
-                if options.google_doc:
+                if self.google_doc:
                     list_style = google_list_style(tag_style)
                 else:
                     list_style = tag
@@ -568,12 +561,12 @@ class _html2text(HTMLParser.HTMLParser):
             if start:
                 if self.list: li = self.list[-1]
                 else: li = {'name':'ul', 'num':0}
-                if options.google_doc:
+                if self.google_doc:
                     nest_count = google_nest_count(tag_style)
                 else:
                     nest_count = len(self.list)
                 self.o("  " * nest_count) #TODO: line up <ol><li>s > 9 correctly.
-                if li['name'] == "ul": self.o(options.ul_item_mark + " ")
+                if li['name'] == "ul": self.o(self.ul_item_mark + " ")
                 elif li['name'] == "ol":
                     li['num'] += 1
                     self.o(str(li['num'])+". ")
@@ -603,7 +596,7 @@ class _html2text(HTMLParser.HTMLParser):
         if self.abbr_data is not None: self.abbr_data += data
         
         if not self.quiet: 
-            if options.google_doc:
+            if self.google_doc:
                 # prevent white space immediately after 'begin emphasis' marks ('**' and '_')
                 lstripped_data = data.lstrip()
                 if self.drop_white_space and not (self.pre or self.code):
@@ -682,6 +675,31 @@ class _html2text(HTMLParser.HTMLParser):
         self.o(data, 1)
     
     def unknown_decl(self, data): pass
+    
+    def optwrap(self, text):
+        """Wrap all paragraphs in the provided text."""
+        if not self.body_width:
+            return text
+
+        assert wrap, "Requires Python 2.3."
+        result = ''
+        newlines = 0
+        for para in text.split("\n"):
+            if len(para) > 0:
+                if para[0] != ' ' and para[0] != '-' and para[0] != '*':
+                    for line in wrap(para, self.body_width):
+                        result += line + "\n"
+                    result += "\n"
+                    newlines = 2
+                else:
+                    if not onlywhite(para):
+                        result += para + "\n"
+                        newlines = 1
+            else:
+                if newlines < 2:
+                    result += "\n"
+                    newlines += 1
+        return result
 
 def wrapwrite(text):
     text = text.encode('utf-8')
@@ -690,19 +708,9 @@ def wrapwrite(text):
     except AttributeError:
         sys.stdout.write(text)
 
-def html2text_file(html, out=wrapwrite, baseurl=''):
-    h = _html2text(out, baseurl)
-    h.feed(html)
-    h.feed("")
-    return h.close()
-
 def html2text(html, baseurl=''):
-    return optwrap(html2text_file(html, None, baseurl))
-
-class Storage: pass
-options = Storage()
-options.google_doc = False
-options.ul_item_mark = '*'
+    h = HTML2Text(baseurl=baseurl)
+    return h.handle(html)
 
 if __name__ == "__main__":
     baseurl = ''
@@ -718,23 +726,12 @@ if __name__ == "__main__":
     p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
         default=False, help="use a dash rather than a star for unordered list items")
     p.add_option("-b", "--body-width", dest="body_width", action="store", type="int",
-        default=78, help="number of characters per output line, 0 for no wrap")
+        default=BODY_WIDTH, help="number of characters per output line, 0 for no wrap")
     p.add_option("-i", "--google-list-indent", dest="list_indent", action="store", type="int",
         default=GOOGLE_LIST_INDENT, help="number of pixels Google indents nested lists")
     p.add_option("-s", "--hide-strikethrough", action="store_true", dest="hide_strikethrough",
         default=False, help="hide strike-through text. only relevent when -g is specified as well")
     (options, args) = p.parse_args()
-
-    # handle options
-    if options.ul_style_dash:
-        options.ul_item_mark = '-'
-    else:
-        options.ul_item_mark = '*'
-
-    BODY_WIDTH = options.body_width
-    GOOGLE_LIST_INDENT = options.list_indent
-    IGNORE_ANCHORS = options.ignore_links
-    IGNORE_IMAGES = options.ignore_images
 
     # process input
     if len(args) > 0:
@@ -770,4 +767,16 @@ if __name__ == "__main__":
             data = data.decode(encoding)
     else:
         data = sys.stdin.read()
-    wrapwrite(html2text(data, baseurl))
+    
+    h = HTML2Text(baseurl=baseurl)
+    # handle options
+    if options.ul_style_dash: h.ul_item_mark = '-'
+
+    h.body_width = options.body_width
+    h.list_indent = options.list_indent
+    h.ignore_links = options.ignore_links
+    h.ignore_images = options.ignore_images
+    h.google_doc = options.google_doc
+    h.hide_strikethrough = options.hide_strikethrough
+
+    wrapwrite(h.handle(data))
