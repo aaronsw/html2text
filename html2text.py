@@ -188,7 +188,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         
         if out is None: self.out = self.outtextf
         else: self.out = out
-        self.outtextlist = [] # empty list to store output characters before they are  "joined"
+        self.outtextlist = [] # empty list to store output characters before they are "joined"
         try:
             self.outtext = unicode()
         except NameError: # Python3
