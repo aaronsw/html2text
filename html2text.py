@@ -736,9 +736,9 @@ def main():
     (options, args) = p.parse_args()
 
     # process input
+    encoding = "utf-8"
     if len(args) > 0:
         file_ = args[0]
-        encoding = None
         if len(args) == 2:
             encoding = args[1]
         if len(args) > 2:
