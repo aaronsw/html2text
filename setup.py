@@ -24,6 +24,10 @@ setup(
        'Programming Language :: Python :: 3.1',
        'Programming Language :: Python :: 3.2'
      ],
+    entry_points="""
+        [console_scripts]
+        html2text=html2text:main
+    """,
    license='GNU GPL 3',
    packages=find_packages(),
    py_modules=['html2text'],

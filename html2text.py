@@ -714,7 +714,7 @@ def html2text(html, baseurl=''):
     h = HTML2Text(baseurl=baseurl)
     return h.handle(html)
 
-if __name__ == "__main__":
+def main():
     baseurl = ''
 
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
@@ -782,3 +782,7 @@ if __name__ == "__main__":
     h.hide_strikethrough = options.hide_strikethrough
 
     wrapwrite(h.handle(data))
+
+
+if __name__ == "__main__":
+    main()
