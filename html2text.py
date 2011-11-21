@@ -747,17 +747,15 @@ def main():
         if file_.startswith('http://') or file_.startswith('https://'):
             baseurl = file_
             j = urllib.urlopen(baseurl)
-            text = j.read()
+            data = j.read()
             if encoding is None:
                 try:
                     from feedparser import _getCharacterEncoding as enc
                 except ImportError:
                     enc = lambda x, y: ('utf-8', 1)
-                encoding = enc(j.headers, text)[0]
+                encoding = enc(j.headers, data)[0]
                 if encoding == 'us-ascii':
                     encoding = 'utf-8'
-            data = text.decode(encoding)
-
         else:
             data = open(file_, 'rb').read()
             if encoding is None:
@@ -766,10 +764,10 @@ def main():
                 except ImportError:
                     detect = lambda x: {'encoding': 'utf-8'}
                 encoding = detect(data)['encoding']
-            data = data.decode(encoding)
     else:
         data = sys.stdin.read()
 
+    data = data.decode(encoding)
     h = HTML2Text(baseurl=baseurl)
     # handle options
     if options.ul_style_dash: h.ul_item_mark = '-'
