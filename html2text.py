@@ -56,6 +56,7 @@ GOOGLE_LIST_INDENT = 36
 
 IGNORE_ANCHORS = False
 IGNORE_IMAGES = False
+IGNORE_EMPHASIS = False
 
 ### Entity Nonsense ###
 
@@ -183,6 +184,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.google_list_indent = GOOGLE_LIST_INDENT
         self.ignore_links = IGNORE_ANCHORS
         self.ignore_images = IGNORE_IMAGES
+        self.ignore_emphasis = IGNORE_EMPHASIS
         self.google_doc = False
         self.ul_item_mark = '*'
 
@@ -419,9 +421,9 @@ class HTML2Text(HTMLParser.HTMLParser):
             else:
                 self.blockquote -= 1
                 self.p()
-
-        if tag in ['em', 'i', 'u']: self.o("_")
-        if tag in ['strong', 'b']: self.o("**")
+        
+        if tag in ['em', 'i', 'u'] and not self.ignore_emphasis: self.o("_")
+        if tag in ['strong', 'b'] and not self.ignore_emphasis: self.o("**")
         if tag in ['del', 'strike']:
             if start:
                 self.o("<"+tag+">")
@@ -719,6 +721,8 @@ def main():
 
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
+    p.add_option("--ignore-emphasis", dest="ignore_emphasis", action="store_true", 
+        default=IGNORE_EMPHASIS, help="don't include any formatting for emphasis")
     p.add_option("--ignore-links", dest="ignore_links", action="store_true",
         default=IGNORE_ANCHORS, help="don't include any formatting for links")
     p.add_option("--ignore-images", dest="ignore_images", action="store_true",
@@ -774,6 +778,7 @@ def main():
 
     h.body_width = options.body_width
     h.list_indent = options.list_indent
+    h.ignore_emphasis = options.ignore_emphasis
     h.ignore_links = options.ignore_links
     h.ignore_images = options.ignore_images
     h.google_doc = options.google_doc
