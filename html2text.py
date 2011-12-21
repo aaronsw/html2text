@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-__version__ = "3.200.0"
+__version__ = "3.200.1"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
 __copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
 __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes", "Kevin Jay North"]
@@ -114,7 +114,10 @@ def dumb_css_parser(data):
 
     # parse the css. reverted from dictionary compehension in order to support older pythons
     elements =  [x.split('{') for x in data.split('}') if '{' in x.strip()]
-    elements = dict([(a.strip(), dumb_property_dict(b)) for a, b in elements])
+    try:
+        elements = dict([(a.strip(), dumb_property_dict(b)) for a, b in elements])
+    except ValueError:
+        elements = {} # not that important
 
     return elements
 
