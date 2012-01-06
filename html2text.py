@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-__version__ = "3.200.1"
+__version__ = "3.200.2"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
 __copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
 __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes", "Kevin Jay North"]
@@ -670,7 +670,6 @@ class HTML2Text(HTMLParser.HTMLParser):
             return self.charref(s[1:])
         else: return self.entityref(s)
 
-    # @@nobody calls this function?
     r_unescape = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
     def unescape(self, s):
         return self.r_unescape.sub(self.replaceEntities, s)
@@ -718,6 +717,11 @@ def wrapwrite(text):
 def html2text(html, baseurl=''):
     h = HTML2Text(baseurl=baseurl)
     return h.handle(html)
+
+def unescape(s, unicode_snob=False):
+    h = HTML2Text()
+    h.unicode_snob = unicode_snob
+    return h.unescape(s)
 
 def main():
     baseurl = ''
