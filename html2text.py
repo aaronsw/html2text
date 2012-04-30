@@ -692,7 +692,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         newlines = 0
         for para in text.split("\n"):
             if len(para) > 0:
-                if para[0] != ' ' and para[0] != '-' and para[0] != '*':
+                if not skipwrap(para):
                     for line in wrap(para, self.body_width):
                         result += line + "\n"
                     result += "\n"
@@ -706,6 +706,29 @@ class HTML2Text(HTMLParser.HTMLParser):
                     result += "\n"
                     newlines += 1
         return result
+
+ordered_list_matcher = re.compile(r'\d+\.\s')
+unordered_list_matcher = re.compile(r'[-\*\+]\s')
+
+def skipwrap(para):
+    # If the text begins with four spaces or one tab, it's a code block; don't wrap
+    if para[0:4] == '    ' or para[0] == '\t':
+        return True
+    # If the text begins with only two "--", possibly preceded by whitespace, that's
+    # an emdash; so wrap.
+    stripped = para.lstrip()
+    if stripped[0:2] == "--" and stripped[2] != "-":
+        return False
+    # I'm not sure what this is for; I thought it was to detect lists, but there's
+    # a <br>-inside-<span> case in one of the tests that also depends upon it.
+    if stripped[0] == '-' or stripped[0] == '*':
+        return True
+    # If the text begins with a single -, *, or +, followed by a space, or an integer,
+    # followed by a ., followed by a space (in either case optionally preceeded by
+    # whitespace), it's a list; don't wrap.
+    if ordered_list_matcher.match(stripped) or unordered_list_matcher.match(stripped):
+        return True
+    return False
 
 def wrapwrite(text):
     text = text.encode('utf-8')
