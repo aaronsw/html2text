@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 __version__ = "3.200.3"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
@@ -13,6 +14,11 @@ try:
 except NameError:
     setattr(__builtins__, 'True', 1)
     setattr(__builtins__, 'False', 0)
+
+import optparse
+import re
+import sys
+import codecs
 
 def has_key(x, y):
     if hasattr(x, 'has_key'): return x.has_key(y)
@@ -30,10 +36,13 @@ try: #Python3
     import urllib.request as urllib
 except:
     import urllib
-import optparse, re, sys, codecs, types
 
-try: from textwrap import wrap
-except: pass
+try:
+    from textwrap import wrap
+except:
+    pass
+
+VERSION_PYTHON = sys.version_info[0]
 
 # Use Unicode characters instead of their ascii psuedo-replacements
 UNICODE_SNOB = 0
@@ -61,23 +70,35 @@ IGNORE_EMPHASIS = False
 ### Entity Nonsense ###
 
 def name2cp(k):
-    if k == 'apos': return ord("'")
+    if k == 'apos':
+        return ord("'")
     if hasattr(htmlentitydefs, "name2codepoint"): # requires Python 2.3
         return htmlentitydefs.name2codepoint[k]
     else:
         k = htmlentitydefs.entitydefs[k]
-        if k.startswith("&#") and k.endswith(";"): return int(k[2:-1]) # not in latin-1
+        if k.startswith("&#") and k.endswith(";"):
+            return int(k[2:-1]) # not in latin-1
         return ord(codecs.latin_1_decode(k)[0])
 
-unifiable = {'rsquo':"'", 'lsquo':"'", 'rdquo':'"', 'ldquo':'"',
-'copy':'(C)', 'mdash':'--', 'nbsp':' ', 'rarr':'->', 'larr':'<-', 'middot':'*',
-'ndash':'-', 'oelig':'oe', 'aelig':'ae',
-'agrave':'a', 'aacute':'a', 'acirc':'a', 'atilde':'a', 'auml':'a', 'aring':'a',
-'egrave':'e', 'eacute':'e', 'ecirc':'e', 'euml':'e',
-'igrave':'i', 'iacute':'i', 'icirc':'i', 'iuml':'i',
-'ograve':'o', 'oacute':'o', 'ocirc':'o', 'otilde':'o', 'ouml':'o',
-'ugrave':'u', 'uacute':'u', 'ucirc':'u', 'uuml':'u',
-'lrm':'', 'rlm':''}
+unifiable = {}
+for entity, value in  htmlentitydefs.entitydefs.items():
+    if value.startswith('&#'):
+        value  = unichr(int(value[2:-1]))
+    else:
+        if VERSION_PYTHON == 2:
+            value = value.decode('latin-1')
+    unifiable[entity] = value
+
+
+# unifiable = {'rsquo':"'", 'lsquo':"'", 'rdquo':'"', 'ldquo':'"',
+# 'copy':'(C)', 'mdash':'--', 'nbsp':' ', 'rarr':'->', 'larr':'<-', 'middot':'*',
+# 'ndash':'-', 'oelig':'oe', 'aelig':'ae',
+# 'agrave':'a', 'aacute':'a', 'acirc':'a', 'atilde':'a', 'auml':'a', 'aring':'a',
+# 'egrave':'e', 'eacute':'e', 'ecirc':'e', 'euml':'e',
+# 'igrave':'i', 'iacute':'i', 'icirc':'i', 'iuml':'i',
+# 'ograve':'o', 'oacute':'o', 'ocirc':'o', 'otilde':'o', 'ouml':'o',
+# 'ugrave':'u', 'uacute':'u', 'ucirc':'u', 'uuml':'u',
+# 'lrm':'', 'rlm':''}
 
 unifiable_n = {}
 
@@ -225,8 +246,10 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.abbr_list = {} # stack of abbreviations to write later
         self.baseurl = baseurl
 
-        try: del unifiable_n[name2cp('nbsp')]
-        except KeyError: pass
+        try:
+            del unifiable_n[name2cp('nbsp')]
+        except KeyError:
+            pass
         unifiable['nbsp'] = '&nbsp_place_holder;'
 
 
@@ -424,7 +447,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             else:
                 self.blockquote -= 1
                 self.p()
-        
+
         if tag in ['em', 'i', 'u'] and not self.ignore_emphasis: self.o("_")
         if tag in ['strong', 'b'] and not self.ignore_emphasis: self.o("**")
         if tag in ['del', 'strike']:
@@ -653,11 +676,13 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return chr(c)
 
     def entityref(self, c):
-        if not self.unicode_snob and c in unifiable.keys():
+        if not self.unicode_snob and c in unifiable:
             return unifiable[c]
         else:
-            try: name2cp(c)
-            except KeyError: return "&" + c + ';'
+            try:
+                name2cp(c)
+            except KeyError:
+                return "&" + c + ';'
             else:
                 try:
                     return unichr(name2cp(c))
@@ -668,7 +693,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         s = s.group(1)
         if s[0] == "#":
             return self.charref(s[1:])
-        else: return self.entityref(s)
+        else:
+            return self.entityref(s)
 
     r_unescape = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
     def unescape(self, s):
@@ -728,7 +754,7 @@ def main():
 
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
-    p.add_option("--ignore-emphasis", dest="ignore_emphasis", action="store_true", 
+    p.add_option("--ignore-emphasis", dest="ignore_emphasis", action="store_true",
         default=IGNORE_EMPHASIS, help="don't include any formatting for emphasis")
     p.add_option("--ignore-links", dest="ignore_links", action="store_true",
         default=IGNORE_ANCHORS, help="don't include any formatting for links")
