@@ -721,7 +721,7 @@ def skipwrap(para):
         return False
     # I'm not sure what this is for; I thought it was to detect lists, but there's
     # a <br>-inside-<span> case in one of the tests that also depends upon it.
-    if stripped[0] == '-' or stripped[0] == '*':
+    if stripped[0:1] == '-' or stripped[0:1] == '*':
         return True
     # If the text begins with a single -, *, or +, followed by a space, or an integer,
     # followed by a ., followed by a space (in either case optionally preceeded by
