@@ -424,10 +424,10 @@ class HTML2Text(HTMLParser.HTMLParser):
             else:
                 self.blockquote -= 1
                 self.p()
-        
+
         if tag in ['em', 'i', 'u'] and not self.ignore_emphasis: self.o("_")
         if tag in ['strong', 'b'] and not self.ignore_emphasis: self.o("**")
-        if tag in ['del', 'strike']:
+        if tag in ['del', 'strike', 's']:
             if start:
                 self.o("<"+tag+">")
             else:
