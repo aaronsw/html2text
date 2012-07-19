@@ -2,7 +2,7 @@ import glob
 import os
 import re
 import subprocess
-import sys; sys.path.append('..')
+import sys; sys.path.insert(0, '..')
 import html2text
 
 def test_module(fn):
@@ -33,7 +33,6 @@ def print_result(out, baseline, fn):
             print 'PASS'
         else:
             print 'FAIL'
-            # file(fn + '-output.md', 'w').write(out)
             file('output.md', 'w').write(out)
             raise Exception("test failed: diff -u %s output.md" % fn.replace('.html', '.md'))
 
