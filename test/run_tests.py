@@ -5,7 +5,7 @@ import re
 import subprocess
 import sys
 
-sys.path.append('..')
+sys.path.insert(0, '..')
 import html2text
 
 
@@ -42,7 +42,7 @@ def test_command(fn, google_doc=False):
     if os.name == 'nt':
         # Fix the unwanted CR to CRCRLF replacement
         # during text pipelining on Windows/cygwin
-        actual = re.sub(r"\r+", "\r", actual)
+        actual = re.sub(r'\r+', '\r', actual)
         actual = actual.replace('\r\n', '\n')
 
     print_result(fn, 'command', result, actual)

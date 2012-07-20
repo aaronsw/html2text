@@ -250,8 +250,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.o('', 0, 'end')
 
         self.outtext = self.outtext.join(self.outtextlist)
-        nbsp = unichr(name2cp('nbsp')) if self.unicode_snob else ' '
-        self.outtext = self.outtext.replace('&nbsp_place_holder;', nbsp)
+        nbsp = unichr(name2cp('nbsp')) if self.unicode_snob else u' '
+        self.outtext = self.outtext.replace(u'&nbsp_place_holder;', nbsp)
 
         return self.outtext
 
