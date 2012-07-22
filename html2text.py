@@ -191,15 +191,20 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.google_doc = False
         self.ul_item_mark = '*'
 
-        if out is None: self.out = self.outtextf
-        else: self.out = out
-        self.outtextlist = [] # empty list to store output characters before they are "joined"
+        if out is None:
+            self.out = self.outtextf
+        else:
+            self.out = out
+
+        self.outtextlist = []  # empty list to store output characters before they are "joined"
+
         try:
             self.outtext = unicode()
-        except NameError: # Python3
+        except NameError:  # Python3
             self.outtext = str()
+
         self.quiet = 0
-        self.p_p = 0 # number of newline character to print before next output
+        self.p_p = 0  # number of newline character to print before next output
         self.outcount = 0
         self.start = 1
         self.space = 0
@@ -220,9 +225,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.emphasis = 0
         self.drop_white_space = 0
         self.inheader = False
-        self.abbr_title = None # current abbreviation definition
-        self.abbr_data = None # last inner HTML (for abbr being defined)
-        self.abbr_list = {} # stack of abbreviations to write later
+        self.abbr_title = None  # current abbreviation definition
+        self.abbr_data = None  # last inner HTML (for abbr being defined)
+        self.abbr_list = {}  # stack of abbreviations to write later
         self.baseurl = baseurl
 
         try: del unifiable_n[name2cp('nbsp')]
@@ -465,7 +470,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     a = self.astack.pop()
                     if a:
                         if self.inline_links:
-                            self.o("](" + a['href'] + ")")
+                            self.o("](" + escape_md(a['href']) + ")")
                         else:
                             i = self.previousIndex(a)
                             if i is not None:
@@ -481,10 +486,10 @@ class HTML2Text(HTMLParser.HTMLParser):
             if has_key(attrs, 'src'):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
+                self.o("![" + escape_md(alt) + "]")
+
                 if self.inline_links:
-                    self.o("![")
-                    self.o(alt)
-                    self.o("]("+ attrs['href'] +")")
+                    self.o("(" + escape_md(attrs['href']) + ")")
                 else:
                     i = self.previousIndex(attrs)
                     if i is not None:
@@ -494,9 +499,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                         attrs['count'] = self.acount
                         attrs['outcount'] = self.outcount
                         self.a.append(attrs)
-                    self.o("![")
-                    self.o(alt)
-                    self.o("]["+ str(attrs['count']) +"]")
+                    self.o("[" + str(attrs['count']) + "]")
 
         if tag == 'dl' and start: self.p()
         if tag == 'dt' and not start: self.pbr()
@@ -548,16 +551,19 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.p()
 
     def pbr(self):
-        if self.p_p == 0: self.p_p = 1
+        if self.p_p == 0:
+            self.p_p = 1
 
-    def p(self): self.p_p = 2
+    def p(self):
+        self.p_p = 2
 
     def soft_br(self):
         self.pbr()
         self.br_toggle = '  '
 
     def o(self, data, puredata=0, force=0):
-        if self.abbr_data is not None: self.abbr_data += data
+        if self.abbr_data is not None:
+            self.abbr_data += data
 
         if not self.quiet:
             if self.google_doc:
@@ -711,6 +717,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
 ordered_list_matcher = re.compile(r'\d+\.\s')
 unordered_list_matcher = re.compile(r'[-\*\+]\s')
+md_chars_matcher = re.compile(r"([\\`\*_{}\[\]\(\)#\+-\.!])")
 
 def skipwrap(para):
     # If the text begins with four spaces or one tab, it's a code block; don't wrap
@@ -747,6 +754,10 @@ def unescape(s, unicode_snob=False):
     h = HTML2Text()
     h.unicode_snob = unicode_snob
     return h.unescape(s)
+
+def escape_md(text):
+    """Escapes markdown-sensitive characters."""
+    return md_chars_matcher.sub("\\\t", text)
 
 def main():
     baseurl = ''
