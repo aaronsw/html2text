@@ -10,7 +10,7 @@ import html2text
 
 
 def test_module(fn, unicode_snob=False, google_doc=False):
-    print_conditions(fn, 'module', unicode_snob, google_doc)
+    print_conditions('module', unicode_snob, google_doc)
 
     h = html2text.HTML2Text()
 
@@ -29,7 +29,7 @@ def test_module(fn, unicode_snob=False, google_doc=False):
 
 
 def test_command(fn, google_doc=False):
-    print_conditions(fn, 'command', False, google_doc)
+    print_conditions('command', False, google_doc)
 
     cmd = ['python', '../html2text.py']
     if fn.lower().startswith('google'):
@@ -48,9 +48,9 @@ def test_command(fn, google_doc=False):
     print_result(fn, 'command', result, actual)
 
 
-def print_conditions(fn, mode, unicode_snob, google_doc):
-    format = "%s (%s, unicode_snob=%d, google_doc=%d): "
-    sys.stdout.write(format % (fn, mode, int(unicode_snob), int(google_doc)))
+def print_conditions(mode, unicode_snob, google_doc):
+    format = " * %s, unicode_snob=%d, google_doc=%d: "
+    sys.stdout.write(format % (mode, int(unicode_snob), int(google_doc)))
 
 
 def print_result(fn, mode, result, actual):
@@ -63,7 +63,10 @@ def print_result(fn, mode, result, actual):
             print(len(result), len(actual))
 
         dump_name = get_dump_name(fn, mode)
-        open(dump_name, 'w').write(result)
+
+        with codecs.open(dump_name, encoding='utf-8', mode='w+') as f:
+            f.write(actual)
+
         print("  Use: diff -u %s %s" % (get_baseline_name(fn), dump_name))
 
 
@@ -90,6 +93,7 @@ def run_all_tests():
         google_doc = fn.lower().startswith('google')
         unicode_snob = fn.lower().find('unicode') > 0
 
+        print('\n' + fn + ':')
         test_module(fn, unicode_snob, google_doc)
 
         if not unicode_snob:
