@@ -757,7 +757,7 @@ def unescape(s, unicode_snob=False):
 
 def escape_md(text):
     """Escapes markdown-sensitive characters."""
-    return md_chars_matcher.sub("\\\t", text)
+    return md_chars_matcher.sub(r"\1", text)
 
 def main():
     baseurl = ''
