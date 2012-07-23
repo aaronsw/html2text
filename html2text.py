@@ -717,7 +717,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
 ordered_list_matcher = re.compile(r'\d+\.\s')
 unordered_list_matcher = re.compile(r'[-\*\+]\s')
-md_chars_matcher = re.compile(r"([\\`\*_{}\[\]\(\)#\+-\.!])")
+md_chars_matcher = re.compile(r"([\\\[\]\(\)])")
 
 def skipwrap(para):
     # If the text begins with four spaces or one tab, it's a code block; don't wrap
@@ -757,7 +757,7 @@ def unescape(s, unicode_snob=False):
 
 def escape_md(text):
     """Escapes markdown-sensitive characters."""
-    return md_chars_matcher.sub(r"\1", text)
+    return md_chars_matcher.sub(r"\\\1", text)
 
 def main():
     baseurl = ''
