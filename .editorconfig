@@ -1,0 +1,11 @@
+; top-most EditorConfig file
+root = true
+
+; Unix-style newlines
+[*]
+end_of_line = CRLF
+
+; 4 space indentation
+[*.py]
+indent_style = space
+indent_size = 4
