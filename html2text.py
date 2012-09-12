@@ -701,9 +701,11 @@ class HTML2Text(HTMLParser.HTMLParser):
         for para in text.split("\n"):
             if len(para) > 0:
                 if not skipwrap(para):
-                    for line in wrap(para, self.body_width):
-                        result += line + "\n"
-                    result += "\n"
+                    result += "\n".join(wrap(para, self.body_width))
+                    if para.endswith('  '):
+                        result += "  \n"
+                    else:
+                        result += "\n\n"
                     newlines = 2
                 else:
                     if not onlywhite(para):
@@ -764,7 +766,7 @@ def main():
 
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
-    p.add_option("--ignore-emphasis", dest="ignore_emphasis", action="store_true", 
+    p.add_option("--ignore-emphasis", dest="ignore_emphasis", action="store_true",
         default=IGNORE_EMPHASIS, help="don't include any formatting for emphasis")
     p.add_option("--ignore-links", dest="ignore_links", action="store_true",
         default=IGNORE_ANCHORS, help="don't include any formatting for links")
