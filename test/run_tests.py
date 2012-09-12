@@ -25,7 +25,7 @@ def test_module(fn, unicode_snob=False, google_doc=False):
 
     result = get_baseline(fn, unicode_snob)
     actual = h.handle(file(fn).read())
-    print_result(fn, 'module', result, actual)
+    return print_result(fn, 'module', result, actual)
 
 
 def test_command(fn, google_doc=False):
@@ -45,7 +45,7 @@ def test_command(fn, google_doc=False):
         actual = re.sub(r'\r+', '\r', actual)
         actual = actual.replace('\r\n', '\n')
 
-    print_result(fn, 'command', result, actual)
+    return print_result(fn, 'command', result, actual)
 
 
 def print_conditions(mode, unicode_snob, google_doc):
@@ -56,6 +56,7 @@ def print_conditions(mode, unicode_snob, google_doc):
 def print_result(fn, mode, result, actual):
     if result == actual:
         print('PASS')
+        return True
     else:
         print('FAIL')
 
@@ -68,6 +69,7 @@ def print_result(fn, mode, result, actual):
             f.write(actual)
 
         print("  Use: diff -u %s %s" % (get_baseline_name(fn), dump_name))
+        return False
 
 
 def get_dump_name(fn, suffix):
@@ -89,16 +91,22 @@ def get_baseline(fn, unicode_snob=False):
 
 def run_all_tests():
     html_files = glob.glob("*.html")
+    passing = True
     for fn in html_files:
         google_doc = fn.lower().startswith('google')
         unicode_snob = fn.lower().find('unicode') > 0
 
         print('\n' + fn + ':')
-        test_module(fn, unicode_snob, google_doc)
+        passing = passing and test_module(fn, unicode_snob, google_doc)
 
         if not unicode_snob:
             # (Because there is no command-line option to control unicode_snob)
-            test_command(fn, google_doc=google_doc)
+            passing = passing and test_command(fn, google_doc=google_doc)
+    if passing:
+        print("ALL TESTS PASSED")
+    else:
+        print("Fail.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     run_all_tests()
