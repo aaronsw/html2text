@@ -31,7 +31,7 @@ def test_module(fn, unicode_snob=False, google_doc=False):
 def test_command(fn, google_doc=False):
     print_conditions('command', False, google_doc)
 
-    cmd = ['python', '../html2text.py']
+    cmd = [sys.executable or 'python', '../html2text.py']
     if fn.lower().startswith('google'):
         cmd += ['-g', '-d', '-b', '0', '-s']
     cmd += [fn]
