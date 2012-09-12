@@ -17,7 +17,7 @@ text to separate lists
   3. end
 
 **bold**  
-_italic_
+_italic_  
 
     
     
@@ -27,7 +27,6 @@ _italic_
       return 'b'
           
 
-Some `fixed width text` here
-
+Some `fixed width text` here  
 _`italic fixed width text`_
 
