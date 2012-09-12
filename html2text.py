@@ -704,9 +704,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                     result += "\n".join(wrap(para, self.body_width))
                     if para.endswith('  '):
                         result += "  \n"
+                        newlines = 1
                     else:
                         result += "\n\n"
-                    newlines = 2
+                        newlines = 2
                 else:
                     if not onlywhite(para):
                         result += para + "\n"
