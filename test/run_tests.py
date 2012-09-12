@@ -65,8 +65,8 @@ def print_result(fn, mode, result, actual):
 
         dump_name = get_dump_name(fn, mode)
 
-        with codecs.open(dump_name, encoding='utf-8', mode='w+') as f:
-            f.write(actual)
+        f = codecs.open(dump_name, encoding='utf-8', mode='w+')
+        f.write(actual)
 
         print("  Use: diff -u %s %s" % (get_baseline_name(fn), dump_name))
         return False
@@ -83,8 +83,8 @@ def get_baseline_name(fn):
 def get_baseline(fn, unicode_snob=False):
     name = get_baseline_name(fn)
     if unicode_snob:
-        with codecs.open(name, mode='r', encoding='utf8') as f:
-            return f.read()
+        f = codecs.open(name, mode='r', encoding='utf8')
+        return f.read()
     else:
         return unicode(open(name).read())
 

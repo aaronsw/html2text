@@ -3,6 +3,5 @@ python:
   - "2.5"
   - "2.6"
   - "2.7"
-  - "3.2"
   - "pypy"
 script: cd test/; python run_tests.py
