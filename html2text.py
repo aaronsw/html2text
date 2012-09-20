@@ -729,7 +729,7 @@ def skipwrap(para):
     # If the text begins with only two "--", possibly preceded by whitespace, that's
     # an emdash; so wrap.
     stripped = para.lstrip()
-    if stripped[0:2] == "--" and stripped[2] != "-":
+    if stripped[0:2] == "--" and len(stripped) > 2 and stripped[2] != "-":
         return False
     # I'm not sure what this is for; I thought it was to detect lists, but there's
     # a <br>-inside-<span> case in one of the tests that also depends upon it.
