@@ -19,7 +19,7 @@ def test_module(fn, google_doc=False, **kwargs):
         h.ul_item_mark = '-'
         h.body_width = 0
         h.hide_strikethrough = True
-    
+
     for k, v in kwargs.iteritems():
         setattr(h, k, v)
 
@@ -30,16 +30,16 @@ def test_module(fn, google_doc=False, **kwargs):
 def test_command(fn, *args):
     print_conditions('command', *args)
     args = list(args)
-    
+
     cmd = [sys.executable or 'python', '../html2text.py']
-    
+
     if '--googledoc' in args:
         args.remove('--googledoc')
         cmd += ['-g', '-d', '-b', '0', '-s']
-    
+
     if args:
         cmd.extend(args)
-    
+
     cmd += [fn]
 
     result = get_baseline(fn)
@@ -92,18 +92,22 @@ def run_all_tests():
     for fn in html_files:
         module_args = {}
         cmdline_args = []
-        
+
         if fn.lower().startswith('google'):
             module_args['google_doc'] = True
             cmdline_args.append('--googledoc')
-            
+
         if fn.lower().find('unicode') >= 0:
             module_args['unicode_snob'] = True
-        
+
         if fn.lower().find('flip_emphasis') >= 0:
             module_args['emphasis_mark'] = '*'
             module_args['strong_mark'] = '__'
             cmdline_args.append('-e')
+
+        if fn.lower().find('escape_snob') >= 0:
+            module_args['escape_snob'] = True
+            cmdline_args.append('--escape-all')
 
         print('\n' + fn + ':')
         passing = passing and test_module(fn, **module_args)

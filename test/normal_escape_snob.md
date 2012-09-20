@@ -6,7 +6,7 @@ first issue
   * _**bold italic**_
     * orange
     * apple
-    * yam\\sweet potato
+    * yam\\\\sweet potato
   * final
 
 text to separate lists
@@ -19,7 +19,7 @@ text to separate lists
 
 **bold**  
 _italic_  
-text with _underscore but not _italicized  
+text with \_underscore but not \_italicized  
 
     
     
