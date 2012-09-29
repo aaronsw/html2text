@@ -191,6 +191,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.google_doc = False
         self.ul_item_mark = '*'
         self.emphasis_mark = '_'
+        self.strong_mark = '**'
 
         if out is None:
             self.out = self.outtextf
@@ -326,7 +327,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.o(self.emphasis_mark)
                 self.drop_white_space += 1
             if bold:
-                self.o("**")
+                self.o(self.strong_mark)
                 self.drop_white_space += 1
             if fixed:
                 self.o('`')
@@ -352,7 +353,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.drop_last(2)
                     self.drop_white_space -= 1
                 else:
-                    self.o("**")
+                    self.o(self.strong_mark)
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
@@ -434,7 +435,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.p()
 
         if tag in ['em', 'i', 'u'] and not self.ignore_emphasis: self.o(self.emphasis_mark)
-        if tag in ['strong', 'b'] and not self.ignore_emphasis: self.o("**")
+        if tag in ['strong', 'b'] and not self.ignore_emphasis: self.o(self.strong_mark)
         if tag in ['del', 'strike', 's']:
             if start:
                 self.o("<"+tag+">")
@@ -824,7 +825,9 @@ def main():
     h = HTML2Text(baseurl=baseurl)
     # handle options
     if options.ul_style_dash: h.ul_item_mark = '-'
-    if options.em_style_asterisk: h.emphasis_mark = '*'
+    if options.em_style_asterisk:
+        h.emphasis_mark = '*'
+        h.strong_mark = '__'
 
     h.body_width = options.body_width
     h.list_indent = options.list_indent
