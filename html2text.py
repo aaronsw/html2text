@@ -210,6 +210,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.space = 0
         self.a = []
         self.astack = []
+        self.maybe_automatic_link = None
+        self.absolute_url_matcher = re.compile(r'^[a-zA-Z+]+://')
         self.acount = 0
         self.list = []
         self.blockquote = 0
@@ -462,13 +464,15 @@ class HTML2Text(HTMLParser.HTMLParser):
             if start:
                 if has_key(attrs, 'href') and not (self.skip_internal_links and attrs['href'].startswith('#')):
                     self.astack.append(attrs)
-                    self.o("[")
+                    self.maybe_automatic_link = attrs['href']
                 else:
                     self.astack.append(None)
             else:
                 if self.astack:
                     a = self.astack.pop()
-                    if a:
+                    if self.maybe_automatic_link:
+                        self.maybe_automatic_link = None
+                    elif a:
                         if self.inline_links:
                             self.o("](" + escape_md(a['href']) + ")")
                         else:
@@ -641,6 +645,15 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if self.style:
             self.style_def.update(dumb_css_parser(data))
+
+        if not self.maybe_automatic_link is None:
+            href = self.maybe_automatic_link
+            if href == data and self.absolute_url_matcher.match(href):
+                self.o("<" + data + ">")
+                return
+            else:
+                self.o("[")
+                self.maybe_automatic_link = None
 
         self.o(data, 1)
 
