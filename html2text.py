@@ -190,6 +190,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ignore_emphasis = IGNORE_EMPHASIS
         self.google_doc = False
         self.ul_item_mark = '*'
+        self.emphasis_mark = '_'
+        self.strong_mark = '**'
 
         if out is None:
             self.out = self.outtextf
@@ -324,10 +326,10 @@ class HTML2Text(HTMLParser.HTMLParser):
             if strikethrough:
                 self.quiet += 1
             if italic:
-                self.o("_")
+                self.o(self.emphasis_mark)
                 self.drop_white_space += 1
             if bold:
-                self.o("**")
+                self.o(self.strong_mark)
                 self.drop_white_space += 1
             if fixed:
                 self.o('`')
@@ -353,14 +355,14 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.drop_last(2)
                     self.drop_white_space -= 1
                 else:
-                    self.o("**")
+                    self.o(self.strong_mark)
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
                     self.drop_last(1)
                     self.drop_white_space -= 1
                 else:
-                    self.o("_")
+                    self.o(self.emphasis_mark)
             # space is only allowed after *all* emphasis marks
             if (bold or italic) and not self.emphasis:
                     self.o(" ")
@@ -434,8 +436,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.blockquote -= 1
                 self.p()
 
-        if tag in ['em', 'i', 'u'] and not self.ignore_emphasis: self.o("_")
-        if tag in ['strong', 'b'] and not self.ignore_emphasis: self.o("**")
+        if tag in ['em', 'i', 'u'] and not self.ignore_emphasis: self.o(self.emphasis_mark)
+        if tag in ['strong', 'b'] and not self.ignore_emphasis: self.o(self.strong_mark)
         if tag in ['del', 'strike', 's']:
             if start:
                 self.o("<"+tag+">")
@@ -790,6 +792,8 @@ def main():
         default=False, help="convert an html-exported Google Document")
     p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
         default=False, help="use a dash rather than a star for unordered list items")
+    p.add_option("-e", "--asterisk-emphasis", action="store_true", dest="em_style_asterisk",
+        default=False, help="use an asterisk rather than an underscore for emphasized text")
     p.add_option("-b", "--body-width", dest="body_width", action="store", type="int",
         default=BODY_WIDTH, help="number of characters per output line, 0 for no wrap")
     p.add_option("-i", "--google-list-indent", dest="list_indent", action="store", type="int",
@@ -834,6 +838,9 @@ def main():
     h = HTML2Text(baseurl=baseurl)
     # handle options
     if options.ul_style_dash: h.ul_item_mark = '-'
+    if options.em_style_asterisk:
+        h.emphasis_mark = '*'
+        h.strong_mark = '__'
 
     h.body_width = options.body_width
     h.list_indent = options.list_indent
