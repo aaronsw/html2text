@@ -9,31 +9,37 @@ sys.path.insert(0, '..')
 import html2text
 
 
-def test_module(fn, unicode_snob=False, google_doc=False):
-    print_conditions('module', unicode_snob, google_doc)
+def test_module(fn, google_doc=False, **kwargs):
+    print_conditions('module', google_doc=google_doc, **kwargs)
 
     h = html2text.HTML2Text()
-
-    if unicode_snob:
-        h.unicode_snob = True
 
     if google_doc:
         h.google_doc = True
         h.ul_item_mark = '-'
         h.body_width = 0
         h.hide_strikethrough = True
+    
+    for k, v in kwargs.iteritems():
+        setattr(h, k, v)
 
-    result = get_baseline(fn, unicode_snob)
+    result = get_baseline(fn)
     actual = h.handle(file(fn).read())
     return print_result(fn, 'module', result, actual)
 
-
-def test_command(fn, google_doc=False):
-    print_conditions('command', False, google_doc)
-
+def test_command(fn, *args):
+    print_conditions('command', *args)
+    args = list(args)
+    
     cmd = [sys.executable or 'python', '../html2text.py']
-    if fn.lower().startswith('google'):
+    
+    if '--googledoc' in args:
+        args.remove('--googledoc')
         cmd += ['-g', '-d', '-b', '0', '-s']
+    
+    if args:
+        cmd.extend(args)
+    
     cmd += [fn]
 
     result = get_baseline(fn)
@@ -47,11 +53,9 @@ def test_command(fn, google_doc=False):
 
     return print_result(fn, 'command', result, actual)
 
-
-def print_conditions(mode, unicode_snob, google_doc):
-    format = " * %s, unicode_snob=%d, google_doc=%d: "
-    sys.stdout.write(format % (mode, int(unicode_snob), int(google_doc)))
-
+def print_conditions(mode, *args, **kwargs):
+    format = " * %s %s, %s: "
+    sys.stdout.write(format % (mode, args, kwargs))
 
 def print_result(fn, mode, result, actual):
     if result == actual:
@@ -71,37 +75,36 @@ def print_result(fn, mode, result, actual):
         print("  Use: diff -u %s %s" % (get_baseline_name(fn), dump_name))
         return False
 
-
 def get_dump_name(fn, suffix):
     return '%s-%s_output.md' % (os.path.splitext(fn)[0], suffix)
-
 
 def get_baseline_name(fn):
     return os.path.splitext(fn)[0] + '.md'
 
-
-def get_baseline(fn, unicode_snob=False):
+def get_baseline(fn):
     name = get_baseline_name(fn)
-    if unicode_snob:
-        f = codecs.open(name, mode='r', encoding='utf8')
-        return f.read()
-    else:
-        return unicode(open(name).read())
-
+    f = codecs.open(name, mode='r', encoding='utf8')
+    return f.read()
 
 def run_all_tests():
     html_files = glob.glob("*.html")
     passing = True
     for fn in html_files:
-        google_doc = fn.lower().startswith('google')
-        unicode_snob = fn.lower().find('unicode') > 0
+        module_args = {}
+        cmdline_args = []
+        
+        if fn.lower().startswith('google'):
+            module_args['google_doc'] = True
+            cmdline_args.append('--googledoc')
+            
+        if fn.lower().find('unicode') > 0:
+            module_args['unicode_snob'] = True
 
         print('\n' + fn + ':')
-        passing = passing and test_module(fn, unicode_snob, google_doc)
+        passing = passing and test_module(fn, **module_args)
 
-        if not unicode_snob:
-            # (Because there is no command-line option to control unicode_snob)
-            passing = passing and test_command(fn, google_doc=google_doc)
+        if not 'unicode_snob' in module_args: # Because there is no command-line option to control unicode_snob
+            passing = passing and test_command(fn, *cmdline_args)
     if passing:
         print("ALL TESTS PASSED")
     else:
