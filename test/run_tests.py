@@ -97,8 +97,13 @@ def run_all_tests():
             module_args['google_doc'] = True
             cmdline_args.append('--googledoc')
             
-        if fn.lower().find('unicode') > 0:
+        if fn.lower().find('unicode') >= 0:
             module_args['unicode_snob'] = True
+        
+        if fn.lower().find('flip_emphasis') >= 0:
+            module_args['emphasis_mark'] = '*'
+            module_args['strong_mark'] = '__'
+            cmdline_args.append('-e')
 
         print('\n' + fn + ':')
         passing = passing and test_module(fn, **module_args)
