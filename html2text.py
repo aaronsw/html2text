@@ -38,6 +38,9 @@ except: pass
 # Use Unicode characters instead of their ascii psuedo-replacements
 UNICODE_SNOB = 0
 
+# Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
+ESCAPE_SNOB = 0
+
 # Put the links after each paragraph instead of at the end.
 LINKS_EACH_PARAGRAPH = 0
 
@@ -180,6 +183,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         # Config options
         self.unicode_snob = UNICODE_SNOB
+        self.escape_snob = ESCAPE_SNOB
         self.links_each_paragraph = LINKS_EACH_PARAGRAPH
         self.body_width = BODY_WIDTH
         self.skip_internal_links = SKIP_INTERNAL_LINKS
@@ -657,6 +661,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.o("[")
                 self.maybe_automatic_link = None
 
+        if self.escape_snob and not self.code and not self.pre:
+            data = escape_md(data, snob=True)
         self.o(data, 1)
 
     def unknown_decl(self, data): pass
@@ -736,6 +742,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 ordered_list_matcher = re.compile(r'\d+\.\s')
 unordered_list_matcher = re.compile(r'[-\*\+]\s')
 md_chars_matcher = re.compile(r"([\\\[\]\(\)])")
+md_chars_matcher_all = re.compile(r"([\\`\*_{}\[\]\(\)#\+\-\.!])")
 
 def skipwrap(para):
     # If the text begins with four spaces or one tab, it's a code block; don't wrap
@@ -773,9 +780,10 @@ def unescape(s, unicode_snob=False):
     h.unicode_snob = unicode_snob
     return h.unescape(s)
 
-def escape_md(text):
+def escape_md(text, snob=False):
     """Escapes markdown-sensitive characters."""
-    return md_chars_matcher.sub(r"\\\1", text)
+    matcher = md_chars_matcher_all if snob else md_chars_matcher
+    return matcher.sub(r"\\\1", text)
 
 def main():
     baseurl = ''
@@ -799,7 +807,9 @@ def main():
     p.add_option("-i", "--google-list-indent", dest="list_indent", action="store", type="int",
         default=GOOGLE_LIST_INDENT, help="number of pixels Google indents nested lists")
     p.add_option("-s", "--hide-strikethrough", action="store_true", dest="hide_strikethrough",
-        default=False, help="hide strike-through text. only relevent when -g is specified as well")
+        default=False, help="hide strike-through text. only relevant when -g is specified as well")
+    p.add_option("--escape-all", action="store_true", dest="escape_snob",
+        default=False, help="Escape all special characters.  Output is less readable, but avoids corner case formatting issues.")
     (options, args) = p.parse_args()
 
     # process input
@@ -849,6 +859,7 @@ def main():
     h.ignore_images = options.ignore_images
     h.google_doc = options.google_doc
     h.hide_strikethrough = options.hide_strikethrough
+    h.escape_snob = options.escape_snob
 
     wrapwrite(h.handle(data))
 
