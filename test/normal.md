@@ -30,3 +30,23 @@ _italic_
 Some `fixed width text` here  
 _`italic fixed width text`_
 
+2012\. Now that was a good year. So was 2011. That's all.
+
+3.14159 is an approximation of pi.
+
+\+ not + a list item
+
++foo
+
+\- foo - bar
+
+-foo 
+
+not a header  
+\--
+
+not a hr  
+  
+\---  
+\- - -
+
