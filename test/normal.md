@@ -50,3 +50,5 @@ not a hr
 \---  
 \- - -
 
+c:\tmp, \\\server\path, \\_/, foo\bar, #\\#, \\\\#
+

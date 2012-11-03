@@ -6,7 +6,6 @@ first issue
   * _**bold italic**_
     * orange
     * apple
-    * yam\\\\sweet potato
   * final
 
 text to separate lists
@@ -51,4 +50,6 @@ not a hr
   
 \---  
 \- - -
+
+c:\tmp, \\\server\path, \\\_/, foo\bar, \#\\\#, \\\\\#
 

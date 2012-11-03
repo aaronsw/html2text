@@ -744,7 +744,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 ordered_list_matcher = re.compile(r'\d+\.\s')
 unordered_list_matcher = re.compile(r'[-\*\+]\s')
 md_chars_matcher = re.compile(r"([\\\[\]\(\)])")
-md_chars_matcher_all = re.compile(r"([\\`\*_{}\[\]\(\)#!])")
+md_chars_matcher_all = re.compile(r"([`\*_{}\[\]\(\)#!])")
 md_dot_matcher = re.compile(r"""
     ^             # start of line
     (\s*\d+)      # optional whitespace and a number
@@ -764,6 +764,12 @@ md_dash_matcher = re.compile(r"""
     (?=\s|\-)     # followed by whitespace (bullet list, or spaced out hr)
                   # or another dash (header or hr)
     """, flags=re.MULTILINE | re.VERBOSE)
+slash_chars = r'\`*_{}[]()#+-.!'
+md_backslash_matcher = re.compile(r'''
+    (\\)          # match one slash
+    (?=[%s])      # followed by a char that requires escaping
+    ''' % re.escape(slash_chars),
+    flags=re.VERBOSE)
 
 def skipwrap(para):
     # If the text begins with four spaces or one tab, it's a code block; don't wrap
@@ -807,6 +813,7 @@ def escape_md(text):
 
 def escape_md_section(text, snob=False):
     """Escapes markdown-sensitive characters across whole document sections."""
+    text = md_backslash_matcher.sub(r"\\\1", text)
     if snob:
         text = md_chars_matcher_all.sub(r"\\\1", text)
     text = md_dot_matcher.sub(r"\1\\\2", text)
