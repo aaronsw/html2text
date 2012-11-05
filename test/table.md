@@ -1,0 +1,16 @@
+Here is our price list:
+
+<table>
+
+<tr><th>Item</th><th>Price</th>
+
+</tr>
+
+<tr><td><a href="http://www.example.com">Apple</a></td><td>1 USD</td>
+
+</tr>
+
+<tr><td>Orange</td><td>1.50 USD</td>
+
+</tr> </table>
+
