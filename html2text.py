@@ -600,6 +600,8 @@ class HTML2Text(HTMLParser.HTMLParser):
 
             if self.pre:
                 bq += "    "
+                for i in xrange(len(self.list)):
+                    bq += "    "
                 data = data.replace("\n", "\n"+bq)
 
             if self.start:
