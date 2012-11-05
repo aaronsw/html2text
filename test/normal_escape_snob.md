@@ -6,7 +6,6 @@ first issue
   * _**bold italic**_
     * orange
     * apple
-    * yam\\\\sweet potato
   * final
 
 text to separate lists
@@ -31,4 +30,26 @@ text with \_underscore but not \_italicized
 
 Some `fixed width text` here  
 _`italic fixed width text`_
+
+2012\. Now that was a good year. So was 2011. That's all.
+
+3.14159 is an approximation of pi.
+
+\+ not + a list item
+
++foo
+
+\- foo - bar
+
+-foo 
+
+not a header  
+\--
+
+not a hr  
+  
+\---  
+\- - -
+
+c:\tmp, \\\server\path, \\\_/, foo\bar, \#\\\#, \\\\\#
 
