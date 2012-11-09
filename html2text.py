@@ -30,7 +30,7 @@ try: #Python3
     import urllib.request as urllib
 except:
     import urllib
-import optparse, re, sys, codecs, types
+import optparse, re, sys, codecs, types, cgi
 
 try: from textwrap import wrap
 except: pass
@@ -272,10 +272,16 @@ class HTML2Text(HTMLParser.HTMLParser):
         return self.outtext
 
     def handle_charref(self, c):
-        self.o(self.charref(c), 1)
+        charref = self.charref(c)
+        if not self.code and not self.pre:
+            charref = cgi.escape(charref)
+        self.o(charref, 1)
 
     def handle_entityref(self, c):
-        self.o(self.entityref(c), 1)
+        entityref = self.entityref(c)
+        if not self.code and not self.pre and entityref != '&nbsp_place_holder;':
+            entityref = cgi.escape(entityref)
+        self.o(entityref, 1)
 
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
