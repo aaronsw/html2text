@@ -266,7 +266,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         if self.unicode_snob:
             nbsp = unichr(name2cp('nbsp'))
         else:
-            nbsp = u' '
+            nbsp = u'&nbsp;'
         self.outtext = self.outtext.replace(u'&nbsp_place_holder;', nbsp)
 
         return self.outtext
@@ -281,6 +281,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         entityref = self.entityref(c)
         if not self.code and not self.pre and entityref != '&nbsp_place_holder;':
             entityref = cgi.escape(entityref)
+        if (self.code or self.pre) and entityref == '&nbsp_place_holder;':
+            # &nbsp; doesn't work in `` and indented blocks
+            entityref = unichr(name2cp('nbsp'))
         self.o(entityref, 1)
 
     def handle_starttag(self, tag, attrs):
