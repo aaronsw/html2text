@@ -52,6 +52,8 @@ not a hr
 
 c:\tmp, \\\server\path, \\_/, foo\bar, #\\#, \\\\#
 
+`c:\tmp, \\server\path, \_/, foo\bar, #\#, \\#`
+
 A common entity is &amp;copy;  
 3 &lt; 6 &amp;&amp; "z" &gt; "a"
 
