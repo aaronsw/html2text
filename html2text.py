@@ -110,6 +110,7 @@ def dumb_property_dict(style):
 def dumb_css_parser(data):
     """returns a hash of css selectors, each of which contains a hash of css attributes"""
     # remove @import sentences
+    data += ';'
     importIndex = data.find('@import')
     while importIndex != -1:
         data = data[0:importIndex] + data[data.find(';', importIndex) + 1:]
