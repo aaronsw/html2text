@@ -594,6 +594,8 @@ class HTML2Text(HTMLParser.HTMLParser):
             if self.startpre:
                 #self.out(" :") #TODO: not output when already one there
                 self.startpre = 0
+                if not data.startswith("\n"):  # <pre>stuff...
+                    data = "\n" + data
 
             bq = (">" * self.blockquote)
             if not (force and data and data[0] == ">") and self.blockquote: bq += " "
