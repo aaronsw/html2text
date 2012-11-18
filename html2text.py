@@ -593,7 +593,6 @@ class HTML2Text(HTMLParser.HTMLParser):
 
             if self.startpre:
                 #self.out(" :") #TODO: not output when already one there
-                self.startpre = 0
                 if not data.startswith("\n"):  # <pre>stuff...
                     data = "\n" + data
 
@@ -601,10 +600,17 @@ class HTML2Text(HTMLParser.HTMLParser):
             if not (force and data and data[0] == ">") and self.blockquote: bq += " "
 
             if self.pre:
-                bq += "    "
+                if not self.list:
+                    bq += "    "
+                #else: list content is already partially indented
                 for i in xrange(len(self.list)):
                     bq += "    "
                 data = data.replace("\n", "\n"+bq)
+
+            if self.startpre:
+                self.startpre = 0
+                if self.list:
+                    data = data.lstrip("\n") # use existing initial indentation
 
             if self.start:
                 self.space = 0
