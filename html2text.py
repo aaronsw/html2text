@@ -30,7 +30,7 @@ try: #Python3
     import urllib.request as urllib
 except:
     import urllib
-import optparse, re, sys, codecs, types
+import optparse, re, sys, codecs, types, cgi
 
 try: from textwrap import wrap
 except: pass
@@ -267,16 +267,25 @@ class HTML2Text(HTMLParser.HTMLParser):
         if self.unicode_snob:
             nbsp = unichr(name2cp('nbsp'))
         else:
-            nbsp = u' '
+            nbsp = u'&nbsp;'
         self.outtext = self.outtext.replace(u'&nbsp_place_holder;', nbsp)
 
         return self.outtext
 
     def handle_charref(self, c):
-        self.o(self.charref(c), 1)
+        charref = self.charref(c)
+        if not self.code and not self.pre:
+            charref = cgi.escape(charref)
+        self.o(charref, 1)
 
     def handle_entityref(self, c):
-        self.o(self.entityref(c), 1)
+        entityref = self.entityref(c)
+        if not self.code and not self.pre and entityref != '&nbsp_place_holder;':
+            entityref = cgi.escape(entityref)
+        if (self.code or self.pre) and entityref == '&nbsp_place_holder;':
+            # &nbsp; doesn't work in `` and indented blocks
+            entityref = unichr(name2cp('nbsp'))
+        self.o(entityref, 1)
 
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
@@ -454,7 +463,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                 # handle some font attributes, but leave headers clean
                 self.handle_emphasis(start, tag_style, parent_style)
 
-        if tag in ["code", "tt"] and not self.pre: self.o('`') #TODO: `` `this` ``
+        if tag in ["code", "tt"] and not self.pre:
+            # TODO: `` `this` ``
+            self.o('`')
+            self.code = not self.code
         if tag == "abbr":
             if start:
                 self.abbr_title = None

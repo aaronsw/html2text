@@ -43,7 +43,7 @@ def test_command(fn, *args):
     cmd += [fn]
 
     result = get_baseline(fn)
-    actual = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read()
+    actual = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read().decode('utf-8')
 
     if os.name == 'nt':
         # Fix the unwanted CR to CRCRLF replacement
