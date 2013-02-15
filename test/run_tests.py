@@ -24,7 +24,7 @@ def test_module(fn, google_doc=False, **kwargs):
         setattr(h, k, v)
 
     result = get_baseline(fn)
-    actual = h.handle(file(fn).read())
+    actual = h.handle(open(fn).read())
     return print_result(fn, 'module', result, actual)
 
 def test_command(fn, *args):
