@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """html2text: Turn HTML into equivalent Markdown-structured text."""
+from __future__ import division
 __version__ = "3.200.3"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
 __copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
@@ -62,16 +63,12 @@ IGNORE_IMAGES = False
 IGNORE_EMPHASIS = False
 
 ### Entity Nonsense ###
+# For checking space-only lines on line 771
+SPACE_RE = re.compile(r'\s\+')
 
 def name2cp(k):
     if k == 'apos': return ord("'")
-    if hasattr(htmlentitydefs, "name2codepoint"): # requires Python 2.3
-        return htmlentitydefs.name2codepoint[k]
-    else:
-        k = htmlentitydefs.entitydefs[k]
-        if k.startswith("&#") and k.endswith(";"):
-            return int(k[2:-1]) # not in latin-1
-        return ord(codecs.latin_1_decode(k)[0])
+    return htmlentitydefs.name2codepoint[k]
 
 unifiable = {'rsquo':"'", 'lsquo':"'", 'rdquo':'"', 'ldquo':'"',
 'copy':'(C)', 'mdash':'--', 'nbsp':' ', 'rarr':'->', 'larr':'<-', 'middot':'*',
@@ -89,14 +86,6 @@ for k in unifiable.keys():
     unifiable_n[name2cp(k)] = unifiable[k]
 
 ### End Entity Nonsense ###
-
-def onlywhite(line):
-    """Return true if the line does only consist of whitespace characters."""
-    for c in line:
-        if c is not ' ' and c is not '  ':
-            return c is ' '
-    return line
-
 def hn(tag):
     if tag[0] == 'h' and len(tag) == 2:
         try:
@@ -106,7 +95,10 @@ def hn(tag):
 
 def dumb_property_dict(style):
     """returns a hash of css attributes"""
-    return dict([(x.strip(), y.strip()) for x, y in [z.split(':', 1) for z in style.split(';') if ':' in z]]);
+    out = dict([(x.strip(), y.strip()) for x, y in
+        [z.split(':', 1) for z in
+            style.split(';') if ':' in z]]);
+    return out
 
 def dumb_css_parser(data):
     """returns a hash of css selectors, each of which contains a hash of css attributes"""
@@ -271,8 +263,14 @@ class HTML2Text(HTMLParser.HTMLParser):
             except NameError:
                 nbsp = chr(name2cp('nbsp'))
         else:
-            nbsp = u' '
-        self.outtext = self.outtext.replace(u'&nbsp_place_holder;', nbsp)
+            try:
+                nbsp = unichr(32)
+            except NameError:
+                nbsp = chr(32)
+        try:
+            self.outtext = self.outtext.replace(unicode('&nbsp_place_holder;'), nbsp)
+        except NameError:
+            self.outtext = self.outtext.replace('&nbsp_place_holder;', nbsp)
 
         return self.outtext
 
@@ -380,6 +378,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
     def handle_tag(self, tag, attrs, start):
         #attrs = fixattrs(attrs)
+        # attrs is None for endtags
         if attrs is None:
             attrs = {}
         else:
@@ -582,7 +581,8 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if not self.quiet:
             if self.google_doc:
-                # prevent white space immediately after 'begin emphasis' marks ('**' and '_')
+                # prevent white space immediately after 'begin emphasis'
+                # marks ('**' and '_')
                 lstripped_data = data.lstrip()
                 if self.drop_white_space and not (self.pre or self.code):
                     data = lstripped_data
@@ -590,7 +590,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.drop_white_space = 0
 
             if puredata and not self.pre:
-                data = re.sub('\s+', ' ', data)
+                # This is a very dangerous call ... it could mess up
+                # all handling of &nbsp; when not handled properly
+                # (see entityref)
+                data = re.sub(r'\s+', r' ', data)
                 if data and data[0] == ' ':
                     self.space = 1
                     data = data[1:]
@@ -602,7 +605,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                     data = "\n" + data
 
             bq = (">" * self.blockquote)
-            if not (force and data and data[0] == ">") and self.blockquote: bq += " "
+            if not (force and data and data[0] == ">") and self.blockquote:
+                bq += " "
 
             if self.pre:
                 if not self.list:
@@ -637,19 +641,24 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if not self.lastWasNL: self.out(' ')
                 self.space = 0
 
-            if self.a and ((self.p_p == 2 and self.links_each_paragraph) or force == "end"):
+            if self.a and ((self.p_p == 2 and self.links_each_paragraph)
+                    or force == "end"):
                 if force == "end": self.out("\n")
 
                 newa = []
                 for link in self.a:
                     if self.outcount > link['outcount']:
-                        self.out("   ["+ str(link['count']) +"]: " + urlparse.urljoin(self.baseurl, link['href']))
-                        if has_key(link, 'title'): self.out(" ("+link['title']+")")
+                        self.out("   ["+ str(link['count']) +"]: " +
+                            urlparse.urljoin(self.baseurl, link['href']))
+                        if 'title' in link:
+                            self.out(" ("+link['title']+")")
                         self.out("\n")
                     else:
                         newa.append(link)
 
-                if self.a != newa: self.out("\n") # Don't need an extra line when nothing was done.
+                # Don't need an extra line when nothing was done.
+                if self.a != newa:
+                    self.out("\n")
 
                 self.a = newa
 
@@ -703,10 +712,13 @@ class HTML2Text(HTMLParser.HTMLParser):
             try: name2cp(c)
             except KeyError: return "&" + c + ';'
             else:
-                try:
-                    return unichr(name2cp(c))
-                except NameError: #Python3
-                    return chr(name2cp(c))
+                if c == 'nbsp':
+                    return unifiable[c]
+                else:
+                    try:
+                        return unichr(name2cp(c))
+                    except NameError: #Python3
+                        return chr(name2cp(c))
 
     def replaceEntities(self, s):
         s = s.group(1)
@@ -722,7 +734,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         """calculate the nesting count of google doc lists"""
         nest_count = 0
         if 'margin-left' in style:
-            nest_count = int(style['margin-left'][:-2]) / self.google_list_indent
+            nest_count = int(style['margin-left'][:-2]) // self.google_list_indent
         return nest_count
 
 
@@ -745,7 +757,11 @@ class HTML2Text(HTMLParser.HTMLParser):
                         result += "\n\n"
                         newlines = 2
                 else:
-                    if not onlywhite(para):
+                    # Warning for tempted!!!
+                    # Be aware that obvious replacement of this with
+                    # line.isspace()
+                    # DOES NOT work! Explanations are welcome.
+                    if not SPACE_RE.match(para):
                         result += para + "\n"
                         newlines = 1
             else:
