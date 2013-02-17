@@ -20,11 +20,11 @@ def test_module(fn, google_doc=False, **kwargs):
         h.body_width = 0
         h.hide_strikethrough = True
 
-    for k, v in kwargs.iteritems():
+    for k, v in kwargs.items():
         setattr(h, k, v)
 
     result = get_baseline(fn)
-    actual = h.handle(file(fn).read())
+    actual = h.handle(open(fn).read())
     return print_result(fn, 'module', result, actual)
 
 def test_command(fn, *args):
@@ -51,7 +51,7 @@ def test_command(fn, *args):
         actual = re.sub(r'\r+', '\r', actual)
         actual = actual.replace('\r\n', '\n')
 
-    return print_result(fn, 'command', result, actual)
+    return print_result(fn, 'command', result, actual.decode('utf8'))
 
 def print_conditions(mode, *args, **kwargs):
     format = " * %s %s, %s: "
@@ -70,7 +70,7 @@ def print_result(fn, mode, result, actual):
         dump_name = get_dump_name(fn, mode)
 
         f = codecs.open(dump_name, encoding='utf-8', mode='w+')
-        f.write(actual)
+        f.write(actual.decode('utf8'))
 
         print("  Use: diff -u %s %s" % (get_baseline_name(fn), dump_name))
         return False
