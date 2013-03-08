@@ -4,4 +4,8 @@ python:
   - "2.6"
   - "2.7"
   - "pypy"
-script: cd test/; python run_tests.py
+  - "3.2"
+  - "3.3"
+before_script:
+  - "python install_deps.py"
+script: PYTHONPATH=$PYTHONPATH:. python test/test_html2text.py -v
