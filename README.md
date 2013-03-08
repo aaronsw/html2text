@@ -43,7 +43,6 @@ _Originally written by Aaron Swartz. This code is distributed under the GPLv3._
 
 ## How to run unit tests
 
-    cd test/
-    python run_tests.py
+    python test/test_html2text.py -v
 
-[![Build Status](https://secure.travis-ci.org/aaronsw/html2text.png)](http://travis-ci.org/aaronsw/html2text)
+[![Build Status](https://secure.travis-ci.org/mcepl/html2text.png)](http://travis-ci.org/mcepl/html2text)
