@@ -760,7 +760,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 else:
                     # Warning for the tempted!!!
                     # Be aware that obvious replacement of this with
-                    # line.isspace()
+                    # not para.isspace()
                     # DOES NOT work! Explanations are welcome.
                     if not SPACE_RE.match(para):
                         result += para + "\n"
