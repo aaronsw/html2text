@@ -1,3 +1,4 @@
+# coding: utf-8
 import sys
 from setuptools import setup, find_packages, Command
 requires_list = []
@@ -29,7 +30,7 @@ class RunTests(Command):
 
 setup(
    name = "html2text",
-   version = "3.200.3",
+   version = "3.200.3.1",  # Temporarily adding the fourth revision number
    description = "Turn HTML into equivalent Markdown-structured text.",
    author = "Aaron Swartz",
    author_email = "me@aaronsw.com",
