@@ -14,9 +14,6 @@ except NameError:
     setattr(__builtins__, 'True', 1)
     setattr(__builtins__, 'False', 0)
 
-def has_key(x, y):
-    if hasattr(x, 'has_key'): return x.has_key(y)
-    else: return y in x
 
 try:
     import htmlentitydefs
@@ -290,16 +287,16 @@ class HTML2Text(HTMLParser.HTMLParser):
 
             If the set of attributes is not found, returns None
         """
-        if not has_key(attrs, 'href'): return None
+        if 'href' not in attrs: return None
 
         i = -1
         for a in self.a:
             i += 1
             match = 0
 
-            if has_key(a, 'href') and a['href'] == attrs['href']:
-                if has_key(a, 'title') or has_key(attrs, 'title'):
-                        if (has_key(a, 'title') and has_key(attrs, 'title') and
+            if ('href' in a) and a['href'] == attrs['href']:
+                if ('title' in a) or ('title' in attrs):
+                        if (('title' in a) and ('title' in attrs) and
                             a['title'] == attrs['title']):
                             match = True
                 else:
@@ -459,7 +456,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             if start:
                 self.abbr_title = None
                 self.abbr_data = ''
-                if has_key(attrs, 'title'):
+                if ('title' in attrs):
                     self.abbr_title = attrs['title']
             else:
                 if self.abbr_title != None:
@@ -469,7 +466,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if tag == "a" and not self.ignore_links:
             if start:
-                if has_key(attrs, 'href') and not (self.skip_internal_links and attrs['href'].startswith('#')):
+                if ('href' in attrs) and not (self.skip_internal_links and attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
                 else:
@@ -494,7 +491,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                             self.o("][" + str(a['count']) + "]")
 
         if tag == "img" and start and not self.ignore_images:
-            if has_key(attrs, 'src'):
+            if ('src' in attrs):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
                 self.o("![" + escape_md(alt) + "]")
