@@ -190,9 +190,12 @@ def google_fixed_width_font(style):
 def list_numbering_start(attrs):
     """extract numbering from list element attributes"""
     if 'start' in attrs:
-        return int(attrs['start']) - 1
-    else:
-        return 0
+        try:
+            return int(attrs['start']) - 1
+        except ValueError:
+            pass
+
+    return 0
 
 
 class HTML2Text(HTMLParser.HTMLParser):
