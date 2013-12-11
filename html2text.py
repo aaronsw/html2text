@@ -830,7 +830,14 @@ def escape_md_section(text, snob=False):
     text = md_dash_matcher.sub(r"\1\\\2", text)
     return text
 
-
+# deflate support
+import zlib
+def deflate(data):   # zlib only provides the zlib compress format, not the deflate format;
+    try:               # so on top of all there's this workaround:
+        return zlib.decompress(data, -zlib.MAX_WBITS)
+    except zlib.error:
+        return zlib.decompress(data)
+        
 def main():
     baseurl = ''
 
@@ -868,9 +875,27 @@ def main():
             p.error('Too many arguments')
 
         if file_.startswith('http://') or file_.startswith('https://'):
+            import urllib2
+            from gzip import GzipFile
+            from urlparse import urlparse
+            from StringIO import StringIO
+            
             baseurl = file_
-            j = urllib.urlopen(baseurl)
-            data = j.read()
+            urls = urlparse(baseurl);
+            j = urllib2.urlopen(urllib2.Request(baseurl, headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:25.0) Gecko/20100101 Firefox/25.0',
+                'Accept-Encoding': 'gzip, deflate',
+                'Referer'   : 'http://%s' % (urls.hostname)
+            }), timeout=30)
+            if (j.code == 200) :
+                content_encoding = j.headers.get('Content-Encoding')
+                if content_encoding == 'gzip':
+                    data = GzipFile(fileobj=StringIO(j.read()), mode='r').read()
+                elif content_encoding == 'deflate':
+                    data = StringIO(deflate(j.read())).getvalue()
+                else:
+                    data = j.read()
+            
             if encoding is None:
                 try:
                     from feedparser import _getCharacterEncoding as enc
@@ -890,7 +915,7 @@ def main():
     else:
         data = sys.stdin.read()
 
-    data = data.decode(encoding)
+    data = data.decode(encoding,'ignore')
     h = HTML2Text(baseurl=baseurl)
     # handle options
     if options.ul_style_dash: h.ul_item_mark = '-'
