@@ -199,14 +199,14 @@ def list_numbering_start(attrs):
 
 
 class HTML2Text(HTMLParser.HTMLParser):
-    def __init__(self, out=None, baseurl=''):
+    def __init__(self, out=None, baseurl='', bodywidth=BODY_WIDTH):
         HTMLParser.HTMLParser.__init__(self)
 
         # Config options
         self.unicode_snob = UNICODE_SNOB
         self.escape_snob = ESCAPE_SNOB
         self.links_each_paragraph = LINKS_EACH_PARAGRAPH
-        self.body_width = BODY_WIDTH
+        self.body_width = bodywidth
         self.skip_internal_links = SKIP_INTERNAL_LINKS
         self.inline_links = INLINE_LINKS
         self.google_list_indent = GOOGLE_LIST_INDENT
@@ -903,8 +903,8 @@ def wrapwrite(text):
         sys.stdout.write(text)
 
 
-def html2text(html, baseurl=''):
-    h = HTML2Text(baseurl=baseurl)
+def html2text(html, baseurl='', bodywidth=BODY_WIDTH):
+    h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
     return h.handle(html)
 
 
