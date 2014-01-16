@@ -4,13 +4,13 @@ import os
 import re
 import subprocess
 import sys
-if sys.version_info[:2] < (2,7):
+if sys.version_info[:2] < (2, 7):
     import unittest2 as unittest
 else:
     import unittest
 import logging
 logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
-    level=logging.DEBUG)
+                    level=logging.DEBUG)
 
 import html2text
 
@@ -50,7 +50,8 @@ def test_command(fn, *args):
     result = get_baseline(fn)
     pid = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     out, _ = pid.communicate()
-    actual = out.decode()
+
+    actual = out.decode('utf8')
 
     if os.name == 'nt':
         # Fix the unwanted CR to CRCRLF replacement
@@ -108,6 +109,11 @@ def generate_test(fn):
     if base_fn.find('escape_snob') >= 0:
         module_args['escape_snob'] = True
         cmdline_args.append('--escape-all')
+
+    if base_fn.startswith('bodywidth'):
+        #module_args['unicode_snob'] = True
+        module_args['body_width'] = 0
+        cmdline_args.append('--body-width=0')
 
     return test_mod, test_cmd
 
