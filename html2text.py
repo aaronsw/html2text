@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-__version__ = "3.200.3"
+__version__ = "3.200.4"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
 __copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
 __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes", "Kevin Jay North"]
@@ -238,6 +238,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.abbr_data = None  # last inner HTML (for abbr being defined)
         self.abbr_list = {}  # stack of abbreviations to write later
         self.baseurl = baseurl
+        self.in_span = False
 
         try: del unifiable_n[name2cp('nbsp')]
         except KeyError: pass
@@ -413,7 +414,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 else:
                     self.soft_br()
             else:
-                self.p()
+                if start == 1 or not self.in_span:
+                    self.p()
 
         if tag == "br" and start: self.o("  \n")
 
@@ -492,12 +494,14 @@ class HTML2Text(HTMLParser.HTMLParser):
                                 a['outcount'] = self.outcount
                                 self.a.append(a)
                             self.o("][" + str(a['count']) + "]")
+                        self.in_span = False
 
         if tag == "img" and start and not self.ignore_images:
             if has_key(attrs, 'src'):
                 attrs['href'] = attrs['src']
                 alt = attrs.get('alt', '')
                 self.o("![" + escape_md(alt) + "]")
+                self.in_span = False
 
                 if self.inline_links:
                     self.o("(" + escape_md(attrs['href']) + ")")
@@ -511,6 +515,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                         attrs['outcount'] = self.outcount
                         self.a.append(attrs)
                     self.o("[" + str(attrs['count']) + "]")
+                self.in_span = False
 
         if tag == 'dl' and start: self.p()
         if tag == 'dt' and not start: self.pbr()
@@ -670,6 +675,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return
             else:
                 self.o("[")
+                self.in_span = True
                 self.maybe_automatic_link = None
 
         if not self.code and not self.pre:
