@@ -223,6 +223,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.list = []
         self.blockquote = 0
         self.pre = 0
+        self.table = 0
         self.startpre = 0
         self.code = False
         self.br_toggle = ''
@@ -468,7 +469,11 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.abbr_data = ''
 
         if tag == "a" and not self.ignore_links:
-            if start:
+            if self.table and start:
+                self.o('<a href="' + attrs['href'] + '">')
+            elif self.table:
+                self.o("</a>")
+            elif start:
                 if has_key(attrs, 'href') and not (self.skip_internal_links and attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
@@ -550,8 +555,21 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.o(str(li['num'])+". ")
                 self.start = 1
 
-        if tag in ["table", "tr"] and start: self.p()
-        if tag == 'td': self.pbr()
+        if tag == 'table':
+            if start:
+                self.table = 1
+                self.o("<"+tag+">")
+            else:
+                self.table = 0
+                self.o("</"+tag+">")
+
+        if tag in ["tr", "td", "th"]:
+            if tag == 'tr':
+                self.pbr()
+            if start:
+                self.o("<"+tag+">")
+            else:
+                self.o("</"+tag+">")
 
         if tag == "pre":
             if start:
