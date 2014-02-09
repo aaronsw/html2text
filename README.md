@@ -9,6 +9,7 @@ Usage: `html2text.py [(filename|url) [encoding]]`
       -h, --help            show this help message and exit
       --ignore-links        don't include any formatting for links
       --ignore-images       don't include any formatting for images
+      --ignore-yaml-fm      ignore Yaml front matter
       -g, --google-doc      convert an html-exported Google Document
       -d, --dash-unordered-list
                             use a dash rather than a star for unordered list items
