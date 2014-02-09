@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-__version__ = "3.200.3"
+__version__ = "3.200.4"
 __author__ = "Aaron Swartz (me@aaronsw.com)"
 __copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
 __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes", "Kevin Jay North"]
@@ -60,6 +60,7 @@ GOOGLE_LIST_INDENT = 36
 IGNORE_ANCHORS = False
 IGNORE_IMAGES = False
 IGNORE_EMPHASIS = False
+IGNORE_YAML_FRONT_MATTER = False
 
 ### Entity Nonsense ###
 
@@ -193,10 +194,12 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ignore_links = IGNORE_ANCHORS
         self.ignore_images = IGNORE_IMAGES
         self.ignore_emphasis = IGNORE_EMPHASIS
+        self.ignore_yaml_front_matter = IGNORE_YAML_FRONT_MATTER
         self.google_doc = False
         self.ul_item_mark = '*'
         self.emphasis_mark = '_'
         self.strong_mark = '**'
+        self.yaml_fm = []
 
         if out is None:
             self.out = self.outtextf
@@ -244,14 +247,31 @@ class HTML2Text(HTMLParser.HTMLParser):
         unifiable['nbsp'] = '&nbsp_place_holder;'
 
 
+    def handle_ignore_yaml_fm(self, data):
+        first_time = True
+        while True:
+            line, data = data.split('\n', 1)
+            self.yaml_fm.append(line)
+            if line == "---" and not first_time:
+                break
+            first_time = False
+        return data
+
     def feed(self, data):
         data = data.replace("</' + 'script>", "</ignore>")
+        if self.ignore_yaml_front_matter:
+            if data.startswith("---\n"):
+                data = self.handle_ignore_yaml_fm(data)
         HTMLParser.HTMLParser.feed(self, data)
 
     def handle(self, data):
         self.feed(data)
         self.feed("")
-        return self.optwrap(self.close())
+        markdown = self.optwrap(self.close())
+        if self.ignore_yaml_front_matter:
+            return "\n".join(self.yaml_fm) + "\n" + markdown
+        else:
+            return markdown
 
     def outtextf(self, s):
         self.outtextlist.append(s)
@@ -842,6 +862,8 @@ def main():
         default=IGNORE_ANCHORS, help="don't include any formatting for links")
     p.add_option("--ignore-images", dest="ignore_images", action="store_true",
         default=IGNORE_IMAGES, help="don't include any formatting for images")
+    p.add_option("--ignore-yaml-fm", dest="ignore_yaml_front_matter", action="store_true",
+        default=IGNORE_YAML_FRONT_MATTER, help="skip re-formatting of YAML front matter")
     p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
         default=False, help="convert an html-exported Google Document")
     p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
@@ -903,6 +925,7 @@ def main():
     h.ignore_emphasis = options.ignore_emphasis
     h.ignore_links = options.ignore_links
     h.ignore_images = options.ignore_images
+    h.ignore_yaml_front_matter = options.ignore_yaml_front_matter
     h.google_doc = options.google_doc
     h.hide_strikethrough = options.hide_strikethrough
     h.escape_snob = options.escape_snob

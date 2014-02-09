@@ -9,8 +9,8 @@ sys.path.insert(0, '..')
 import html2text
 
 
-def test_module(fn, google_doc=False, **kwargs):
-    print_conditions('module', google_doc=google_doc, **kwargs)
+def test_module(fn, google_doc=False, ignore_yaml_fm=False,**kwargs):
+    print_conditions('module', google_doc=google_doc, ignore_yaml_fm=ignore_yaml_fm, **kwargs)
 
     h = html2text.HTML2Text()
 
@@ -19,7 +19,8 @@ def test_module(fn, google_doc=False, **kwargs):
         h.ul_item_mark = '-'
         h.body_width = 0
         h.hide_strikethrough = True
-
+    if ignore_yaml_fm:
+        h.ignore_yaml_front_matter = True
     for k, v in kwargs.iteritems():
         setattr(h, k, v)
 
@@ -87,7 +88,7 @@ def get_baseline(fn):
     return f.read()
 
 def run_all_tests():
-    html_files = glob.glob("*.html")
+    html_files = glob.glob("yaml*.html")
     passing = True
     for fn in html_files:
         module_args = {}
@@ -108,6 +109,9 @@ def run_all_tests():
         if fn.lower().find('escape_snob') >= 0:
             module_args['escape_snob'] = True
             cmdline_args.append('--escape-all')
+        if fn.lower().find('yaml_front_matter') >=0:
+            module_args['ignore_yaml_fm'] = True
+            cmdline_args.append('--ignore-yaml-fm')
 
         print('\n' + fn + ':')
         passing = passing and test_module(fn, **module_args)
