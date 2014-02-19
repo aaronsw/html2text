@@ -80,7 +80,9 @@ unifiable = {'rsquo':"'", 'lsquo':"'", 'rdquo':'"', 'ldquo':'"',
 'igrave':'i', 'iacute':'i', 'icirc':'i', 'iuml':'i',
 'ograve':'o', 'oacute':'o', 'ocirc':'o', 'otilde':'o', 'ouml':'o',
 'ugrave':'u', 'uacute':'u', 'ucirc':'u', 'uuml':'u',
-'lrm':'', 'rlm':''}
+'lrm':'', 'rlm':'',
+'laquo': '<<', 'raquo': '>>', 'lsaquo': '<', 'rsaquo': '>',
+'reg': '(R)', 'trade': '(TM)', 'bull': '*'}
 
 unifiable_n = {}
 
