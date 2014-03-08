@@ -37,6 +37,8 @@ setup(
     description="Turn HTML into equivalent Markdown-structured text.",
     author="Aaron Swartz",
     author_email="me@aaronsw.com",
+    maintainer='Alireza Savand',
+    maintainer_email='alireza.savand@gmail.com',
     url='https://github.com/aaronsw/html2text/',
     cmdclass={'test': RunTests},
     classifiers=[
