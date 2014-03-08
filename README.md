@@ -45,4 +45,4 @@ _Originally written by Aaron Swartz. This code is distributed under the GPLv3._
 
     python test/test_html2text.py -v
 
-[![Build Status](https://secure.travis-ci.org/mcepl/html2text.png)](http://travis-ci.org/mcepl/html2text)
+[![Build Status](https://secure.travis-ci.org/Alir3z4/html2text.png)](http://travis-ci.org/Alir3z4/html2text)
