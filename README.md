@@ -35,6 +35,16 @@ Or with some configuration options:
 _Originally written by Aaron Swartz. This code is distributed under the GPLv3._
 
 
+## How to install
+
+`html2text` is available on pypi
+https://pypi.python.org/pypi/html2text
+
+```
+$ pip install html2text
+```
+
+
 ## How to do a release
 
 1. Update the version in `html2text.py`
