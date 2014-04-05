@@ -1,0 +1,1 @@
+Another theory is that magician and occultist [Aliester Crowley](http://en.wikipedia.org/wiki/Aleister_Crowley) created the beast while attempting to summon evil spirits at his house on the edge of the lake in the early 1900′s. **I met a local woman who prefers this explanation.**
