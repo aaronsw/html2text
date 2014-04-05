@@ -39,7 +39,7 @@ setup(
     author_email="me@aaronsw.com",
     maintainer='Alireza Savand',
     maintainer_email='alireza.savand@gmail.com',
-    url='https://github.com/aaronsw/html2text/',
+    url='https://github.com/Alir3z4/html2text/',
     cmdclass={'test': RunTests},
     platforms='OS Independent',
     classifiers=[
