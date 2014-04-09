@@ -48,12 +48,6 @@ $ pip install html2text
 ```
 
 
-## How to do a release
-
-1. Update the version in `html2text.py`
-2. Update the version in `setup.py`
-3. Run `python setup.py sdist upload`
-
 ## How to run unit tests
 
     python test/test_html2text.py -v
