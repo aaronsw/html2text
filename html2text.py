@@ -517,8 +517,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         if tag == "a" and not self.ignore_links:
             if start:
                 if ('href' in attrs) and \
-                        not (self.skip_internal_links and
-                             attrs['href'].startswith('#')):
+                        (attrs['href'] is not None) and \
+                            not (self.skip_internal_links and
+                                attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
                 else:
