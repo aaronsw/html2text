@@ -12,13 +12,6 @@ __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes",
 #   Support decoded entities with unifiable.
 
 try:
-    True
-except NameError:
-    setattr(__builtins__, 'True', 1)
-    setattr(__builtins__, 'False', 0)
-
-
-try:
     import htmlentitydefs
     import urlparse
     import HTMLParser
