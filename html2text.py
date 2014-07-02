@@ -200,6 +200,12 @@ def list_numbering_start(attrs):
 
 class HTML2Text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl='', bodywidth=BODY_WIDTH):
+        """
+        Input parameters:
+            out: possible custom replacement for self.outtextf (which
+                 appends lines of text).
+            baseurl: base URL of the document we process
+        """
         HTMLParser.HTMLParser.__init__(self)
 
         # Config options
@@ -380,7 +386,6 @@ class HTML2Text(HTMLParser.HTMLParser):
                 # there must not be whitespace before closing emphasis mark
                 self.emphasis -= 1
                 self.space = 0
-                self.outtext = self.outtext.rstrip()
             if fixed:
                 if self.drop_white_space:
                     # empty emphasis, drop it
@@ -514,8 +519,8 @@ class HTML2Text(HTMLParser.HTMLParser):
             if start:
                 if ('href' in attrs) and \
                         (attrs['href'] is not None) and \
-                            not (self.skip_internal_links and
-                                attrs['href'].startswith('#')):
+                        not (self.skip_internal_links and
+                             attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
                 else:
@@ -633,6 +638,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.br_toggle = '  '
 
     def o(self, data, puredata=0, force=0):
+        """
+        Deal with indentation and whitespace
+        """
         if self.abbr_data is not None:
             self.abbr_data += data
 
