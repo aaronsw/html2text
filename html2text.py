@@ -226,11 +226,6 @@ class HTML2Text(HTMLParser.HTMLParser):
         # empty list to store output characters before they are "joined"
         self.outtextlist = []
 
-        try:
-            self.outtext = unicode()
-        except NameError:  # Python3
-            self.outtext = str()
-
         self.quiet = 0
         self.p_p = 0  # number of newline character to print before next output
         self.outcount = 0
@@ -291,7 +286,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.pbr()
         self.o('', 0, 'end')
 
-        self.outtext = nochr.join(self.outtextlist)
+        outtext = nochr.join(self.outtextlist)
         if self.unicode_snob:
             try:
                 nbsp = unichr(name2cp('nbsp'))
@@ -303,16 +298,15 @@ class HTML2Text(HTMLParser.HTMLParser):
             except NameError:
                 nbsp = chr(32)
         try:
-            self.outtext = self.outtext.replace(unicode('&nbsp_place_holder;'),
-                                                nbsp)
+            outtext = outtext.replace(unicode('&nbsp_place_holder;'), nbsp)
         except NameError:
-            self.outtext = self.outtext.replace('&nbsp_place_holder;', nbsp)
+            outtext = outtext.replace('&nbsp_place_holder;', nbsp)
 
         # Clear self.outtextlist to avoid memory leak of its content to
         # the next handling.
         self.outtextlist = []
 
-        return self.outtext
+        return outtext
 
     def handle_charref(self, c):
         self.o(self.charref(c), 1)
@@ -350,10 +344,6 @@ class HTML2Text(HTMLParser.HTMLParser):
 
             if match:
                 return i
-
-    def drop_last(self, nLetters):
-        if not self.quiet:
-            self.outtext = self.outtext[:-nLetters]
 
     def handle_emphasis(self, start, tag_style, parent_style):
         """handles various text emphases"""
@@ -394,7 +384,6 @@ class HTML2Text(HTMLParser.HTMLParser):
             if fixed:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.drop_last(1)
                     self.drop_white_space -= 1
                 else:
                     self.o('`')
@@ -402,14 +391,12 @@ class HTML2Text(HTMLParser.HTMLParser):
             if bold:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.drop_last(2)
                     self.drop_white_space -= 1
                 else:
                     self.o(self.strong_mark)
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.drop_last(1)
                     self.drop_white_space -= 1
                 else:
                     self.o(self.emphasis_mark)
