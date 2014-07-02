@@ -5,6 +5,11 @@ python:
   - "pypy"
   - "3.2"
   - "3.3"
+install:
+    - pip install coveralls
 before_script:
-  - "python install_deps.py"
-script: PYTHONPATH=$PYTHONPATH:. python test/test_html2text.py -v
+  - '[ "${TRAVIS_PYTHON_VERSION}" = "2.6" ] && pip install --use-mirrors unittest2 || /bin/true'
+script:
+  PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
+after_success:
+    coveralls
