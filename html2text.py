@@ -283,10 +283,15 @@ class HTML2Text(HTMLParser.HTMLParser):
     def close(self):
         HTMLParser.HTMLParser.close(self)
 
+        try:
+            nochr = unicode('')
+        except NameError:
+            nochr = str('')
+
         self.pbr()
         self.o('', 0, 'end')
 
-        self.outtext = self.outtext.join(self.outtextlist)
+        self.outtext = nochr.join(self.outtextlist)
         if self.unicode_snob:
             try:
                 nbsp = unichr(name2cp('nbsp'))
@@ -302,6 +307,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                                                 nbsp)
         except NameError:
             self.outtext = self.outtext.replace('&nbsp_place_holder;', nbsp)
+
+        # Clear self.outtextlist to avoid memory leak of its content to
+        # the next handling.
+        self.outtextlist = []
 
         return self.outtext
 
