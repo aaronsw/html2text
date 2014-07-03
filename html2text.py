@@ -116,7 +116,7 @@ def dumb_css_parser(data):
         data = data[0:importIndex] + data[data.find(';', importIndex) + 1:]
         importIndex = data.find('@import')
 
-    # parse the css. reverted from dictionary compehension in order to
+    # parse the css. reverted from dictionary comprehension in order to
     # support older pythons
     elements = [x.split('{') for x in data.split('}') if '{' in x.strip()]
     try:
@@ -886,7 +886,7 @@ def skipwrap(para):
         return True
     # If the text begins with a single -, *, or +, followed by a space,
     # or an integer, followed by a ., followed by a space (in either
-    # case optionally preceeded by whitespace), it's a list; don't wrap.
+    # case optionally proceeded by whitespace), it's a list; don't wrap.
     if ordered_list_matcher.match(stripped) or \
             unordered_list_matcher.match(stripped):
         return True
