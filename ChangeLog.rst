@@ -4,6 +4,7 @@
 
 * Fix #8: Remove ``How to do a release`` section from README.md.
 * Fix #11: Include test directory markdown, html files.
+* Fix memory leak in using ``handle`` while keeping the old instance of ``html2text``.
 
 
 2014.4.5 - 2014-04-05
