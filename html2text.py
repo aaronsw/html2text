@@ -12,13 +12,6 @@ __contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes",
 #   Support decoded entities with unifiable.
 
 try:
-    True
-except NameError:
-    setattr(__builtins__, 'True', 1)
-    setattr(__builtins__, 'False', 0)
-
-
-try:
     import htmlentitydefs
     import urlparse
     import HTMLParser
@@ -200,6 +193,12 @@ def list_numbering_start(attrs):
 
 class HTML2Text(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl='', bodywidth=BODY_WIDTH):
+        """
+        Input parameters:
+            out: possible custom replacement for self.outtextf (which
+                 appends lines of text).
+            baseurl: base URL of the document we process
+        """
         HTMLParser.HTMLParser.__init__(self)
 
         # Config options
@@ -225,11 +224,6 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         # empty list to store output characters before they are "joined"
         self.outtextlist = []
-
-        try:
-            self.outtext = unicode()
-        except NameError:  # Python3
-            self.outtext = str()
 
         self.quiet = 0
         self.p_p = 0  # number of newline character to print before next output
@@ -283,10 +277,15 @@ class HTML2Text(HTMLParser.HTMLParser):
     def close(self):
         HTMLParser.HTMLParser.close(self)
 
+        try:
+            nochr = unicode('')
+        except NameError:
+            nochr = str('')
+
         self.pbr()
         self.o('', 0, 'end')
 
-        self.outtext = self.outtext.join(self.outtextlist)
+        outtext = nochr.join(self.outtextlist)
         if self.unicode_snob:
             try:
                 nbsp = unichr(name2cp('nbsp'))
@@ -298,12 +297,15 @@ class HTML2Text(HTMLParser.HTMLParser):
             except NameError:
                 nbsp = chr(32)
         try:
-            self.outtext = self.outtext.replace(unicode('&nbsp_place_holder;'),
-                                                nbsp)
+            outtext = outtext.replace(unicode('&nbsp_place_holder;'), nbsp)
         except NameError:
-            self.outtext = self.outtext.replace('&nbsp_place_holder;', nbsp)
+            outtext = outtext.replace('&nbsp_place_holder;', nbsp)
 
-        return self.outtext
+        # Clear self.outtextlist to avoid memory leak of its content to
+        # the next handling.
+        self.outtextlist = []
+
+        return outtext
 
     def handle_charref(self, c):
         self.o(self.charref(c), 1)
@@ -342,10 +344,6 @@ class HTML2Text(HTMLParser.HTMLParser):
             if match:
                 return i
 
-    def drop_last(self, nLetters):
-        if not self.quiet:
-            self.outtext = self.outtext[:-nLetters]
-
     def handle_emphasis(self, start, tag_style, parent_style):
         """handles various text emphases"""
         tag_emphasis = google_text_emphasis(tag_style)
@@ -381,11 +379,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                 # there must not be whitespace before closing emphasis mark
                 self.emphasis -= 1
                 self.space = 0
-                self.outtext = self.outtext.rstrip()
             if fixed:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.drop_last(1)
                     self.drop_white_space -= 1
                 else:
                     self.o('`')
@@ -393,14 +389,12 @@ class HTML2Text(HTMLParser.HTMLParser):
             if bold:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.drop_last(2)
                     self.drop_white_space -= 1
                 else:
                     self.o(self.strong_mark)
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
-                    self.drop_last(1)
                     self.drop_white_space -= 1
                 else:
                     self.o(self.emphasis_mark)
@@ -518,8 +512,8 @@ class HTML2Text(HTMLParser.HTMLParser):
             if start:
                 if ('href' in attrs) and \
                         (attrs['href'] is not None) and \
-                            not (self.skip_internal_links and
-                                attrs['href'].startswith('#')):
+                        not (self.skip_internal_links and
+                             attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
                 else:
@@ -637,6 +631,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.br_toggle = '  '
 
     def o(self, data, puredata=0, force=0):
+        """
+        Deal with indentation and whitespace
+        """
         if self.abbr_data is not None:
             self.abbr_data += data
 
