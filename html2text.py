@@ -107,8 +107,13 @@ def dumb_property_dict(style):
 
 
 def dumb_css_parser(data):
-    """returns a hash of css selectors, each of which contains a hash of
-    css attributes"""
+    """
+    :type data: str
+
+    :returns: A hash of css selectors, each of which contains a hash of
+    css attributes.
+    :rtype: dict
+    """
     # remove @import sentences
     data += ';'
     importIndex = data.find('@import')
