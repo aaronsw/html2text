@@ -29,4 +29,4 @@ class TestMemleak(unittest.TestCase):
         h2t = html2text.HTML2Text()
         h2t.handle(self.instr)
         # And even less when the input is empty
-        self.assertEqual(h2t.handle(''), u'\n\n')
+        self.assertEqual(h2t.handle(''), '\n\n')
