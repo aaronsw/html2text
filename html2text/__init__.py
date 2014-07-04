@@ -2,6 +2,7 @@
 # coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
+from html2text import config
 
 
 __version__ = "2014.7.3"
@@ -39,8 +40,9 @@ def name2cp(k):
 
 unifiable_n = {}
 
-for k in unifiable.keys():
-    unifiable_n[name2cp(k)] = unifiable[k]
+for k in config.unifiable.keys():
+    unifiable_n[name2cp(k)] = config.unifiable[k]
+
 
 
 ### End Entity Nonsense ###
@@ -161,7 +163,7 @@ def list_numbering_start(attrs):
 
 
 class HTML2Text(HTMLParser.HTMLParser):
-    def __init__(self, out=None, baseurl='', bodywidth=BODY_WIDTH):
+    def __init__(self, out=None, baseurl='', bodywidth=config.BODY_WIDTH):
         """
         Input parameters:
             out: possible custom replacement for self.outtextf (which
@@ -171,16 +173,16 @@ class HTML2Text(HTMLParser.HTMLParser):
         HTMLParser.HTMLParser.__init__(self)
 
         # Config options
-        self.unicode_snob = UNICODE_SNOB
-        self.escape_snob = ESCAPE_SNOB
-        self.links_each_paragraph = LINKS_EACH_PARAGRAPH
+        self.unicode_snob = config.UNICODE_SNOB
+        self.escape_snob = config.ESCAPE_SNOB
+        self.links_each_paragraph = config.LINKS_EACH_PARAGRAPH
         self.body_width = bodywidth
-        self.skip_internal_links = SKIP_INTERNAL_LINKS
-        self.inline_links = INLINE_LINKS
-        self.google_list_indent = GOOGLE_LIST_INDENT
-        self.ignore_links = IGNORE_ANCHORS
-        self.ignore_images = IGNORE_IMAGES
-        self.ignore_emphasis = IGNORE_EMPHASIS
+        self.skip_internal_links = config.SKIP_INTERNAL_LINKS
+        self.inline_links = config.INLINE_LINKS
+        self.google_list_indent = config.GOOGLE_LIST_INDENT
+        self.ignore_links = config.IGNORE_ANCHORS
+        self.ignore_images = config.IGNORE_IMAGES
+        self.ignore_emphasis = config.IGNORE_EMPHASIS
         self.google_doc = False
         self.ul_item_mark = '*'
         self.emphasis_mark = '_'
@@ -227,7 +229,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             del unifiable_n[name2cp('nbsp')]
         except KeyError:
             pass
-        unifiable['nbsp'] = '&nbsp_place_holder;'
+        config.unifiable['nbsp'] = '&nbsp_place_holder;'
 
     def feed(self, data):
         data = data.replace("</' + 'script>", "</ignore>")
@@ -739,8 +741,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return chr(c)
 
     def entityref(self, c):
-        if not self.unicode_snob and c in unifiable.keys():
-            return unifiable[c]
+        if not self.unicode_snob and c in config.unifiable.keys():
+            return config.unifiable[c]
         else:
             try:
                 name2cp(c)
@@ -748,7 +750,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return "&" + c + ';'
             else:
                 if c == 'nbsp':
-                    return unifiable[c]
+                    return config.unifiable[c]
                 else:
                     try:
                         return unichr(name2cp(c))
@@ -798,7 +800,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     # Be aware that obvious replacement of this with
                     # line.isspace()
                     # DOES NOT work! Explanations are welcome.
-                    if not SPACE_RE.match(para):
+                    if not config.SPACE_RE.match(para):
                         result += para + "\n"
                         newlines = 1
             else:
@@ -870,7 +872,7 @@ def wrapwrite(text):
         sys.stdout.write(text)
 
 
-def html2text(html, baseurl='', bodywidth=BODY_WIDTH):
+def html2text(html, baseurl='', bodywidth=config.BODY_WIDTH):
     h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
     return h.handle(html)
 
@@ -904,13 +906,13 @@ def main():
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
     p.add_option("--ignore-emphasis", dest="ignore_emphasis",
-                 action="store_true", default=IGNORE_EMPHASIS,
+                 action="store_true", default=config.IGNORE_EMPHASIS,
                  help="don't include any formatting for emphasis")
     p.add_option("--ignore-links", dest="ignore_links", action="store_true",
-                 default=IGNORE_ANCHORS,
+                 default=config.IGNORE_ANCHORS,
                  help="don't include any formatting for links")
     p.add_option("--ignore-images", dest="ignore_images", action="store_true",
-                 default=IGNORE_IMAGES,
+                 default=config.IGNORE_IMAGES,
                  help="don't include any formatting for images")
     p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
                  default=False,
@@ -923,10 +925,10 @@ def main():
                  help="use an asterisk rather than an underscore " +
                  "for emphasized text")
     p.add_option("-b", "--body-width", dest="body_width", action="store",
-                 type="int", default=BODY_WIDTH,
+                 type="int", default=config.BODY_WIDTH,
                  help="number of characters per output line, 0 for no wrap")
     p.add_option("-i", "--google-list-indent", dest="list_indent",
-                 action="store", type="int", default=GOOGLE_LIST_INDENT,
+                 action="store", type="int", default=config.GOOGLE_LIST_INDENT,
                  help="number of pixels Google indents nested lists")
     p.add_option("-s", "--hide-strikethrough", action="store_true",
                  dest="hide_strikethrough", default=False,
