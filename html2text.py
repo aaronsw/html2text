@@ -2,11 +2,10 @@
 # coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
+
+
 __version__ = "2014.7.3"
-__author__ = "Aaron Swartz (me@aaronsw.com)"
-__copyright__ = "(C) 2004-2008 Aaron Swartz. GNU GPL 3."
-__contributors__ = ["Martin 'Joey' Schulze", "Ricardo Reyes",
-                    "Kevin Jay North", "Matěj Cepl"]
+
 
 # TODO:
 #   Support decoded entities with unifiable.
