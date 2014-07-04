@@ -134,7 +134,14 @@ def dumb_css_parser(data):
 
 
 def element_style(attrs, style_def, parent_style):
-    """returns a hash of the 'final' style attributes of the element"""
+    """
+    :type attrs: dict
+    :type style_def: dict
+    :type style_def: dict
+
+    :returns: A hash of the 'final' style attributes of the element
+    :rtype: dict
+    """
     style = parent_style.copy()
     if 'class' in attrs:
         for css_class in attrs['class'].split():
