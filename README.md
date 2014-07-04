@@ -23,7 +23,7 @@ Usage: `html2text.py [(filename|url) [encoding]]`
 |`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
 
 
-Or you can use it from within Python:
+Or you can use it from within `Python`:
 
     import html2text
     print html2text.html2text("<p>Hello, world.</p>")
