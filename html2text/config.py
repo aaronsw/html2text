@@ -1,6 +1,6 @@
-# Use Unicode characters instead of their ascii psuedo-replacements
 import re
 
+# Use Unicode characters instead of their ascii psuedo-replacements
 UNICODE_SNOB = 0
 
 # Escape all special characters.  Output is less readable, but avoids
@@ -31,15 +31,43 @@ IGNORE_EMPHASIS = False
 # For checking space-only lines on line 771
 SPACE_RE = re.compile(r'\s\+')
 
-
-
-unifiable = {'rsquo': "'", 'lsquo': "'", 'rdquo': '"', 'ldquo': '"',
-             'copy': '(C)', 'mdash': '--', 'nbsp': ' ', 'rarr': '->',
-             'larr': '<-', 'middot': '*', 'ndash': '-', 'oelig': 'oe',
-             'aelig': 'ae', 'agrave': 'a', 'aacute': 'a', 'acirc': 'a',
-             'atilde': 'a', 'auml': 'a', 'aring': 'a', 'egrave': 'e',
-             'eacute': 'e', 'ecirc': 'e', 'euml': 'e', 'igrave': 'i',
-             'iacute': 'i', 'icirc': 'i', 'iuml': 'i', 'ograve': 'o',
-             'oacute': 'o', 'ocirc': 'o', 'otilde': 'o', 'ouml': 'o',
-             'ugrave': 'u', 'uacute': 'u', 'ucirc': 'u', 'uuml': 'u',
-             'lrm': '', 'rlm': ''}
+unifiable = {
+    'rsquo': "'",
+    'lsquo': "'",
+    'rdquo': '"',
+    'ldquo': '"',
+    'copy': '(C)',
+    'mdash': '--',
+    'nbsp': ' ',
+    'rarr': '->',
+    'larr': '<-',
+    'middot': '*',
+    'ndash': '-',
+    'oelig': 'oe',
+    'aelig': 'ae',
+    'agrave': 'a',
+    'aacute': 'a',
+    'acirc': 'a',
+    'atilde': 'a',
+    'auml': 'a',
+    'aring': 'a',
+    'egrave': 'e',
+    'eacute': 'e',
+    'ecirc': 'e',
+    'euml': 'e',
+    'igrave': 'i',
+    'iacute': 'i',
+    'icirc': 'i',
+    'iuml': 'i',
+    'ograve': 'o',
+    'oacute': 'o',
+    'ocirc': 'o',
+    'otilde': 'o',
+    'ouml': 'o',
+    'ugrave': 'u',
+    'uacute': 'u',
+    'ucirc': 'u',
+    'uuml': 'u',
+    'lrm': '',
+    'rlm': ''
+}
