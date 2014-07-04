@@ -21,6 +21,8 @@ Usage: `html2text.py [(filename|url) [encoding]]`
 |`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
 |`-i` `LIST_INDENT`, `--google-list-indent`=`LIST_INDENT`| Number of pixels Google indents nested lists
 |`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
+|`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
+
 
 
 Or you can use it from within `Python`:
