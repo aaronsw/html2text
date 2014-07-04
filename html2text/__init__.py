@@ -919,9 +919,11 @@ def unescape(s, unicode_snob=False):
 
 
 def escape_md(text):
-    """Escapes markdown-sensitive characters within other markdown
-    constructs."""
-    return md_chars_matcher.sub(r"\\\1", text)
+    """
+    Escapes markdown-sensitive characters within other markdown
+    constructs.
+    """
+    return config.RE_MD_CHARS_MATCHER.sub(r"\\\1", text)
 
 
 def escape_md_section(text, snob=False):
