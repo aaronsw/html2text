@@ -35,7 +35,7 @@ def test_module(fn, google_doc=False, **kwargs):
 
 def test_command(fn, *args):
     args = list(args)
-    cmd_name = os.path.join(os.path.dirname(fn), '..', 'html2text.py')
+    cmd_name = os.path.join(os.path.dirname(fn), '..', 'html2text/__init__.py')
     cmd = [sys.executable, cmd_name]
 
     if '--googledoc' in args:
