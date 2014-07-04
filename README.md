@@ -6,25 +6,24 @@
 
 html2text is a Python script that converts a page of HTML into clean, easy-to-read plain ASCII text. Better yet, that ASCII also happens to be valid Markdown (a text-to-HTML format).
 
+
 Usage: `html2text.py [(filename|url) [encoding]]`
 
-    Options:
-      --version             show program's version number and exit
-      -h, --help            show this help message and exit
-      --ignore-links        don't include any formatting for links
-      --ignore-images       don't include any formatting for images
-      -g, --google-doc      convert an html-exported Google Document
-      -d, --dash-unordered-list
-                            use a dash rather than a star for unordered list items
-      -b BODY_WIDTH, --body-width=BODY_WIDTH
-                            number of characters per output line, 0 for no wrap
-      -i LIST_INDENT, --google-list-indent=LIST_INDENT
-                            number of pixels Google indents nested lists
-      -s, --hide-strikethrough
-                            hide strike-through text. only relevent when -g is
-                            specified as well
 
-Or you can use it from within Python:
+| Option                                                 | Description            
+|--------------------------------------------------------|--------------------------------------------------
+| `--version`                                            | Show program's version number and exit 
+| `-h`, `--help`                                         | Show this help message and exit      
+| `--ignore-links`                                       | Don't include any formatting for links
+|`--ignore-images`                                       | Don't include any formatting for images
+|`-g`, `--google-doc`                                    | Convert an html-exported Google Document
+|`-d`, `--dash-unordered-list`                           | Use a dash rather than a star for unordered list items
+|`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
+|`-i` `LIST_INDENT`, `--google-list-indent`=`LIST_INDENT`| Number of pixels Google indents nested lists
+|`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
+
+
+Or you can use it from within `Python`:
 
     import html2text
     print html2text.html2text("<p>Hello, world.</p>")
@@ -51,4 +50,4 @@ $ pip install html2text
 
 ## How to run unit tests
 
-    python test/test_html2text.py -v
+    PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
