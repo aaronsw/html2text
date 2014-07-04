@@ -1,6 +1,6 @@
 # coding: utf-8
 import sys
-from setuptools import setup, find_packages, Command
+from setuptools import setup, Command
 
 requires_list = []
 try:
@@ -28,7 +28,8 @@ class RunTests(Command):
     def run(self):
         tests = unittest.TestLoader().discover('.')
         runner = unittest.TextTestRunner()
-        runner.run(tests)
+        results = runner.run(tests)
+        sys.exit(not results.wasSuccessful())
 
 
 setup(
