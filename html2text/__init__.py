@@ -9,7 +9,7 @@ __version__ = "2014.7.3"
 
 
 # TODO:
-#   Support decoded entities with unifiable.
+#   Support decoded entities with UNIFIABLE.
 
 try:
     import htmlentitydefs
@@ -40,8 +40,8 @@ def name2cp(k):
 
 unifiable_n = {}
 
-for k in config.unifiable.keys():
-    unifiable_n[name2cp(k)] = config.unifiable[k]
+for k in config.UNIFIABLE.keys():
+    unifiable_n[name2cp(k)] = config.UNIFIABLE[k]
 
 
 def hn(tag):
@@ -257,7 +257,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             del unifiable_n[name2cp('nbsp')]
         except KeyError:
             pass
-        config.unifiable['nbsp'] = '&nbsp_place_holder;'
+        config.UNIFIABLE['nbsp'] = '&nbsp_place_holder;'
 
     def feed(self, data):
         data = data.replace("</' + 'script>", "</ignore>")
@@ -772,8 +772,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return chr(c)
 
     def entityref(self, c):
-        if not self.unicode_snob and c in config.unifiable.keys():
-            return config.unifiable[c]
+        if not self.unicode_snob and c in config.UNIFIABLE.keys():
+            return config.UNIFIABLE[c]
         else:
             try:
                 name2cp(c)
@@ -781,7 +781,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return "&" + c + ';'
             else:
                 if c == 'nbsp':
-                    return config.unifiable[c]
+                    return config.UNIFIABLE[c]
                 else:
                     try:
                         return unichr(name2cp(c))
@@ -795,10 +795,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         else:
             return self.entityref(s)
 
-    r_unescape = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
-
     def unescape(self, s):
-        return self.r_unescape.sub(self.replaceEntities, s)
+        return config.RE_UNESCAPE.sub(self.replaceEntities, s)
 
     def google_nest_count(self, style):
         """
@@ -808,6 +806,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         if 'margin-left' in style:
             nest_count = int(style['margin-left'][:-2]) \
                 // self.google_list_indent
+
         return nest_count
 
     def optwrap(self, text):
@@ -835,7 +834,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     # Be aware that obvious replacement of this with
                     # line.isspace()
                     # DOES NOT work! Explanations are welcome.
-                    if not config.SPACE_RE.match(para):
+                    if not config.RE_SPACE.match(para):
                         result += para + "\n"
                         newlines = 1
             else:
@@ -850,22 +849,26 @@ def skipwrap(para):
     # don't wrap
     if para[0:4] == '    ' or para[0] == '\t':
         return True
+
     # If the text begins with only two "--", possibly preceded by
     # whitespace, that's an emdash; so wrap.
     stripped = para.lstrip()
     if stripped[0:2] == "--" and len(stripped) > 2 and stripped[2] != "-":
         return False
+
     # I'm not sure what this is for; I thought it was to detect lists,
     # but there's a <br>-inside-<span> case in one of the tests that
     # also depends upon it.
     if stripped[0:1] == '-' or stripped[0:1] == '*':
         return True
+
     # If the text begins with a single -, *, or +, followed by a space,
     # or an integer, followed by a ., followed by a space (in either
     # case optionally proceeded by whitespace), it's a list; don't wrap.
-    if ordered_list_matcher.match(stripped) or \
-            unordered_list_matcher.match(stripped):
+    if config.RE_ORDERED_LIST_MATCHER.match(stripped) or \
+            config.RE_UNORDERED_LIST_MATCHER.match(stripped):
         return True
+
     return False
 
 
@@ -879,12 +882,14 @@ def wrapwrite(text):
 
 def html2text(html, baseurl='', bodywidth=config.BODY_WIDTH):
     h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
+
     return h.handle(html)
 
 
 def unescape(s, unicode_snob=False):
     h = HTML2Text()
     h.unicode_snob = unicode_snob
+
     return h.unescape(s)
 
 
@@ -903,10 +908,12 @@ def escape_md_section(text, snob=False):
     text = config.RE_MD_BACKSLASH_MATCHER.sub(r"\\\1", text)
 
     if snob:
-        text = md_chars_matcher_all.sub(r"\\\1", text)
-    text = md_dot_matcher.sub(r"\1\\\2", text)
-    text = md_plus_matcher.sub(r"\1\\\2", text)
-    text = md_dash_matcher.sub(r"\1\\\2", text)
+        text = config.RE_MD_CHARS_MATCHER_ALL.sub(r"\\\1", text)
+
+    text = config.RE_MD_DOT_MATCHER.sub(r"\1\\\2", text)
+    text = config.RE_MD_PLUS_MATCHER.sub(r"\1\\\2", text)
+    text = config.RE_MD_DASH_MATCHER.sub(r"\1\\\2", text)
+
     return text
 
 
