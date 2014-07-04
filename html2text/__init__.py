@@ -44,8 +44,6 @@ for k in config.unifiable.keys():
     unifiable_n[name2cp(k)] = config.unifiable[k]
 
 
-
-### End Entity Nonsense ###
 def hn(tag):
     if tag[0] == 'h' and len(tag) == 2:
         try:
@@ -58,7 +56,8 @@ def hn(tag):
 
 def dumb_property_dict(style):
     """
-    :returns: A hash of css attributes"""
+    :returns: A hash of css attributes
+    """
     out = dict([(x.strip(), y.strip()) for x, y in
                [z.split(':', 1) for z in
                style.split(';') if ':' in z]])
@@ -113,7 +112,13 @@ def element_style(attrs, style_def, parent_style):
 
 
 def google_list_style(style):
-    """finds out whether this is an ordered or unordered list"""
+    """
+    Finds out whether this is an ordered or unordered list
+
+    :type style: dict
+
+    :rtype: str
+    """
     if 'list-style-type' in style:
         list_style = style['list-style-type']
         if list_style in ['disc', 'circle', 'square', 'none']:
@@ -122,15 +127,26 @@ def google_list_style(style):
 
 
 def google_has_height(style):
-    """check if the style of the element has the 'height' attribute
-    explicitly defined"""
+    """
+    Check if the style of the element has the 'height' attribute
+    explicitly defined
+
+    :type style: dict
+
+    :rtype: bool
+    """
     if 'height' in style:
         return True
     return False
 
 
 def google_text_emphasis(style):
-    """return a list of all emphasis modifiers of the element"""
+    """
+    :type style: dict
+
+    :returns: A list of all emphasis modifiers of the element
+    :rtype: list
+    """
     emphasis = []
     if 'text-decoration' in style:
         emphasis.append(style['text-decoration'])
@@ -142,7 +158,13 @@ def google_text_emphasis(style):
 
 
 def google_fixed_width_font(style):
-    """check if the css of the current element defines a fixed width font"""
+    """
+    Check if the css of the current element defines a fixed width font
+
+    :type style: dict
+
+    :rtype: bool
+    """
     font_family = ''
     if 'font-family' in style:
         font_family = style['font-family']
@@ -152,7 +174,13 @@ def google_fixed_width_font(style):
 
 
 def list_numbering_start(attrs):
-    """extract numbering from list element attributes"""
+    """
+    Extract numbering from list element attributes
+
+    :type attrs: dict
+
+    :rtype: int or None
+    """
     if 'start' in attrs:
         try:
             return int(attrs['start']) - 1
@@ -291,10 +319,12 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.handle_tag(tag, None, 0)
 
     def previousIndex(self, attrs):
-        """ returns the index of certain set of attributes (of a link) in the
-            self.a list
+        """
+        :type attrs: dict
 
-            If the set of attributes is not found, returns None
+        :returns: The index of certain set of attributes (of a link) in the
+        self.a list. If the set of attributes is not found, returns None
+        :rtype: int
         """
         if 'href' not in attrs:
             return None
@@ -316,7 +346,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return i
 
     def handle_emphasis(self, start, tag_style, parent_style):
-        """handles various text emphases"""
+        """
+        Handles various text emphases
+        """
         tag_emphasis = google_text_emphasis(tag_style)
         parent_emphasis = google_text_emphasis(parent_style)
 
@@ -376,7 +408,6 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.quiet -= 1
 
     def handle_tag(self, tag, attrs, start):
-        #attrs = fixattrs(attrs)
         # attrs is None for endtags
         if attrs is None:
             attrs = {}
@@ -770,7 +801,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         return self.r_unescape.sub(self.replaceEntities, s)
 
     def google_nest_count(self, style):
-        """calculate the nesting count of google doc lists"""
+        """
+        Calculate the nesting count of google doc lists
+        """
         nest_count = 0
         if 'margin-left' in style:
             nest_count = int(style['margin-left'][:-2]) \
@@ -778,7 +811,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         return nest_count
 
     def optwrap(self, text):
-        """Wrap all paragraphs in the provided text."""
+        """
+        Wrap all paragraphs in the provided text.
+        """
         if not self.body_width:
             return text
 

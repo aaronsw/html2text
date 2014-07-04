@@ -27,7 +27,6 @@ IGNORE_ANCHORS = False
 IGNORE_IMAGES = False
 IGNORE_EMPHASIS = False
 
-### Entity Nonsense ###
 # For checking space-only lines on line 771
 SPACE_RE = re.compile(r'\s\+')
 
