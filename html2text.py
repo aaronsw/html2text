@@ -98,7 +98,8 @@ def hn(tag):
 
 
 def dumb_property_dict(style):
-    """returns a hash of css attributes"""
+    """
+    :returns: A hash of css attributes"""
     out = dict([(x.strip(), y.strip()) for x, y in
                [z.split(':', 1) for z in
                style.split(';') if ':' in z]])
