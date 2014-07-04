@@ -922,39 +922,79 @@ def main():
 
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
-    p.add_option("--ignore-emphasis", dest="ignore_emphasis",
-                 action="store_true", default=config.IGNORE_EMPHASIS,
-                 help="don't include any formatting for emphasis")
-    p.add_option("--ignore-links", dest="ignore_links", action="store_true",
-                 default=config.IGNORE_ANCHORS,
-                 help="don't include any formatting for links")
-    p.add_option("--ignore-images", dest="ignore_images", action="store_true",
-                 default=config.IGNORE_IMAGES,
-                 help="don't include any formatting for images")
-    p.add_option("-g", "--google-doc", action="store_true", dest="google_doc",
-                 default=False,
-                 help="convert an html-exported Google Document")
-    p.add_option("-d", "--dash-unordered-list", action="store_true",
-                 dest="ul_style_dash", default=False,
-                 help="use a dash rather than a star for unordered list items")
-    p.add_option("-e", "--asterisk-emphasis", action="store_true",
-                 dest="em_style_asterisk", default=False,
-                 help="use an asterisk rather than an underscore " +
-                 "for emphasized text")
-    p.add_option("-b", "--body-width", dest="body_width", action="store",
-                 type="int", default=config.BODY_WIDTH,
-                 help="number of characters per output line, 0 for no wrap")
-    p.add_option("-i", "--google-list-indent", dest="list_indent",
-                 action="store", type="int", default=config.GOOGLE_LIST_INDENT,
-                 help="number of pixels Google indents nested lists")
-    p.add_option("-s", "--hide-strikethrough", action="store_true",
-                 dest="hide_strikethrough", default=False,
-                 help="hide strike-through text. only relevant when -g is " +
-                 "specified as well")
-    p.add_option("--escape-all", action="store_true", dest="escape_snob",
-                 default=False,
-                 help="Escape all special characters.  Output is less " +
-                 "readable, but avoids corner case formatting issues.")
+    p.add_option(
+        "--ignore-emphasis",
+        dest="ignore_emphasis",
+        action="store_true",
+        default=config.IGNORE_EMPHASIS,
+        help="don't include any formatting for emphasis"
+    )
+    p.add_option(
+        "--ignore-links",
+        dest="ignore_links",
+        action="store_true",
+        default=config.IGNORE_ANCHORS,
+        help="don't include any formatting for links")
+    p.add_option(
+        "--ignore-images",
+        dest="ignore_images",
+        action="store_true",
+        default=config.IGNORE_IMAGES,
+        help="don't include any formatting for images"
+    )
+    p.add_option(
+        "-g", "--google-doc",
+        action="store_true",
+        dest="google_doc",
+        default=False,
+        help="convert an html-exported Google Document"
+    )
+    p.add_option(
+        "-d", "--dash-unordered-list",
+        action="store_true",
+        dest="ul_style_dash",
+        default=False,
+        help="use a dash rather than a star for unordered list items"
+    )
+    p.add_option(
+        "-e", "--asterisk-emphasis",
+        action="store_true",
+        dest="em_style_asterisk",
+        default=False,
+        help="use an asterisk rather than an underscore for emphasized text"
+    )
+    p.add_option(
+        "-b", "--body-width",
+        dest="body_width",
+        action="store",
+        type="int",
+        default=config.BODY_WIDTH,
+        help="number of characters per output line, 0 for no wrap"
+    )
+    p.add_option(
+        "-i", "--google-list-indent",
+        dest="list_indent",
+        action="store",
+        type="int",
+        default=config.GOOGLE_LIST_INDENT,
+        help="number of pixels Google indents nested lists"
+    )
+    p.add_option(
+        "-s", "--hide-strikethrough",
+        action="store_true",
+        dest="hide_strikethrough",
+        default=False,
+        help="hide strike-through text. only relevant when -g is "
+             "specified as well"
+    )
+    p.add_option(
+        "--escape-all",
+        action="store_true",
+        dest="escape_snob",
+        default=False,
+        help="Escape all special characters.  Output is less readable, but "
+             "avoids corner case formatting issues."
+    )
     (options, args) = p.parse_args()
 
     # process input
