@@ -4,15 +4,18 @@ import os
 import re
 import subprocess
 import sys
+
 if sys.version_info[:2] < (2, 7):
     import unittest2 as unittest
 else:
     import unittest
 import logging
+
 logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
                     level=logging.DEBUG)
 
 import html2text
+
 
 def test_module(fn, google_doc=False, **kwargs):
     h = html2text.HTML2Text()
@@ -32,6 +35,7 @@ def test_module(fn, google_doc=False, **kwargs):
     actual = h.handle(inf.read())
     inf.close()
     return result, actual
+
 
 def test_command(fn, *args):
     args = list(args)
@@ -61,11 +65,14 @@ def test_command(fn, *args):
 
     return result, actual
 
+
 def get_dump_name(fn, suffix):
     return '%s-%s_output.md' % (os.path.splitext(fn)[0], suffix)
 
+
 def get_baseline_name(fn):
     return os.path.splitext(fn)[0] + '.md'
+
 
 def get_baseline(fn):
     name = get_baseline_name(fn)
@@ -74,8 +81,10 @@ def get_baseline(fn):
     f.close()
     return out
 
+
 class TestHTML2Text(unittest.TestCase):
     pass
+
 
 def generate_test(fn):
     def test_mod(self):
