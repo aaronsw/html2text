@@ -925,8 +925,11 @@ def escape_md(text):
 
 
 def escape_md_section(text, snob=False):
-    """Escapes markdown-sensitive characters across whole document sections."""
-    text = md_backslash_matcher.sub(r"\\\1", text)
+    """
+    Escapes markdown-sensitive characters across whole document sections.
+    """
+    text = config.RE_MD_BACKSLASH_MATCHER.sub(r"\\\1", text)
+
     if snob:
         text = md_chars_matcher_all.sub(r"\\\1", text)
     text = md_dot_matcher.sub(r"\1\\\2", text)
