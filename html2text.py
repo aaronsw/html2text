@@ -20,7 +20,7 @@ except ImportError:  # Python3
     import html.parser as HTMLParser
 try:  # Python3
     import urllib.request as urllib
-except:
+except ImportError:
     import urllib
 import optparse
 import re
@@ -28,7 +28,7 @@ import sys
 
 try:
     from textwrap import wrap
-except:
+except ImportError:
     pass
 
 # Use Unicode characters instead of their ascii psuedo-replacements
