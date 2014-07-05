@@ -5,6 +5,7 @@ python:
   - "pypy"
   - "3.2"
   - "3.3"
+  - "3.4"
 install:
     - pip install coveralls
 before_script:
