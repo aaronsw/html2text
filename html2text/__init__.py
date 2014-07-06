@@ -801,6 +801,10 @@ class HTML2Text(HTMLParser.HTMLParser):
     def google_nest_count(self, style):
         """
         Calculate the nesting count of google doc lists
+
+        :type style: dict
+
+        :rtype: int
         """
         nest_count = 0
         if 'margin-left' in style:
