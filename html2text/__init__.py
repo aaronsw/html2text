@@ -812,6 +812,10 @@ class HTML2Text(HTMLParser.HTMLParser):
     def optwrap(self, text):
         """
         Wrap all paragraphs in the provided text.
+
+        :type text: str
+
+        :rtype: str
         """
         if not self.body_width:
             return text
