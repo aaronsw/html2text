@@ -61,8 +61,6 @@ RE_MD_BACKSLASH_MATCHER = re.compile(r'''
     ''' % re.escape(RE_SLASH_CHARS),
     flags=re.VERBOSE)
 
-
-
 UNIFIABLE = {
     'rsquo': "'",
     'lsquo': "'",
