@@ -3,10 +3,11 @@
 ----
 
 * Fix ``unicode``/``type`` error in memory leak unit-test.
+* Feature #16: Remove ``install_deps.py``.
 * Feature #18: Add ``Python`` ``3.4`` to travis config file.
 * Feature #19: Bring ``html2text`` to a separate module and take out the ``conf``/``constant`` variables.
 * Feature #21: Remove meta vars from ``html2text.py`` file header.
-* 
+
 
 2014.7.3 - 2014-07-03
 =====================
