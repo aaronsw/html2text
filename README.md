@@ -7,6 +7,7 @@
 [![Egg?](https://pypip.in/egg/html2text/badge.png)](https://pypi.python.org/pypi/html2text/)
 [![Wheel?](https://pypip.in/wheel/html2text/badge.png)](https://pypi.python.org/pypi/html2text/)
 [![Format](https://pypip.in/format/html2text/badge.png)](https://pypi.python.org/pypi/html2text/)
+[![License](https://pypip.in/license/html2text/badge.png)](https://pypi.python.org/pypi/html2text/)
 
 
 html2text is a Python script that converts a page of HTML into clean, easy-to-read plain ASCII text. Better yet, that ASCII also happens to be valid Markdown (a text-to-HTML format).
