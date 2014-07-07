@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/Alir3z4/html2text/badge.png)](https://coveralls.io/r/Alir3z4/html2text)
 [![Downloads](https://pypip.in/d/html2text/badge.png)](https://pypi.python.org/pypi/html2text/)
 [![Version](https://pypip.in/v/html2text/badge.png)](https://pypi.python.org/pypi/html2text/)
+[![Egg?](https://pypip.in/egg/html2text/badge.png)](https://pypi.python.org/pypi/html2text/)
 
 
 html2text is a Python script that converts a page of HTML into clean, easy-to-read plain ASCII text. Better yet, that ASCII also happens to be valid Markdown (a text-to-HTML format).
