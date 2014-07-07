@@ -1,7 +1,16 @@
 language: python
 python:
-  - "2.5"
   - "2.6"
   - "2.7"
   - "pypy"
-script: cd test/; python run_tests.py
+  - "3.2"
+  - "3.3"
+  - "3.4"
+install:
+    - pip install coveralls
+before_script:
+  - '[ "${TRAVIS_PYTHON_VERSION}" = "2.6" ] && pip install --use-mirrors unittest2 || /bin/true'
+script:
+  PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
+after_success:
+    coveralls

@@ -1,2 +1,5 @@
 include COPYING
 include README.md
+include ChangeLog.rst
+include AUTHORS.rst
+recursive-include test *.html *.md *.py
