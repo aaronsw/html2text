@@ -542,11 +542,12 @@ class HTML2Text(HTMLParser.HTMLParser):
         if tag == "img" and start and not self.ignore_images:
             if 'src' in attrs:
                 attrs['href'] = attrs['src']
-                alt = attrs.get('alt', '')
+                alt = attrs.get('alt') or ''
                 self.o("![" + escape_md(alt) + "]")
 
                 if self.inline_links:
-                    self.o("(" + escape_md(attrs['href']) + ")")
+                    href = attrs.get('href') or ''
+                    self.o("(" + escape_md(href) + ")")
                 else:
                     i = self.previousIndex(attrs)
                     if i is not None:
