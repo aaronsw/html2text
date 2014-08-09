@@ -16,4 +16,5 @@ And here are images with tricky attribute values:
 ![\[banana\]](http://placehold.it/350x150#\[banana\])  
 ![{banana}](http://placehold.it/350x150#{banana})  
 ![\(\[{}\]\)](http://placehold.it/350x150#\(\[{}\]\))
+![](http://placehold.it/350x150#\(\[{}\]\))
 
