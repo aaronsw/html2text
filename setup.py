@@ -1,6 +1,6 @@
 # coding: utf-8
 import sys
-from setuptools import setup, Command
+from setuptools import setup, Command, find_packages
 
 requires_list = []
 try:
@@ -67,6 +67,7 @@ setup(
     license='GNU GPL 3',
     requires=requires_list,
     py_modules=['html2text'],
+    packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
 )
