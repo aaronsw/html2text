@@ -8,5 +8,6 @@ Displaynone text
 
 Header 1 | Header 2 | Header 3  
 ---|---|---  
+Content 1 | Content 2 | ![200](http://lorempixel.com/200/200) Image!  
 Content 1 | Content 2 | ![200](http://lorempixel.com/200/200) Image!
 

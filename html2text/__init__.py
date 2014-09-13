@@ -2,7 +2,7 @@
 # coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
-from html2text import config
+import config
 
 
 __version__ = "2014.9.8"
@@ -202,8 +202,8 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         # Config options
         self.split_next_td = False
-        self.th_count = 0
-        self.th_start = False
+        self.td_count = 0
+        self.table_start = False
         self.unicode_snob = config.UNICODE_SNOB
         self.escape_snob = config.ESCAPE_SNOB
         self.links_each_paragraph = config.LINKS_EACH_PARAGRAPH
@@ -615,31 +615,39 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if tag in ["table", "tr", "td", "th"]:
             if self.bypass_tables:
-                if tag == "tr" and start:
-                    self.soft_br()
                 if start:
-                    self.o('<{0}>'.format(tag))
+                    self.soft_br()
+                if tag in ["td", "th"]:
+                    if start:
+                        self.o('<{0}>\n\n'.format(tag))
+                    else:
+                        self.o('\n</{0}>'.format(tag))
                 else:
-                    self.o('</{0}>'.format(tag))
+                    if start:
+                        self.o('<{0}>'.format(tag))
+                    else:
+                        self.o('</{0}>'.format(tag))
+
             else:
+                if tag == "table" and start:
+                    self.table_start = True
                 if tag in ["td", "th"] and start:
                     if self.split_next_td:
                         self.o("| ")
                     self.split_next_td = True
 
                 if tag == "tr" and start:
-                    self.th_count = 0
+                    self.td_count = 0
                 if tag == "tr" and not start:
                     self.split_next_td = False
                     self.soft_br()
-                if tag == "tr" and not start and self.th_start:
+                if tag == "tr" and not start and self.table_start:
                     # Underline table header
-                    self.o("|".join(["---"] * self.th_count))
+                    self.o("|".join(["---"] * self.td_count))
                     self.soft_br()
-                    self.th_start = False
-                if tag == "th" and start:
-                    self.th_start = True
-                    self.th_count += 1
+                    self.table_start = False
+                if tag in ["td", "th"] and start:
+                    self.td_count += 1
 
         if tag == "pre":
             if start:
