@@ -1,4 +1,4 @@
-# [html2text](http://www.aaronsw.com/2002/html2text/)
+# html2text
 
 [![Build Status](https://secure.travis-ci.org/Alir3z4/html2text.png)](http://travis-ci.org/Alir3z4/html2text)
 [![Coverage Status](https://coveralls.io/repos/Alir3z4/html2text/badge.png)](https://coveralls.io/r/Alir3z4/html2text)
