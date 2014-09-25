@@ -201,6 +201,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         HTMLParser.HTMLParser.__init__(self)
 
         # Config options
+        self.split_next_td = False
+        self.td_count = 0
+        self.table_start = False
         self.unicode_snob = config.UNICODE_SNOB
         self.escape_snob = config.ESCAPE_SNOB
         self.links_each_paragraph = config.LINKS_EACH_PARAGRAPH
@@ -211,6 +214,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ignore_links = config.IGNORE_ANCHORS
         self.ignore_images = config.IGNORE_IMAGES
         self.ignore_emphasis = config.IGNORE_EMPHASIS
+        self.bypass_tables = config.BYPASS_TABLES
         self.google_doc = False
         self.ul_item_mark = '*'
         self.emphasis_mark = '_'
@@ -609,10 +613,41 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.o(str(li['num']) + ". ")
                 self.start = 1
 
-        if tag in ["table", "tr"] and start:
-            self.p()
-        if tag == 'td':
-            self.pbr()
+        if tag in ["table", "tr", "td", "th"]:
+            if self.bypass_tables:
+                if start:
+                    self.soft_br()
+                if tag in ["td", "th"]:
+                    if start:
+                        self.o('<{0}>\n\n'.format(tag))
+                    else:
+                        self.o('\n</{0}>'.format(tag))
+                else:
+                    if start:
+                        self.o('<{0}>'.format(tag))
+                    else:
+                        self.o('</{0}>'.format(tag))
+
+            else:
+                if tag == "table" and start:
+                    self.table_start = True
+                if tag in ["td", "th"] and start:
+                    if self.split_next_td:
+                        self.o("| ")
+                    self.split_next_td = True
+
+                if tag == "tr" and start:
+                    self.td_count = 0
+                if tag == "tr" and not start:
+                    self.split_next_td = False
+                    self.soft_br()
+                if tag == "tr" and not start and self.table_start:
+                    # Underline table header
+                    self.o("|".join(["---"] * self.td_count))
+                    self.soft_br()
+                    self.table_start = False
+                if tag in ["td", "th"] and start:
+                    self.td_count += 1
 
         if tag == "pre":
             if start:
@@ -1004,6 +1039,13 @@ def main():
         help="Escape all special characters.  Output is less readable, but "
              "avoids corner case formatting issues."
     )
+    p.add_option(
+        "--bypass-tables",
+        action="store_true",
+        dest="bypass_tables",
+        default=config.BYPASS_TABLES,
+        help="Format tables in HTML rather than Markdown syntax."
+    )
     (options, args) = p.parse_args()
 
     # process input
@@ -1055,6 +1097,7 @@ def main():
     h.google_doc = options.google_doc
     h.hide_strikethrough = options.hide_strikethrough
     h.escape_snob = options.escape_snob
+    h.bypass_tables = options.bypass_tables
 
     wrapwrite(h.handle(data))
 

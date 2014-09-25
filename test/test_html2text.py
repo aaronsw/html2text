@@ -119,6 +119,10 @@ def generate_test(fn):
         module_args['escape_snob'] = True
         cmdline_args.append('--escape-all')
 
+    if base_fn.find('table_bypass') >= 0:
+        module_args['bypass_tables'] = True
+        cmdline_args.append('--bypass-tables')
+
     if base_fn.startswith('bodywidth'):
         #module_args['unicode_snob'] = True
         module_args['body_width'] = 0

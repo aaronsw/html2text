@@ -101,3 +101,5 @@ UNIFIABLE = {
     'lrm': '',
     'rlm': ''
 }
+
+BYPASS_TABLES = False
