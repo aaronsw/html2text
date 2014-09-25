@@ -10,4 +10,4 @@ The AUTHORS/Contributors are (and/or have been):
 
 Maintainer:
 
-    * Alireza Savand
+    * Alireza Savand <alireza.savand@gmail.com>
