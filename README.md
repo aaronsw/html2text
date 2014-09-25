@@ -28,7 +28,7 @@ Usage: `html2text.py [(filename|url) [encoding]]`
 |`-i` `LIST_INDENT`, `--google-list-indent`=`LIST_INDENT`| Number of pixels Google indents nested lists
 |`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
 |`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
-
+| `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
 
 
 Or you can use it from within `Python`:
