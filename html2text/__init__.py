@@ -5,7 +5,7 @@ from __future__ import division
 from html2text import config
 
 
-__version__ = "2014.9.8"
+__version__ = "2014.9.25"
 
 
 # TODO:
