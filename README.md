@@ -33,17 +33,37 @@ Usage: `html2text.py [(filename|url) [encoding]]`
 
 Or you can use it from within `Python`:
 
-    import html2text
-    print html2text.html2text("<p>Hello, world.</p>")
+```
+>>> import html2text
+>>>
+>>> print(html2text.html2text("<p><strong>Zed's</strong> dead baby, <em>Zed's</em> dead.</p>"))
+**Zed's** dead baby, _Zed's_ dead.
+
+```
+
 
 Or with some configuration options:
+```
+>>> import html2text
+>>> 
+>>> h = html2text.HTML2Text()
+>>> # Ignore converting links from HTML
+>>> h.ignore_links = True
+>>> print h.handle("<p>Hello, <a href='http://earth.google.com/'>world</a>!")
+Hello, world!
 
-    import html2text
-    h = html2text.HTML2Text()
-    h.ignore_links = True
-    print h.handle("<p>Hello, <a href='http://earth.google.com/'>world</a>!")
+>>> print(h.handle("<p>Hello, <a href='http://earth.google.com/'>world</a>!"))
 
-_Originally written by Aaron Swartz. This code is distributed under the GPLv3._
+Hello, world!
+
+>>> # Don't Ignore links anymore, I like links
+>>> h.ignore_links = False
+>>> print(h.handle("<p>Hello, <a href='http://earth.google.com/'>world</a>!"))
+Hello, [world](http://earth.google.com/)!
+
+```
+
+*Originally written by Aaron Swartz. This code is distributed under the GPLv3.*
 
 
 ## How to install
