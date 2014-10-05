@@ -66,7 +66,6 @@ setup(
     """,
     license='GNU GPL 3',
     requires=requires_list,
-    py_modules=['html2text'],
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
