@@ -1,9 +1,19 @@
+0000.00.00 - 0000-00-00
+=====================
+----
+
+* Feature: Update `README.md` with usage examples.
+* Fix #35: Remove `py_modules` from `setup.py`.
+* Fix #36: Excludes tests from being installed as a separate module.
+
+
 2014.9.25 - 2014-09-25
 =====================
 ----
 
 * Feature #29, #27: Add simple table support with bypass option.
 * Fix #20: Replace project website with: http://alir3z4.github.io/html2text/ .
+
 
 2014.9.8 - 2014-09-08
 =====================
