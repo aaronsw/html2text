@@ -66,7 +66,7 @@ setup(
     """,
     license='GNU GPL 3',
     requires=requires_list,
-    packages=find_packages(),
+    packages=find_packages(exclude=['test']),
     include_package_data=True,
     zip_safe=False,
 )
