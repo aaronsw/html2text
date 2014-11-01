@@ -1,7 +1,7 @@
 import sys
+from html2text import config
 
 from html2text.compat import htmlentitydefs
-from html2text import config, HTML2Text
 
 
 def name2cp(k):
@@ -202,19 +202,6 @@ def wrapwrite(text):
         sys.stdout.buffer.write(text)
     except AttributeError:
         sys.stdout.write(text)
-
-
-def html2text(html, baseurl='', bodywidth=config.BODY_WIDTH):
-    h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
-
-    return h.handle(html)
-
-
-def unescape(s, unicode_snob=False):
-    h = HTML2Text()
-    h.unicode_snob = unicode_snob
-
-    return h.unescape(s)
 
 
 def escape_md(text):

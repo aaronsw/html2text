@@ -731,6 +731,19 @@ class HTML2Text(HTMLParser.HTMLParser):
         return result
 
 
+def html2text(html, baseurl='', bodywidth=config.BODY_WIDTH):
+    h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
+
+    return h.handle(html)
+
+
+def unescape(s, unicode_snob=False):
+    h = HTML2Text()
+    h.unicode_snob = unicode_snob
+
+    return h.unescape(s)
+
+
 
 if __name__ == "__main__":
     from html2text.cli import main
