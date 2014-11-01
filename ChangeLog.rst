@@ -1,14 +1,19 @@
 0000.00.00 - 0000-00-00
-=====================
+=======================
 ----
 
 * Feature: Update `README.md` with usage examples.
 * Fix #35: Remove `py_modules` from `setup.py`.
 * Fix #36: Excludes tests from being installed as a separate module.
+* Fix #37: Don't hardcode the path to the installed binary.
+* Fix: Readme typo in running cli.
+* Feature #40: Extract cli part to ``cli`` module.
+* Feature #42: Bring python version compatibility to ``compat.py`` module.
+
 
 
 2014.9.25 - 2014-09-25
-=====================
+======================
 ----
 
 * Feature #29, #27: Add simple table support with bypass option.

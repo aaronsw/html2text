@@ -62,7 +62,7 @@ setup(
     ],
     entry_points="""
         [console_scripts]
-        html2text=html2text:main
+        html2text=html2text.cli:main
     """,
     license='GNU GPL 3',
     requires=requires_list,
