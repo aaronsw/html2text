@@ -2,6 +2,14 @@
 # coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
+import re
+import sys
+
+try:
+    from textwrap import wrap
+except ImportError:
+    pass
+
 from html2text.compat import htmlentitydefs, urlparse, HTMLParser
 from html2text import config
 
@@ -11,15 +19,6 @@ __version__ = "2014.9.25"
 
 # TODO:
 #   Support decoded entities with UNIFIABLE.
-
-
-import re
-import sys
-
-try:
-    from textwrap import wrap
-except ImportError:
-    pass
 
 
 def name2cp(k):
