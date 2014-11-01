@@ -8,9 +8,12 @@ try:
 except ImportError:
     pass
 
+from html2text.compat import htmlentitydefs, urlparse, HTMLParser
+from html2text import config
+
 from html2text.utils import (
     name2cp,
-    unifiable_n, 
+    unifiable_n,
     google_text_emphasis,
     google_fixed_width_font,
     element_style,
@@ -23,8 +26,6 @@ from html2text.utils import (
     escape_md_section,
     skipwrap
 )
-from html2text.compat import htmlentitydefs, urlparse, HTMLParser
-from html2text import config
 
 __version__ = "2014.9.25"
 
