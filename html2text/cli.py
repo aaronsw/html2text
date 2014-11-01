@@ -2,7 +2,8 @@ import optparse
 import sys
 
 from html2text.compat import urllib
-from html2text import HTML2Text, wrapwrite, config, __version__
+from html2text import HTML2Text, config, __version__
+from html2text.utils import wrapwrite
 
 
 def main():
