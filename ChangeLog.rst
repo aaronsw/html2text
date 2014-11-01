@@ -1,5 +1,5 @@
 0000.00.00 - 0000-00-00
-=====================
+=======================
 ----
 
 * Feature: Update `README.md` with usage examples.
@@ -8,7 +8,7 @@
 
 
 2014.9.25 - 2014-09-25
-=====================
+======================
 ----
 
 * Feature #29, #27: Add simple table support with bypass option.
