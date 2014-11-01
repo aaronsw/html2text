@@ -3,6 +3,7 @@
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
 import re
+
 try:
     from textwrap import wrap
 except ImportError:
@@ -31,7 +32,7 @@ __version__ = "2014.9.25"
 
 
 # TODO:
-#   Support decoded entities with UNIFIABLE.
+# Support decoded entities with UNIFIABLE.
 
 
 class HTML2Text(HTMLParser.HTMLParser):
@@ -184,9 +185,9 @@ class HTML2Text(HTMLParser.HTMLParser):
 
             if ('href' in a) and a['href'] == attrs['href']:
                 if ('title' in a) or ('title' in attrs):
-                        if (('title' in a) and ('title' in attrs) and
+                    if (('title' in a) and ('title' in attrs) and
                                 a['title'] == attrs['title']):
-                            match = True
+                        match = True
                 else:
                     match = True
 
@@ -202,7 +203,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         # handle Google's text emphasis
         strikethrough = 'line-through' in \
-            tag_emphasis and self.hide_strikethrough
+                        tag_emphasis and self.hide_strikethrough
         bold = 'bold' in tag_emphasis and not 'bold' in parent_emphasis
         italic = 'italic' in tag_emphasis and not 'italic' in parent_emphasis
         fixed = google_fixed_width_font(tag_style) and not \
@@ -251,7 +252,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.o(self.emphasis_mark)
             # space is only allowed after *all* emphasis marks
             if (bold or italic) and not self.emphasis:
-                    self.o(" ")
+                self.o(" ")
             if strikethrough:
                 self.quiet -= 1
 
@@ -363,7 +364,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if ('href' in attrs) and \
                         (attrs['href'] is not None) and \
                         not (self.skip_internal_links and
-                             attrs['href'].startswith('#')):
+                                 attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
                 else:
@@ -689,7 +690,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         nest_count = 0
         if 'margin-left' in style:
             nest_count = int(style['margin-left'][:-2]) \
-                // self.google_list_indent
+                         // self.google_list_indent
 
         return nest_count
 
@@ -743,7 +744,6 @@ def unescape(s, unicode_snob=False):
     h.unicode_snob = unicode_snob
 
     return h.unescape(s)
-
 
 
 if __name__ == "__main__":
