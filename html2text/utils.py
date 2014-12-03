@@ -204,6 +204,16 @@ def wrapwrite(text):
         sys.stdout.write(text)
 
 
+def wrap_read():
+    """
+    :rtype: str
+    """
+    try:
+        return sys.stdin.read()
+    except AttributeError:
+        return sys.stdin.buffer.read()
+
+
 def escape_md(text):
     """
     Escapes markdown-sensitive characters within other markdown
