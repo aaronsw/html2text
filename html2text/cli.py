@@ -3,7 +3,7 @@ import sys
 
 from html2text.compat import urllib
 from html2text import HTML2Text, config, __version__
-from html2text.utils import wrapwrite
+from html2text.utils import wrapwrite, wrap_read
 
 
 def main():
@@ -123,9 +123,11 @@ def main():
                     detect = lambda x: {'encoding': 'utf-8'}
                 encoding = detect(data)['encoding']
     else:
-        data = sys.stdin.read()
+        data = wrap_read()
 
-    data = data.decode(encoding)
+    if hasattr(data, 'decode'):
+        data = data.decode(encoding)
+
     h = HTML2Text(baseurl=baseurl)
     # handle options
     if options.ul_style_dash:
