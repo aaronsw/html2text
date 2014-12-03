@@ -1,5 +1,4 @@
 import optparse
-import sys
 
 from html2text.compat import urllib
 from html2text import HTML2Text, config, __version__
