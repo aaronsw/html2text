@@ -10,6 +10,7 @@
 * Feature #40: Extract cli part to ``cli`` module.
 * Feature #42: Bring python version compatibility to ``compat.py`` module.
 * Feature #41: Extract utility/helper methods to ``utils`` module.
+* Fix #45: Does not accept standard input when running under Python 3.
 
 
 2014.9.25 - 2014-09-25
