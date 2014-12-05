@@ -9,7 +9,7 @@ try:
 except ImportError:
     pass
 
-from html2text.compat import htmlentitydefs, urlparse, HTMLParser
+from html2text.compat import urlparse, HTMLParser
 from html2text import config
 
 from html2text.utils import (
