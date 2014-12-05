@@ -11,25 +11,26 @@
 * Feature #42: Bring python version compatibility to ``compat.py`` module.
 * Feature #41: Extract utility/helper methods to ``utils`` module.
 * Fix #45: Does not accept standard input when running under Python 3.
+* Feature: Clean up ``ChangeLog.rst`` for version and date numbers.
 
 
-2014.9.25 - 2014-09-25
-======================
+2014.9.25
+=========
 ----
 
 * Feature #29, #27: Add simple table support with bypass option.
 * Fix #20: Replace project website with: http://alir3z4.github.io/html2text/ .
 
 
-2014.9.8 - 2014-09-08
-=====================
+2014.9.8
+========
 ----
 
 * Fix #28: missing ``html2text`` package in installation.
 
 
-2014.9.7 - 2014-09-07
-=====================
+2014.9.7
+========
 ----
 
 * Fix ``unicode``/``type`` error in memory leak unit-test.
@@ -41,8 +42,8 @@
 * Fix: Fix TypeError when parsing tags like <img src='foo' alt>. Fixed in #25.
 
 
-2014.7.3 - 2014-07-03
-=====================
+2014.7.3
+========
 ----
 
 * Fix #8: Remove ``How to do a release`` section from README.md.
@@ -50,8 +51,8 @@
 * Fix #13:  memory leak in using ``handle`` while keeping the old instance of ``html2text``.
 
 
-2014.4.5 - 2014-04-05
-=====================
+2014.4.5
+========
 ----
 
 * Fix #1: Add ``ChangeLog.rst`` file.
