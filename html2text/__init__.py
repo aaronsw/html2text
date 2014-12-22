@@ -55,6 +55,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.body_width = bodywidth
         self.skip_internal_links = config.SKIP_INTERNAL_LINKS
         self.inline_links = config.INLINE_LINKS
+        self.protect_links = config.PROTECT_LINKS
         self.google_list_indent = config.GOOGLE_LIST_INDENT
         self.ignore_links = config.IGNORE_ANCHORS
         self.ignore_images = config.IGNORE_IMAGES
@@ -367,6 +368,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                                  attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
+                    if self.protect_links:
+                        attrs['href'] = '<'+attrs['href']+'>'
                 else:
                     self.astack.append(None)
             else:

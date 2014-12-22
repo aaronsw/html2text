@@ -127,6 +127,10 @@ def generate_test(fn):
         module_args['body_width'] = 0
         cmdline_args.append('--body-width=0')
 
+    if base_fn.startswith('protect_links'):
+        module_args['protect_links'] = True
+        cmdline_args.append('--protect-links')
+
     return test_mod, test_cmd
 
 # Originally from http://stackoverflow.com/questions/32899/\
