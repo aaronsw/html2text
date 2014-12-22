@@ -25,6 +25,7 @@ GOOGLE_LIST_INDENT = 36
 
 IGNORE_ANCHORS = False
 IGNORE_IMAGES = False
+IMAGES_TO_ALT = False
 IGNORE_EMPHASIS = False
 
 # For checking space-only lines on line 771

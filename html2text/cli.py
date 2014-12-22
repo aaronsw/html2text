@@ -31,6 +31,13 @@ def main():
         help="don't include any formatting for images"
     )
     p.add_option(
+        "--images-to-alt",
+        dest="images_to_alt",
+        action="store_true",
+        default=config.IMAGES_TO_ALT,
+        help="Discard image data, only keep alt text"
+    )
+    p.add_option(
         "-g", "--google-doc",
         action="store_true",
         dest="google_doc",
@@ -140,6 +147,7 @@ def main():
     h.ignore_emphasis = options.ignore_emphasis
     h.ignore_links = options.ignore_links
     h.ignore_images = options.ignore_images
+    h.images_to_alt = options.images_to_alt
     h.google_doc = options.google_doc
     h.hide_strikethrough = options.hide_strikethrough
     h.escape_snob = options.escape_snob
