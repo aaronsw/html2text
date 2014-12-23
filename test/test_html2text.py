@@ -131,6 +131,10 @@ def generate_test(fn):
         module_args['protect_links'] = True
         cmdline_args.append('--protect-links')
 
+    if base_fn.startswith('images_to_alt'):
+        module_args['images_to_alt'] = True
+        cmdline_args.append('--images-to-alt')
+
     return test_mod, test_cmd
 
 # Originally from http://stackoverflow.com/questions/32899/\

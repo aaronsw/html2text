@@ -59,6 +59,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.google_list_indent = config.GOOGLE_LIST_INDENT
         self.ignore_links = config.IGNORE_ANCHORS
         self.ignore_images = config.IGNORE_IMAGES
+        self.images_to_alt = config.IMAGES_TO_ALT
         self.ignore_emphasis = config.IGNORE_EMPHASIS
         self.bypass_tables = config.BYPASS_TABLES
         self.google_doc = False
@@ -393,23 +394,29 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if tag == "img" and start and not self.ignore_images:
             if 'src' in attrs:
-                attrs['href'] = attrs['src']
+                if not self.images_to_alt:
+                    attrs['href'] = attrs['src']
                 alt = attrs.get('alt') or ''
-                self.o("![" + escape_md(alt) + "]")
 
-                if self.inline_links:
-                    href = attrs.get('href') or ''
-                    self.o("(" + escape_md(href) + ")")
+                # If we have images_to_alt, we discard the image itself,
+                # considering only the alt text.
+                if self.images_to_alt:
+                    self.o(escape_md(alt))
                 else:
-                    i = self.previousIndex(attrs)
-                    if i is not None:
-                        attrs = self.a[i]
+                    self.o("![" + escape_md(alt) + "]")
+                    if self.inline_links:
+                        href = attrs.get('href') or ''
+                        self.o("(" + escape_md(href) + ")")
                     else:
-                        self.acount += 1
-                        attrs['count'] = self.acount
-                        attrs['outcount'] = self.outcount
-                        self.a.append(attrs)
-                    self.o("[" + str(attrs['count']) + "]")
+                        i = self.previousIndex(attrs)
+                        if i is not None:
+                            attrs = self.a[i]
+                        else:
+                            self.acount += 1
+                            attrs['count'] = self.acount
+                            attrs['outcount'] = self.outcount
+                            self.a.append(attrs)
+                        self.o("[" + str(attrs['count']) + "]")
 
         if tag == 'dl' and start:
             self.p()
