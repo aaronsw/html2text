@@ -28,7 +28,8 @@ def main():
         dest="protect_links",
         action="store_true",
         default=config.PROTECT_LINKS,
-        help="protect links from line breaks surrounding them with angle brackets")
+        help=("protect links from line breaks surrounding them "+
+              "with angle brackets"))
     p.add_option(
         "--ignore-images",
         dest="ignore_images",
