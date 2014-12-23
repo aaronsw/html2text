@@ -127,6 +127,10 @@ def generate_test(fn):
         module_args['body_width'] = 0
         cmdline_args.append('--body-width=0')
 
+    if base_fn.startswith('protect_links'):
+        module_args['protect_links'] = True
+        cmdline_args.append('--protect-links')
+
     if base_fn.startswith('images_to_alt'):
         module_args['images_to_alt'] = True
         cmdline_args.append('--images-to-alt')

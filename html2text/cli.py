@@ -24,6 +24,13 @@ def main():
         default=config.IGNORE_ANCHORS,
         help="don't include any formatting for links")
     p.add_option(
+        "--protect-links",
+        dest="protect_links",
+        action="store_true",
+        default=config.PROTECT_LINKS,
+        help=("protect links from line breaks surrounding them "+
+              "with angle brackets"))
+    p.add_option(
         "--ignore-images",
         dest="ignore_images",
         action="store_true",
@@ -146,6 +153,7 @@ def main():
     h.list_indent = options.list_indent
     h.ignore_emphasis = options.ignore_emphasis
     h.ignore_links = options.ignore_links
+    h.protect_links = options.protect_links
     h.ignore_images = options.ignore_images
     h.images_to_alt = options.images_to_alt
     h.google_doc = options.google_doc
