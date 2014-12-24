@@ -2,10 +2,8 @@
 ==========
 ----
 
-* Feature #49: Added a images_to_alt option to discard images and keep only
-their alt.
-* Feature #50: Protect links, surrounding them with angle brackets to avoid
-breaking...
+* Feature #49: Added a images_to_alt option to discard images and keep only their alt.
+* Feature #50: Protect links, surrounding them with angle brackets to avoid breaking...
 
 
 2014.12.5
