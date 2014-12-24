@@ -7,6 +7,7 @@ The AUTHORS/Contributors are (and/or have been):
     * Alex Musayev
     * Matěj Cepl
     * Stefano Rivera
+    * Alireza Savand <alireza.savand@gmail.com>
     * Ivan Gromov <summer.is.gone@gmail.com>
 
 Maintainer:
