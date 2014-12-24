@@ -17,11 +17,13 @@ Usage: `html2text [(filename|url) [encoding]]`
 
 
 | Option                                                 | Description            
-|--------------------------------------------------------|--------------------------------------------------
+|--------------------------------------------------------|---------------------------------------------------
 | `--version`                                            | Show program's version number and exit 
 | `-h`, `--help`                                         | Show this help message and exit      
 | `--ignore-links`                                       | Don't include any formatting for links
+|`--protect-links`                                       | Protect links from line breaks surrounding them "+" with angle brackets
 |`--ignore-images`                                       | Don't include any formatting for images
+|`--images-to-alt`                                       | Discard image data, only keep alt text
 |`-g`, `--google-doc`                                    | Convert an html-exported Google Document
 |`-d`, `--dash-unordered-list`                           | Use a dash rather than a star for unordered list items
 |`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
