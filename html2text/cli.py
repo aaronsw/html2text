@@ -28,7 +28,7 @@ def main():
         dest="protect_links",
         action="store_true",
         default=config.PROTECT_LINKS,
-        help=("protect links from line breaks surrounding them "+
+        help=("protect links from line breaks surrounding them " +
               "with angle brackets"))
     p.add_option(
         "--ignore-images",
@@ -110,8 +110,8 @@ def main():
         dest="single_line_break",
         default=config.SINGLE_LINE_BREAK,
         help=(
-            "Use a single line break after a block element rather an two line "
-            "breaks. NOTE: Requires --body-width=0"
+            "Use a single line break after a block element rather than two "
+            "line breaks. NOTE: Requires --body-width=0"
         )
     )
     (options, args) = p.parse_args()
