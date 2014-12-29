@@ -1,3 +1,14 @@
+2014.12.29
+==========
+----
+
+* Feature #51: Add single line break option.
+    This feature is useful for ensuring that lots of extra line breaks do not
+    end up in the resulting Markdown file in situations like Evernote .enex
+    exports. Note that this only works properly if ``body-width`` is set
+    to ``0``.
+
+
 2014.12.24
 ==========
 ----
