@@ -66,7 +66,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ul_item_mark = '*'
         self.emphasis_mark = '_'
         self.strong_mark = '**'
-        self.single_line_break = False
+        self.single_line_break = config.SINGLE_LINE_BREAK
 
         if out is None:
             self.out = self.outtextf
