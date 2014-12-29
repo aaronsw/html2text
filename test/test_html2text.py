@@ -135,6 +135,12 @@ def generate_test(fn):
         module_args['images_to_alt'] = True
         cmdline_args.append('--images-to-alt')
 
+    if base_fn.startswith('single_line_break'):
+        module_args['body_width'] = 0
+        cmdline_args.append('--body-width=0')
+        module_args['single_line_break'] = True
+        cmdline_args.append('--single-line-break')
+
     return test_mod, test_cmd
 
 # Originally from http://stackoverflow.com/questions/32899/\
