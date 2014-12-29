@@ -34,7 +34,7 @@ class RunTests(Command):
 
 setup(
     name="html2text",
-    version="2014.12.24",
+    version="2014.12.29",
     description="Turn HTML into equivalent Markdown-structured text.",
     author="Aaron Swartz",
     author_email="me@aaronsw.com",
