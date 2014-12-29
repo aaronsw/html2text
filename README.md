@@ -31,6 +31,7 @@ Usage: `html2text [(filename|url) [encoding]]`
 |`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
 |`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
 | `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
+| `--single-line-break`                                  | Use a single line break after a block element rather than two.
 
 
 Or you can use it from within `Python`:
