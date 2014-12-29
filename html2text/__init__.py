@@ -66,6 +66,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ul_item_mark = '*'
         self.emphasis_mark = '_'
         self.strong_mark = '**'
+        self.single_line_break = config.SINGLE_LINE_BREAK
 
         if out is None:
             self.out = self.outtextf
@@ -517,7 +518,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.p_p = 1
 
     def p(self):
-        self.p_p = 2
+        self.p_p = 1 if self.single_line_break else 2
 
     def soft_br(self):
         self.pbr()

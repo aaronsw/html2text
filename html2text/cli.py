@@ -28,7 +28,7 @@ def main():
         dest="protect_links",
         action="store_true",
         default=config.PROTECT_LINKS,
-        help=("protect links from line breaks surrounding them "+
+        help=("protect links from line breaks surrounding them " +
               "with angle brackets"))
     p.add_option(
         "--ignore-images",
@@ -104,6 +104,16 @@ def main():
         default=config.BYPASS_TABLES,
         help="Format tables in HTML rather than Markdown syntax."
     )
+    p.add_option(
+        "--single-line-break",
+        action="store_true",
+        dest="single_line_break",
+        default=config.SINGLE_LINE_BREAK,
+        help=(
+            "Use a single line break after a block element rather than two "
+            "line breaks. NOTE: Requires --body-width=0"
+        )
+    )
     (options, args) = p.parse_args()
 
     # process input
@@ -160,5 +170,6 @@ def main():
     h.hide_strikethrough = options.hide_strikethrough
     h.escape_snob = options.escape_snob
     h.bypass_tables = options.bypass_tables
+    h.single_line_break = options.single_line_break
 
     wrapwrite(h.handle(data))
