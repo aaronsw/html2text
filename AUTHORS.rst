@@ -10,6 +10,7 @@ The AUTHORS/Contributors are (and/or have been):
     * Alireza Savand <alireza.savand@gmail.com>
     * Ivan Gromov <summer.is.gone@gmail.com>
     * Jocelyn Delalande <jdelalande@oasiswork.fr>
+    * Matt Dorn <matt.dorn@gmail.com>
 
 Maintainer:
 
