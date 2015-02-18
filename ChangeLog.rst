@@ -1,3 +1,10 @@
+2015.02.18
+==========
+----
+
+* Fix #38: Anchor tags with empty text or with `<img>` tags inside are no longer stripped.
+
+
 2014.12.29
 ==========
 ----

@@ -84,6 +84,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.a = []
         self.astack = []
         self.maybe_automatic_link = None
+        self.empty_link = False
         self.absolute_url_matcher = re.compile(r'^[a-zA-Z+]+://')
         self.acount = 0
         self.list = []
@@ -370,6 +371,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                                  attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
+                    self.empty_link = True
                     if self.protect_links:
                         attrs['href'] = '<'+attrs['href']+'>'
                 else:
@@ -377,9 +379,13 @@ class HTML2Text(HTMLParser.HTMLParser):
             else:
                 if self.astack:
                     a = self.astack.pop()
-                    if self.maybe_automatic_link:
+                    if self.maybe_automatic_link and not self.empty_link:
                         self.maybe_automatic_link = None
                     elif a:
+                        if self.empty_link:
+                            self.o("[")
+                            self.empty_link = False
+                            self.maybe_automatic_link = None
                         if self.inline_links:
                             self.o("](" + escape_md(a['href']) + ")")
                         else:
@@ -398,6 +404,19 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if not self.images_to_alt:
                     attrs['href'] = attrs['src']
                 alt = attrs.get('alt') or ''
+
+                # If we have a link to create, output the start
+                if not self.maybe_automatic_link is None:
+                    href = self.maybe_automatic_link
+                    if self.images_to_alt and escape_md(alt) == href and \
+                            self.absolute_url_matcher.match(href):
+                        self.o("<" + escape_md(alt) + ">")
+                        self.empty_link = False
+                        return
+                    else:
+                        self.o("[")
+                        self.maybe_automatic_link = None
+                        self.empty_link = False                   
 
                 # If we have images_to_alt, we discard the image itself,
                 # considering only the alt text.
@@ -637,10 +656,12 @@ class HTML2Text(HTMLParser.HTMLParser):
             href = self.maybe_automatic_link
             if href == data and self.absolute_url_matcher.match(href):
                 self.o("<" + data + ">")
+                self.empty_link = False
                 return
             else:
                 self.o("[")
                 self.maybe_automatic_link = None
+                self.empty_link = False
 
         if not self.code and not self.pre:
             data = escape_md_section(data, snob=self.escape_snob)
