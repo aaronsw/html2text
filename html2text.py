@@ -194,9 +194,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ignore_images = IGNORE_IMAGES
         self.ignore_emphasis = IGNORE_EMPHASIS
         self.google_doc = False
-        self.ul_item_mark = '*'
-        self.emphasis_mark = '_'
-        self.strong_mark = '**'
+        self.ul_item_mark = ''
+        self.emphasis_mark = ''
+        self.strong_mark = ''
 
         if out is None:
             self.out = self.outtextf
@@ -401,7 +401,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.p()
             if start:
                 self.inheader = True
-                self.o(hn(tag)*"#" + ' ')
+                self.o('')
             else:
                 self.inheader = False
                 return # prevent redundant emphasis marks on headers
@@ -738,7 +738,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                         result += "  \n"
                         newlines = 1
                     else:
-                        result += "\n\n"
+                        result += "\n"
                         newlines = 2
                 else:
                     if not onlywhite(para):
@@ -893,16 +893,16 @@ def main():
     data = data.decode(encoding)
     h = HTML2Text(baseurl=baseurl)
     # handle options
-    if options.ul_style_dash: h.ul_item_mark = '-'
+    if options.ul_style_dash: h.ul_item_mark = ''
     if options.em_style_asterisk:
-        h.emphasis_mark = '*'
-        h.strong_mark = '__'
+        h.emphasis_mark = ''
+        h.strong_mark = ''
 
     h.body_width = options.body_width
     h.list_indent = options.list_indent
-    h.ignore_emphasis = options.ignore_emphasis
-    h.ignore_links = options.ignore_links
-    h.ignore_images = options.ignore_images
+    h.ignore_emphasis = True
+    h.ignore_links = True
+    h.ignore_images = True
     h.google_doc = options.google_doc
     h.hide_strikethrough = options.hide_strikethrough
     h.escape_snob = options.escape_snob
