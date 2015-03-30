@@ -710,7 +710,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             return self.charref(s[1:])
         else: return self.entityref(s)
 
-    r_unescape = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
+    r_unescape = re.compile(r"&((?:#[0-9]+|#[xX][0-9a-fA-F]+|\w{1,8}));")
     def unescape(self, s):
         return self.r_unescape.sub(self.replaceEntities, s)
 
