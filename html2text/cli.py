@@ -118,7 +118,7 @@ def main():
 
     # process input
     encoding = "utf-8"
-    if len(args) > 0:
+    if len(args) > 0 and args[0] != '-':
         file_ = args[0]
         if len(args) == 2:
             encoding = args[1]
