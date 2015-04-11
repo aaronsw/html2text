@@ -3,6 +3,7 @@
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
 import re
+import cgi
 
 try:
     from textwrap import wrap
@@ -160,10 +161,16 @@ class HTML2Text(HTMLParser.HTMLParser):
         return outtext
 
     def handle_charref(self, c):
-        self.o(self.charref(c), 1)
+        charref = self.charref(c)
+        if not self.code and not self.pre:
+            charref = cgi.escape(charref)
+        self.o(charref, 1)
 
     def handle_entityref(self, c):
-        self.o(self.entityref(c), 1)
+        entityref = self.entityref(c)
+        if not self.code and not self.pre and entityref != '&nbsp_place_holder;':
+            entityref = cgi.escape(entityref)
+        self.o(entityref, 1)
 
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
@@ -351,6 +358,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if tag in ["code", "tt"] and not self.pre:
             self.o('`')  # TODO: `` `this` ``
+            self.code = not self.code
         if tag == "abbr":
             if start:
                 self.abbr_title = None
@@ -416,7 +424,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     else:
                         self.o("[")
                         self.maybe_automatic_link = None
-                        self.empty_link = False                   
+                        self.empty_link = False
 
                 # If we have images_to_alt, we discard the image itself,
                 # considering only the alt text.
