@@ -1,3 +1,12 @@
+2015.4.13
+=========
+----
+
+
+* Feature #56: Treat '-' file parameter as stdin.
+* Feature #57: Retain escaping of html except within code or pre tags.
+
+
 2015.2.18
 ==========
 ----
