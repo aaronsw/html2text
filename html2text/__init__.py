@@ -29,7 +29,7 @@ from html2text.utils import (
     skipwrap
 )
 
-__version__ = "2014.12.29"
+__version__ = "2015.4.13"
 
 
 # TODO:
