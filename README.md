@@ -16,14 +16,15 @@ html2text is a Python script that converts a page of HTML into clean, easy-to-re
 Usage: `html2text [(filename|url) [encoding]]`
 
 
-| Option                                                 | Description            
+| Option                                                 | Description
 |--------------------------------------------------------|---------------------------------------------------
-| `--version`                                            | Show program's version number and exit 
-| `-h`, `--help`                                         | Show this help message and exit      
+| `--version`                                            | Show program's version number and exit
+| `-h`, `--help`                                         | Show this help message and exit
 | `--ignore-links`                                       | Don't include any formatting for links
 |`--protect-links`                                       | Protect links from line breaks surrounding them "+" with angle brackets
 |`--ignore-images`                                       | Don't include any formatting for images
 |`--images-to-alt`                                       | Discard image data, only keep alt text
+|`--images-with-size`                                    | Write image tags with height and width attrs as raw html to retain dimensions
 |`-g`, `--google-doc`                                    | Convert an html-exported Google Document
 |`-d`, `--dash-unordered-list`                           | Use a dash rather than a star for unordered list items
 |`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
@@ -48,7 +49,7 @@ Or you can use it from within `Python`:
 Or with some configuration options:
 ```
 >>> import html2text
->>> 
+>>>
 >>> h = html2text.HTML2Text()
 >>> # Ignore converting links from HTML
 >>> h.ignore_links = True
