@@ -49,7 +49,8 @@ def main():
         dest="images_with_size",
         action="store_true",
         default=config.IMAGES_WITH_SIZE,
-        help="Write image tags as raw html with height and width attrs"
+        help="Write image tags with height and width attrs as raw html to "
+             "retain dimensions"
     )
     p.add_option(
         "-g", "--google-doc",

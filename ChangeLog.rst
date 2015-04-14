@@ -1,3 +1,11 @@
+2015.4.14
+=========
+----
+
+
+* Feature #59: Write image tags with height and width attrs as raw html to retain dimensions
+
+
 2015.4.13
 =========
 ----
