@@ -61,6 +61,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ignore_links = config.IGNORE_ANCHORS
         self.ignore_images = config.IGNORE_IMAGES
         self.images_to_alt = config.IMAGES_TO_ALT
+        self.images_with_size = config.IMAGES_WITH_SIZE
         self.ignore_emphasis = config.IGNORE_EMPHASIS
         self.bypass_tables = config.BYPASS_TABLES
         self.google_doc = False
@@ -412,6 +413,20 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if not self.images_to_alt:
                     attrs['href'] = attrs['src']
                 alt = attrs.get('alt') or ''
+
+                # If we have images_with_size, write raw html including width,
+                # height, and alt attributes
+                if self.images_with_size and \
+                        ("width" in attrs or "height" in attrs):
+                    self.o("<img src='" + attrs["src"] + "' ")
+                    if "width" in attrs:
+                        self.o("width='" + attrs["width"] + "' ")
+                    if "height" in attrs:
+                        self.o("height='" + attrs["height"] + "' ")
+                    if alt:
+                        self.o("alt='" + alt + "' ")
+                    self.o("/>")
+                    return
 
                 # If we have a link to create, output the start
                 if not self.maybe_automatic_link is None:

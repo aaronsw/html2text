@@ -45,6 +45,13 @@ def main():
         help="Discard image data, only keep alt text"
     )
     p.add_option(
+        "--images-with-size",
+        dest="images_with_size",
+        action="store_true",
+        default=config.IMAGES_WITH_SIZE,
+        help="Write image tags as raw html with height and width attrs"
+    )
+    p.add_option(
         "-g", "--google-doc",
         action="store_true",
         dest="google_doc",
@@ -166,6 +173,7 @@ def main():
     h.protect_links = options.protect_links
     h.ignore_images = options.ignore_images
     h.images_to_alt = options.images_to_alt
+    h.images_with_size = options.images_with_size
     h.google_doc = options.google_doc
     h.hide_strikethrough = options.hide_strikethrough
     h.escape_snob = options.escape_snob

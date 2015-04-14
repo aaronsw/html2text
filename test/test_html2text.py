@@ -135,6 +135,10 @@ def generate_test(fn):
         module_args['images_to_alt'] = True
         cmdline_args.append('--images-to-alt')
 
+    if base_fn.startswith('images_with_size'):
+        module_args['images_with_size'] = True
+        cmdline_args.append('--images-with-size')
+
     if base_fn.startswith('single_line_break'):
         module_args['body_width'] = 0
         cmdline_args.append('--body-width=0')
