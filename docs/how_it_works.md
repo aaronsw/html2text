@@ -99,3 +99,38 @@ __init__.py
 
 This is where everything comes together. This is the glue for all the
 things we have described above.
+
+This file describes a single HTML2Text class which is itself a subclass of the HTMLParser in python
+
+Upon initialization it sets various config variables.
+The class defines methods:
+    - feed
+    - handle
+    - outtextf
+    - close
+    - handle_charref
+    - handle_entityref
+    - handle_starttag
+    - handle_endtag
+    - previousIndex
+    - handle_emphasis
+    - handle_tag
+    - pbr
+    - p
+    - soft_br
+    - o
+    - handle_data
+    - unknown_decl
+    - charref
+    - entityref
+    - replaceEntities
+    - unescape
+    - google_nest_count
+    - optwrap
+
+Besides this there are 2 more methods defined:
+
+    - html2text     :calls the HTML2Text class with .handle() method
+    - unescape      :calls the HTML2Text class with .unescape() method
+
+The workflow of the application is simple.
