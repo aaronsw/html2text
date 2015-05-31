@@ -8,3 +8,8 @@ Html2Text
 5. Usage
 6. Contributing
 7. Tests
+
+Note: Aaron regularly used the word 'google' in place of 'search' which
+can be found throughout the code. Non native English speakers are 
+advised to mentally make the substitution if that makes the code easier
+to read.
