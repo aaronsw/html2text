@@ -102,7 +102,9 @@ things we have described above.
 
 This file describes a single HTML2Text class which is itself a subclass of the HTMLParser in python
 
-Upon initialization it sets various config variables.
+Upon initialization it sets various config variables necessary for
+processing the given html in a certain manner necessary to create valid
+markdown text.
 The class defines methods:
     - feed
     - handle
@@ -132,5 +134,3 @@ Besides this there are 2 more methods defined:
 
     - html2text     :calls the HTML2Text class with .handle() method
     - unescape      :calls the HTML2Text class with .unescape() method
-
-The workflow of the application is simple.
