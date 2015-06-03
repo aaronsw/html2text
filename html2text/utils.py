@@ -5,6 +5,7 @@ from html2text.compat import htmlentitydefs
 
 
 def name2cp(k):
+    """Return sname to codepoint"""
     if k == 'apos':
         return ord("'")
     return htmlentitydefs.name2codepoint[k]
@@ -32,7 +33,10 @@ def dumb_property_dict(style):
     """
     out = dict([(x.strip(), y.strip()) for x, y in
                 [z.split(':', 1) for z in
-                 style.split(';') if ':' in z]])
+                 style.split(';') if ':' in z
+                 ]
+                ]
+               )
 
     return out
 
