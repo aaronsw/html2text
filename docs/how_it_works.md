@@ -108,6 +108,7 @@ Upon initialization it sets various config variables necessary for
 processing the given html in a certain manner necessary to create valid
 markdown text.
 The class defines methods:
+
     - feed
     - handle
     - outtextf
