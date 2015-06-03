@@ -276,6 +276,13 @@ class HTML2Text(HTMLParser.HTMLParser):
         else:
             attrs = dict(attrs)
 
+        # first thing inside the anchor tag is another tag that produces some output
+        if start and not self.maybe_automatic_link is None and \
+             tag not in ['p', 'div', 'style', 'dl', 'dt'] and (tag != "img" or self.ignore_images):
+            self.o("[")
+            self.maybe_automatic_link = None
+            self.empty_link = False
+
         if self.google_doc:
             # the attrs parameter is empty for a closing tag. in addition, we
             # need the attributes of the parent nodes in order to get a
