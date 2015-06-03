@@ -43,6 +43,7 @@ Used to provide various configuration settings to the converter. They are as fol
     - RE_MD_DASH_MATCHER for matching lines starting with <space>(-)<space>
     - RE_SLASH_CHARS a string of slash escapeable characters
     - RE_MD_BACKSLASH_MATCHER to match \char
+    - USE_AUTOMATIC_LINKS to convert <a href='http://xyz'>http://xyz</a> to <http://xyz>
 
 utils.py
 --------
@@ -134,3 +135,6 @@ Besides this there are 2 more methods defined:
 
     - html2text     :calls the HTML2Text class with .handle() method
     - unescape      :calls the HTML2Text class with .unescape() method
+
+What they do is provide methods to make the HTML parser in python
+parse the HTML and convert to markdown.

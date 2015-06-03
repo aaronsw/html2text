@@ -8,3 +8,6 @@ valid Markdown (a text-to-HTML format).
 It was origionally written by Aaron Swartz.
 
 The code is under GPL v3.
+
+The module is based on the html parser in the python standard library
+and so any valid input for the parser is valid input for the library.
