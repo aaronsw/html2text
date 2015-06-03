@@ -14,6 +14,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Miguel Tavares <mgontav@gmail.com>
 * Scott Blackburn <scott@skipflag.com>
 * Peter Wu <peter@lekensteyn.nl>
+* Arjoonn Sharma <gh: theSage21>
 
 
 Maintainer:

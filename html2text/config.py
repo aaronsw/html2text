@@ -33,6 +33,9 @@ IMAGES_TO_ALT = False
 IMAGES_WITH_SIZE = False
 IGNORE_EMPHASIS = False
 
+# Convert links with same href and text to <href> format if they are absolute links
+USE_AUTOMATIC_LINKS = True
+
 # For checking space-only lines on line 771
 RE_SPACE = re.compile(r'\s\+')
 

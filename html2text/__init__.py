@@ -69,6 +69,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.emphasis_mark = '_'
         self.strong_mark = '**'
         self.single_line_break = config.SINGLE_LINE_BREAK
+        self.use_automatic_links = config.USE_AUTOMATIC_LINKS
 
         if out is None:
             self.out = self.outtextf
@@ -677,7 +678,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if not self.maybe_automatic_link is None:
             href = self.maybe_automatic_link
-            if href == data and self.absolute_url_matcher.match(href):
+            if href == data and self.absolute_url_matcher.match(href) and self.use_automatic_links:
                 self.o("<" + data + ">")
                 self.empty_link = False
                 return
