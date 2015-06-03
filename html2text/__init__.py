@@ -563,6 +563,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.pre = 0
             self.p()
 
+    # TODO: Add docstring for these one letter functions
     def pbr(self):
         if self.p_p == 0:
             self.p_p = 1
@@ -699,6 +700,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.o(data, 1)
 
     def unknown_decl(self, data):
+        # TODO: what is this doing here?
         pass
 
     def charref(self, name):
