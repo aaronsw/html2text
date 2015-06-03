@@ -7,6 +7,7 @@ Installing
 ----------
 
 These are the methods you can get the module installed:-
+
     1. `pip install html2text` for those who have pip
     2. Clone the repository from `https://github.com/Alir3z4/html2text.git`
         1. `git clone https://github.com/Alir3z4/html2text`
@@ -19,10 +20,10 @@ Basic Usage
 
 Once installed the module can be used as follows.
 
->import html2text
->html = function_to_get_some_html()
->text = html2text.html2text(html)
->print(text)
+    import html2text
+    html = function_to_get_some_html()
+    text = html2text.html2text(html)
+    print(text)
 
 This converts the provided html to text( Markdown text) with all the
 options set to default.
@@ -32,13 +33,13 @@ Using Options
 
 To customize the options provided by the module the usage is as follows:
 
->import html2text
->text_maker = html2text.HTML2Text()
->text_maker.ignore_links = True
->text_maker.bypass_tables = False
->html = function_to_get_some_html()
->text = text_maker.handle(html)
->print(text)
+    import html2text
+    text_maker = html2text.HTML2Text()
+    text_maker.ignore_links = True
+    text_maker.bypass_tables = False
+    html = function_to_get_some_html()
+    text = text_maker.handle(html)
+    print(text)
 
 
 Available Options
