@@ -15,6 +15,7 @@ config.py
 ---------
 
 Used to provide various configuration settings to the converter. They are as follows:
+
     - UNICODE_SNOB for using unicode
     - ESCAPE_SNOB for escaping every special character
     - LINKS_EACH_PARAGRAPH for putting links after every paragraph
