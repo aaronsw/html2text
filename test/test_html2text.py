@@ -93,7 +93,7 @@ def generate_test(fn):
 
     def test_cmd(self):
         # Because there is no command-line option to control unicode_snob
-        if not 'unicode_snob' in module_args:
+        if 'unicode_snob' not in module_args:
             self.maxDiff = None
             result, actual = test_command(fn, *cmdline_args)
             self.assertEqual(result, actual)
@@ -123,7 +123,7 @@ def generate_test(fn):
         cmdline_args.append('--bypass-tables')
 
     if base_fn.startswith('bodywidth'):
-        #module_args['unicode_snob'] = True
+        # module_args['unicode_snob'] = True
         module_args['body_width'] = 0
         cmdline_args.append('--body-width=0')
 
@@ -144,6 +144,10 @@ def generate_test(fn):
         cmdline_args.append('--body-width=0')
         module_args['single_line_break'] = True
         cmdline_args.append('--single-line-break')
+
+    if base_fn.startswith('no_inline_links'):
+        module_args['inline_links'] = False
+        cmdline_args.append('--reference-links')
 
     return test_mod, test_cmd
 

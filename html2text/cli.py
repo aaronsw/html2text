@@ -18,6 +18,13 @@ def main():
         help="don't include any formatting for emphasis"
     )
     p.add_option(
+        "--reference-links",
+        dest="inline_links",
+        action="store_false",
+        default=config.INLINE_LINKS,
+        help="use reference style links instead of inline links"
+    )
+    p.add_option(
         "--ignore-links",
         dest="ignore_links",
         action="store_true",
@@ -180,5 +187,6 @@ def main():
     h.escape_snob = options.escape_snob
     h.bypass_tables = options.bypass_tables
     h.single_line_break = options.single_line_break
+    h.inline_links = options.inline_links
 
     wrapwrite(h.handle(data))
