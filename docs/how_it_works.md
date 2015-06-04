@@ -92,6 +92,7 @@ Command line interface for the code.
 |`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
 | `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
 | `--single-line-break`                                  | Use a single line break after a block element rather than two.
+| `--reference-links`                                    | Use reference links instead of inline links to create markdown
 
 
 
