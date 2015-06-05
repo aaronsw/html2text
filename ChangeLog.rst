@@ -3,6 +3,7 @@
 
 * Fix #24: ``3.200.3`` vs ``2014.7.3`` output quirks.
 * Fix #61. Malformed links in markdown output.
+* Feature #62: Automatic version number.
 * Fix #63: Nested code, anchor bug.
 * Fix #64: Proper handling of anchors with content that starts with tags.
 * Feature #67: Documentation all over the module.

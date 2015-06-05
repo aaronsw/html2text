@@ -8,8 +8,10 @@ from html2text.utils import wrapwrite, wrap_read
 def main():
     baseurl = ''
 
-    p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
-                              version='%prog ' + __version__)
+    p = optparse.OptionParser(
+        '%prog [(filename|url) [encoding]]',
+        version='%prog ' + ".".join(map(str, __version__))
+    )
     p.add_option(
         "--ignore-emphasis",
         dest="ignore_emphasis",
