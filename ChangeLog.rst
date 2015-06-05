@@ -7,7 +7,6 @@
 * Fix #63: Nested code, anchor bug.
 * Fix #64: Proper handling of anchors with content that starts with tags.
 * Feature #67: Documentation all over the module.
-that produce markdown produce markdown.
 * Feature #70: Adding tests for the module.
 * Fix #73: Typo in config documentation.
 
