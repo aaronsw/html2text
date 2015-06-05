@@ -54,7 +54,7 @@ simple indications of their function.
     - LINKS_EACH_PARAGRAPH for putting links after every paragraph
     - BODY_WIDTH for wrapping long lines
     - SKIP_INTERNAL_LINKS to skip #local-anchor things
-    - INLNE_LINKS for formatting images and links
+    - INLINE_LINKS for formatting images and links
     - PROTECT_LINKS protect from line breaks
     - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
