@@ -86,12 +86,12 @@ $ pip install html2text
 
     PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
 
-    To see the coverage results:
+To see the coverage results:
     
-    `coverage combine`
-    `coverage html`
+    coverage combine
+    coverage html
 
-    then open the `./htmlcov/index.html` file in your browser.
+then open the `./htmlcov/index.html` file in your browser.
 
 ## Documentation
 

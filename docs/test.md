@@ -11,6 +11,7 @@ Run the tests
 Coverage results can be seen with
 
 `coverage combine`
+
 `coverage html`
 
 and then opening the `./htmlcov/index.html` file with your browser.
