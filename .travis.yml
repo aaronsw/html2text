@@ -11,7 +11,7 @@ install:
 before_script:
   - '[ "${TRAVIS_PYTHON_VERSION}" = "2.6" ] && pip install --use-mirrors unittest2 || /bin/true'
 script:
-  PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
+  -PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
+  -coverage combine
 after_success:
-    -coverage combine
-    -coveralls
+    coveralls
