@@ -13,4 +13,5 @@ before_script:
 script:
   PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
 after_success:
+    coverage combine
     coveralls
