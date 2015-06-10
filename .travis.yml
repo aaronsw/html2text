@@ -16,4 +16,4 @@ script:
   - coverage combine
   - coverage report
 after_success:
-    coveralls
+    coveralls --rcfile=.coveragerc
