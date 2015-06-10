@@ -131,6 +131,13 @@ def main():
             "line breaks. NOTE: Requires --body-width=0"
         )
     )
+    p.add_option(
+        "--mark-code",
+        action="store_true",
+        dest="mark_code",
+        default=config.MARK_CODE,
+        help="Mark program code blocks with [code]...[/code]"
+    )    
     (options, args) = p.parse_args()
 
     # process input
@@ -190,5 +197,6 @@ def main():
     h.bypass_tables = options.bypass_tables
     h.single_line_break = options.single_line_break
     h.inline_links = options.inline_links
+    h.mark_code = options.mark_code
 
     wrapwrite(h.handle(data))

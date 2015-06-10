@@ -70,6 +70,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.strong_mark = '**'
         self.single_line_break = config.SINGLE_LINE_BREAK
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS
+        self.mark_code = config.MARK_CODE
 
         if out is None:
             self.out = self.outtextf
@@ -561,6 +562,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.pre = 1
             else:
                 self.pre = 0
+                if self.mark_code:
+                    self.out("\n[/code]")
             self.p()
 
     # TODO: Add docstring for these one letter functions
@@ -607,6 +610,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                 #self.out(" :") #TODO: not output when already one there
                 if not data.startswith("\n"):  # <pre>stuff...
                     data = "\n" + data
+                if self.mark_code:
+                    self.out("\n[code]")
+                    self.p_p = 0
 
             bq = (">" * self.blockquote)
             if not (force and data and data[0] == ">") and self.blockquote:
