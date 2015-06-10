@@ -1,0 +1,5 @@
+[run]
+branch=True
+parallel=True
+cover_pylib=False
+source=./html2text
