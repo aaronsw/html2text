@@ -149,6 +149,10 @@ def generate_test(fn):
         module_args['inline_links'] = False
         cmdline_args.append('--reference-links')
 
+    if base_fn.startswith('mark_code'):
+        module_args['mark_code'] = True
+        cmdline_args.append('--mark-code')
+        
     return test_mod, test_cmd
 
 # Originally from http://stackoverflow.com/questions/32899/\
