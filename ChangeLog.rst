@@ -1,3 +1,10 @@
+2015.6.12
+=========
+
+* Feature #76: Making ``pre`` blocks clearer for further automatic formatting.
+* Fix #71: Coverage detects tests carried out in ``subprocesses``
+
+
 2015.6.6
 ========
 
