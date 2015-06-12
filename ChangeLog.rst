@@ -1,5 +1,6 @@
 2015.6.12
 =========
+----
 
 * Feature #76: Making ``pre`` blocks clearer for further automatic formatting.
 * Fix #71: Coverage detects tests carried out in ``subprocesses``
@@ -7,6 +8,7 @@
 
 2015.6.6
 ========
+----
 
 * Fix #24: ``3.200.3`` vs ``2014.7.3`` output quirks.
 * Fix #61. Malformed links in markdown output.
