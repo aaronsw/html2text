@@ -16,6 +16,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Peter Wu <peter@lekensteyn.nl>
 * Arjoonn Sharma <gh: theSage21>
 * Ali Mohammad <gh: alawibaba>
+* Albert Berger <gh: nbdsp>
 
 
 Maintainer:
