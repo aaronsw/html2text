@@ -1,3 +1,12 @@
+0000.0.00
+=========
+----
+
+* Fix #31: HTML entities stay inside link
+* Fix #71: Coverage detects command line tests
+* Fix #39: Documentation update
+* Fix #61: Functionality added for optional use of automatic links
+
 2015.4.14
 =========
 ----
