@@ -1,12 +1,12 @@
-try:
+try:  # pragma: no cover
     import urllib.parse as urlparse
     import html.entities as htmlentitydefs
     import html.parser as HTMLParser
-except ImportError:  # Python2
+except ImportError:  # pragma: no cover
     import htmlentitydefs
     import urlparse
     import HTMLParser
-try:  # Python3
+try:  # pragma: no cover
     import urllib.request as urllib
-except ImportError:
+except ImportError:  # pragma: no cover
     import urllib

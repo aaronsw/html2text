@@ -167,13 +167,13 @@ class HTML2Text(HTMLParser.HTMLParser):
         charref = self.charref(c)
         if not self.code and not self.pre:
             charref = cgi.escape(charref)
-        self.o(charref, 1)
+        self.handle_data(charref, True)
 
     def handle_entityref(self, c):
         entityref = self.entityref(c)
         if not self.code and not self.pre and entityref != '&nbsp_place_holder;':
             entityref = cgi.escape(entityref)
-        self.o(entityref, 1)
+        self.handle_data(entityref, True)
 
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
@@ -568,13 +568,16 @@ class HTML2Text(HTMLParser.HTMLParser):
 
     # TODO: Add docstring for these one letter functions
     def pbr(self):
+        "Pretty print has a line break"
         if self.p_p == 0:
             self.p_p = 1
 
     def p(self):
+        "Set pretty print to 1 or 2 lines"
         self.p_p = 1 if self.single_line_break else 2
 
     def soft_br(self):
+        "Soft breaks"
         self.pbr()
         self.br_toggle = '  '
 
@@ -683,7 +686,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.out(data)
             self.outcount += 1
 
-    def handle_data(self, data):
+    def handle_data(self, data, entity_char=False):
         if r'\/script>' in data:
             self.quiet -= 1
 
@@ -701,7 +704,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.maybe_automatic_link = None
                 self.empty_link = False
 
-        if not self.code and not self.pre:
+        if not self.code and not self.pre and not entity_char:
             data = escape_md_section(data, snob=self.escape_snob)
         self.o(data, 1)
 
