@@ -200,7 +200,6 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if ('title' in a) or ('title' in attrs):
                     if (('title' in a) and ('title' in attrs) and
                                 a['title'] == attrs['title']):
-                        print(a['title'], attrs['title'])
                         match = True
                 else:
                     match = True
