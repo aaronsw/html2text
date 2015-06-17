@@ -716,9 +716,10 @@ class HTML2Text(HTMLParser.HTMLParser):
             return unifiable_n[c]
         else:
             try:
-                return unichr(c)
-            except NameError:  # Python3
-                return chr(c)
+                try:
+                    return unichr(c)
+                except NameError:  # Python3
+                    return chr(c)
             except ValueError:  # invalid unicode
                 return ''
 
