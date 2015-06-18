@@ -405,7 +405,13 @@ class HTML2Text(HTMLParser.HTMLParser):
                             self.empty_link = False
                             self.maybe_automatic_link = None
                         if self.inline_links:
-                            self.o("](" + escape_md(a['href']) + ")")
+                            try:
+                                title = escape_md(a['title'])
+                            except KeyError:
+                                self.o("](" + escape_md(a['href']) + ")")
+                            else:
+                                self.o("](" + escape_md(a['href'])
+                                       + ' "' + title + '" )')
                         else:
                             i = self.previousIndex(a)
                             if i is not None:
