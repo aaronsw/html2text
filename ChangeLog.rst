@@ -110,4 +110,4 @@
 * Fix #71: Coverage detects command line tests
 * Fix #39: Documentation update
 * Fix #61: Functionality added for optional use of automatic links
-
+* Feature #80: 'title' attribute is preserved in both inline and reference links
