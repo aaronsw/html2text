@@ -5,11 +5,7 @@ from html2text import HTML2Text, config, __version__
 from html2text.utils import wrapwrite, wrap_read
 
 
-def main():
-    baseurl = ''
-
-    p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
-                              version='%prog ' + __version__)
+def add_options(p):
     p.add_option(
         "--ignore-emphasis",
         dest="ignore_emphasis",
@@ -129,11 +125,11 @@ def main():
             "line breaks. NOTE: Requires --body-width=0"
         )
     )
-    (options, args) = p.parse_args()
+    return p
 
-    # process input
+def process_input(options, args, p, baseurl):  # pragma: no cover
     encoding = "utf-8"
-    if len(args) > 0 and args[0] != '-':  # pragma: no cover
+    if len(args) > 0 and args[0] != '-':
         file_ = args[0]
         if len(args) == 2:
             encoding = args[1]
@@ -165,7 +161,9 @@ def main():
 
     if hasattr(data, 'decode'):
         data = data.decode(encoding)
+    handle_options(baseurl, options, data)
 
+def handle_options(baseurl, options, data):
     h = HTML2Text(baseurl=baseurl)
     # handle options
     if options.ul_style_dash:
@@ -190,3 +188,11 @@ def main():
     h.inline_links = options.inline_links
 
     wrapwrite(h.handle(data))
+
+def main():
+    baseurl = ''
+    p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
+                              version='%prog ' + __version__)
+    p = add_options(p)
+    (options, args) = p.parse_args()
+    process_input(options, args, p, baseurl)
