@@ -7,7 +7,7 @@ import cgi
 
 try:
     from textwrap import wrap
-except ImportError:
+except ImportError:  # pragma: no cover
     pass
 
 from html2text.compat import urlparse, HTMLParser
@@ -72,9 +72,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
 
-        if out is None:
+        if out is None:  # pragma: no cover
             self.out = self.outtextf
-        else:
+        else:  # pragma: no cover
             self.out = out
 
         # empty list to store output characters before they are "joined"
@@ -189,9 +189,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.a list. If the set of attributes is not found, returns None
         :rtype: int
         """
-        if 'href' not in attrs:
+        if 'href' not in attrs:  # pragma: no cover
             return None
-
         i = -1
         for a in self.a:
             i += 1
@@ -709,7 +708,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             data = escape_md_section(data, snob=self.escape_snob)
         self.o(data, 1)
 
-    def unknown_decl(self, data):
+    def unknown_decl(self, data):  # pragma: no cover
         # TODO: what is this doing here?
         pass
 
