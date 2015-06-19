@@ -32,6 +32,7 @@ IGNORE_IMAGES = False
 IMAGES_TO_ALT = False
 IMAGES_WITH_SIZE = False
 IGNORE_EMPHASIS = False
+MARK_CODE = False
 
 # Convert links with same href and text to <href> format if they are absolute links
 USE_AUTOMATIC_LINKS = True

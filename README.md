@@ -34,6 +34,7 @@ Usage: `html2text [(filename|url) [encoding]]`
 | `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
 | `--single-line-break`                                  | Use a single line break after a block element rather than two.
 | `--reference-links`                                    | Use reference links instead of links to create markdown
+| `--mark-code`                                          | Mark preformatted and code blocks with [code]...[/code]
 
 
 

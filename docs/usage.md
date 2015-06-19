@@ -54,7 +54,7 @@ simple indications of their function.
     - LINKS_EACH_PARAGRAPH for putting links after every paragraph
     - BODY_WIDTH for wrapping long lines
     - SKIP_INTERNAL_LINKS to skip #local-anchor things
-    - INLNE_LINKS for formatting images and links
+    - INLINE_LINKS for formatting images and links
     - PROTECT_LINKS protect from line breaks
     - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
@@ -78,6 +78,7 @@ simple indications of their function.
     - RE_SLASH_CHARS a string of slash escapeable characters
     - RE_MD_BACKSLASH_MATCHER to match \char
     - USE_AUTOMATIC_LINKS to convert <a href='http://xyz'>http://xyz</a> to <http://xyz>
+    - MARK_CODE to wrap 'pre' blocks with [code]...[/code] tags
 
 To alter any option the procedure is to create a parser with
 `parser = html2text.HTML2Text()` and to set the option on the parser.

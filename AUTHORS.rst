@@ -15,6 +15,8 @@ The AUTHORS/Contributors are (and/or have been):
 * Scott Blackburn <scott@skipflag.com>
 * Peter Wu <peter@lekensteyn.nl>
 * Arjoonn Sharma <gh: theSage21>
+* Ali Mohammad <gh: alawibaba>
+* Albert Berger <gh: nbdsp>
 
 
 Maintainer:

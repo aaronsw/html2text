@@ -158,6 +158,13 @@ def main():
         dest="links_each_paragraph",
         default=config.LINKS_EACH_PARAGRAPH,
         help="Put links after each paragraph instead of document"
+    )
+    p.add_option(
+        "--mark-code",
+        action="store_true",
+        dest="mark_code",
+        default=config.MARK_CODE,
+        help="Mark program code blocks with [code]...[/code]"
     )    
     (options, args) = p.parse_args()
 
@@ -222,5 +229,6 @@ def main():
     h.use_automatic_links = options.use_automatic_links
     h.skip_internal_links = options.skip_internal_links
     h.links_each_paragraph = options.links_each_paragraph
+    h.mark_code = options.mark_code
 
     wrapwrite(h.handle(data))

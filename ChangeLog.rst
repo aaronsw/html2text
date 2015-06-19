@@ -1,3 +1,25 @@
+2015.6.12
+=========
+----
+
+* Feature #76: Making ``pre`` blocks clearer for further automatic formatting.
+* Fix #71: Coverage detects tests carried out in ``subprocesses``
+
+
+2015.6.6
+========
+----
+
+* Fix #24: ``3.200.3`` vs ``2014.7.3`` output quirks.
+* Fix #61. Malformed links in markdown output.
+* Feature #62: Automatic version number.
+* Fix #63: Nested code, anchor bug.
+* Fix #64: Proper handling of anchors with content that starts with tags.
+* Feature #67: Documentation all over the module.
+* Feature #70: Adding tests for the module.
+* Fix #73: Typo in config documentation.
+
+
 2015.4.14
 =========
 ----
@@ -16,7 +38,7 @@
 
 
 2015.2.18
-==========
+=========
 ----
 
 * Fix #38: Anchor tags with empty text or with `<img>` tags inside are no longer stripped.
