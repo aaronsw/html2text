@@ -95,7 +95,7 @@ Command line interface for the code.
 | `--single-line-break`                                  | Use a single line break after a block element rather than two.
 | `--reference-links`                                    | Use reference links instead of inline links to create markdown
 
-
+*A complete list is available [here](usage.md)*
 
 __init__.py
 -----------
