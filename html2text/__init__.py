@@ -7,7 +7,7 @@ import cgi
 
 try:
     from textwrap import wrap
-except ImportError:
+except ImportError:  # pragma: no cover
     pass
 
 from html2text.compat import urlparse, HTMLParser
@@ -50,31 +50,32 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.split_next_td = False
         self.td_count = 0
         self.table_start = False
-        self.unicode_snob = config.UNICODE_SNOB
-        self.escape_snob = config.ESCAPE_SNOB
+        self.unicode_snob = config.UNICODE_SNOB  # covered in cli
+        self.escape_snob = config.ESCAPE_SNOB  # covered in cli
         self.links_each_paragraph = config.LINKS_EACH_PARAGRAPH
-        self.body_width = bodywidth
-        self.skip_internal_links = config.SKIP_INTERNAL_LINKS
-        self.inline_links = config.INLINE_LINKS
-        self.protect_links = config.PROTECT_LINKS
-        self.google_list_indent = config.GOOGLE_LIST_INDENT
-        self.ignore_links = config.IGNORE_ANCHORS
-        self.ignore_images = config.IGNORE_IMAGES
-        self.images_to_alt = config.IMAGES_TO_ALT
-        self.images_with_size = config.IMAGES_WITH_SIZE
-        self.ignore_emphasis = config.IGNORE_EMPHASIS
-        self.bypass_tables = config.BYPASS_TABLES
-        self.google_doc = False
-        self.ul_item_mark = '*'
-        self.emphasis_mark = '_'
+        self.body_width = bodywidth  # covered in cli
+        self.skip_internal_links = config.SKIP_INTERNAL_LINKS  # covered in cli
+        self.inline_links = config.INLINE_LINKS  # covered in cli
+        self.protect_links = config.PROTECT_LINKS  # covered in cli
+        self.google_list_indent = config.GOOGLE_LIST_INDENT  # covered in cli
+        self.ignore_links = config.IGNORE_ANCHORS  # covered in cli
+        self.ignore_images = config.IGNORE_IMAGES  # covered in cli
+        self.images_to_alt = config.IMAGES_TO_ALT  # covered in cli
+        self.images_with_size = config.IMAGES_WITH_SIZE  # covered in cli
+        self.ignore_emphasis = config.IGNORE_EMPHASIS  # covered in cli
+        self.bypass_tables = config.BYPASS_TABLES  # covered in cli
+        self.google_doc = False  # covered in cli
+        self.ul_item_mark = '*'  # covered in cli
+        self.emphasis_mark = '_'  # covered in cli
         self.strong_mark = '**'
-        self.single_line_break = config.SINGLE_LINE_BREAK
-        self.use_automatic_links = config.USE_AUTOMATIC_LINKS
+        self.single_line_break = config.SINGLE_LINE_BREAK  # covered in cli
+        self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
+        self.hide_strikethrough = False  # covered in cli
         self.mark_code = config.MARK_CODE
 
-        if out is None:
+        if out is None:  # pragma: no cover
             self.out = self.outtextf
-        else:
+        else:  # pragma: no cover
             self.out = out
 
         # empty list to store output characters before they are "joined"
@@ -189,9 +190,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.a list. If the set of attributes is not found, returns None
         :rtype: int
         """
-        if 'href' not in attrs:
+        if 'href' not in attrs:  # pragma: no cover
             return None
-
         i = -1
         for a in self.a:
             i += 1
@@ -714,7 +714,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             data = escape_md_section(data, snob=self.escape_snob)
         self.o(data, 1)
 
-    def unknown_decl(self, data):
+    def unknown_decl(self, data):  # pragma: no cover
         # TODO: what is this doing here?
         pass
 

@@ -1,0 +1,2 @@
+<del>something</del> <strike>something</strike> <s>something</s>
+

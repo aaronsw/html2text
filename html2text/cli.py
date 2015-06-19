@@ -132,6 +132,34 @@ def main():
         )
     )
     p.add_option(
+        "--unicode-snob",
+        action="store_true",
+        dest="unicode_snob",
+        default=config.UNICODE_SNOB,
+        help="Use unicode throughout document"
+    )
+    p.add_option(
+        "--no-automatic-links",
+        action="store_false",
+        dest="use_automatic_links",
+        default=config.USE_AUTOMATIC_LINKS,
+        help="Do not use automatic links wherever applicable"
+    )
+    p.add_option(
+        "--no-skip-internal-links",
+        action="store_false",
+        dest="skip_internal_links",
+        default=config.SKIP_INTERNAL_LINKS,
+        help="Do not skip internal links"
+    )
+    p.add_option(
+        "--links-after-para",
+        action="store_true",
+        dest="links_each_paragraph",
+        default=config.LINKS_EACH_PARAGRAPH,
+        help="Put links after each paragraph instead of document"
+    )
+    p.add_option(
         "--mark-code",
         action="store_true",
         dest="mark_code",
@@ -184,7 +212,7 @@ def main():
         h.strong_mark = '__'
 
     h.body_width = options.body_width
-    h.list_indent = options.list_indent
+    h.google_list_indent = options.list_indent
     h.ignore_emphasis = options.ignore_emphasis
     h.ignore_links = options.ignore_links
     h.protect_links = options.protect_links
@@ -197,6 +225,10 @@ def main():
     h.bypass_tables = options.bypass_tables
     h.single_line_break = options.single_line_break
     h.inline_links = options.inline_links
+    h.unicode_snob = options.unicode_snob
+    h.use_automatic_links = options.use_automatic_links
+    h.skip_internal_links = options.skip_internal_links
+    h.links_each_paragraph = options.links_each_paragraph
     h.mark_code = options.mark_code
 
     wrapwrite(h.handle(data))

@@ -83,3 +83,34 @@ simple indications of their function.
 To alter any option the procedure is to create a parser with
 `parser = html2text.HTML2Text()` and to set the option on the parser.
 example: `parser.unicode_snob = True` to set the UNICODE_SNOB option.
+
+
+Command line options
+--------------------
+
+
+| Option                                                 | Description
+|--------------------------------------------------------|---------------------------------------------------
+| `--version`                                            | Show program version number and exit
+| `-h`, `--help`                                         | Show this help message and exit
+| `--ignore-links`                                       | Do not include any formatting for links
+|`--protect-links`                                       | Protect links from line breaks surrounding them "+" with angle brackets
+|`--ignore-images`                                       | Do not include any formatting for images
+|`--images-to-alt`                                       | Discard image data, only keep alt text
+|`--images-with-size`                                    | Write image tags with height and width attrs as raw html to retain dimensions
+|`-g`, `--google-doc`                                    | Convert an html-exported Google Document
+|`-d`, `--dash-unordered-list`                           | Use a dash rather than a star for unordered list items
+|`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
+|`-i` `LIST_INDENT`, `--google-list-indent`=`LIST_INDENT`| Number of pixels Google indents nested lists
+|`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
+|`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
+| `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
+| `--single-line-break`                                  | Use a single line break after a block element rather than two.
+| `--reference-links`                                    | Use reference links instead of inline links to create markdown
+| `--ignore-emphasis`                                    | Ignore all emphasis formatting in the html.
+| `-e`, `--asterisk-emphasis`                            | Use asterisk rather than underscore to emphasize text
+| `--unicode-snob`                                       | Use unicode throughout instead of ASCII
+| `--no-automatic-links`                                 | Do not use automatic links like <http://googel.com>
+| `--no-skip-internal-links`                             | Turn off skipping of internal links
+| `--links-after-para`                                   | Put the links after the paragraph and not at end of document
+| `--mark-code`                                          | Mark code with [code]...[/code] blocks

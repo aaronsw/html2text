@@ -21,7 +21,7 @@ def hn(tag):
     if tag[0] == 'h' and len(tag) == 2:
         try:
             n = int(tag[1])
-            if n in range(1, 10):
+            if n in range(1, 10):  # pragma: no branch
                 return n
         except ValueError:
             return 0
@@ -62,7 +62,7 @@ def dumb_css_parser(data):
     try:
         elements = dict([(a.strip(), dumb_property_dict(b))
                          for a, b in elements])
-    except ValueError:
+    except ValueError:  # pragma: no cover
         elements = {}  # not that important
 
     return elements
@@ -208,7 +208,7 @@ def wrapwrite(text):
         sys.stdout.write(text)
 
 
-def wrap_read():
+def wrap_read():  # pragma: no cover
     """
     :rtype: str
     """
