@@ -5,7 +5,13 @@ from html2text import HTML2Text, config, __version__
 from html2text.utils import wrapwrite, wrap_read
 
 
-def add_options(p):
+def main():
+    baseurl = ''
+
+    p = optparse.OptionParser(
+        '%prog [(filename|url) [encoding]]',
+        version='%prog ' + ".".join(map(str, __version__))
+    )
     p.add_option(
         "--ignore-emphasis",
         dest="ignore_emphasis",
@@ -152,12 +158,12 @@ def add_options(p):
         dest="links_each_paragraph",
         default=config.LINKS_EACH_PARAGRAPH,
         help="Put links after each paragraph instead of document"
-    )
-    return p
+    )    
+    (options, args) = p.parse_args()
 
-def process_input(options, args, p, baseurl):  # pragma: no cover
+    # process input
     encoding = "utf-8"
-    if len(args) > 0 and args[0] != '-':
+    if len(args) > 0 and args[0] != '-':  # pragma: no cover
         file_ = args[0]
         if len(args) == 2:
             encoding = args[1]
@@ -189,9 +195,7 @@ def process_input(options, args, p, baseurl):  # pragma: no cover
 
     if hasattr(data, 'decode'):
         data = data.decode(encoding)
-    handle_options(baseurl, options, data)
 
-def handle_options(baseurl, options, data):
     h = HTML2Text(baseurl=baseurl)
     # handle options
     if options.ul_style_dash:
@@ -220,11 +224,3 @@ def handle_options(baseurl, options, data):
     h.links_each_paragraph = options.links_each_paragraph
 
     wrapwrite(h.handle(data))
-
-def main():
-    baseurl = ''
-    p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
-                              version='%prog ' + __version__)
-    p = add_options(p)
-    (options, args) = p.parse_args()
-    process_input(options, args, p, baseurl)
