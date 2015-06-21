@@ -6,4 +6,5 @@ dist
 *.egg-info
 .idea
 .coverage
+.coverage.*
 env/
