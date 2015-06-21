@@ -172,7 +172,8 @@ class HTML2Text(HTMLParser.HTMLParser):
 
     def handle_entityref(self, c):
         entityref = self.entityref(c)
-        if not self.code and not self.pre and entityref != '&nbsp_place_holder;':
+        if (not self.code and not self.pre
+                and entityref != '&nbsp_place_holder;'):
             entityref = cgi.escape(entityref)
         self.handle_data(entityref, True)
 
@@ -278,8 +279,9 @@ class HTML2Text(HTMLParser.HTMLParser):
             attrs = dict(attrs)
 
         # first thing inside the anchor tag is another tag that produces some output
-        if start and not self.maybe_automatic_link is None and \
-             tag not in ['p', 'div', 'style', 'dl', 'dt'] and (tag != "img" or self.ignore_images):
+        if (start and not self.maybe_automatic_link is None
+                and tag not in ['p', 'div', 'style', 'dl', 'dt']
+                and (tag != "img" or self.ignore_images)):
             self.o("[")
             self.maybe_automatic_link = None
             self.empty_link = False
@@ -701,7 +703,8 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if not self.maybe_automatic_link is None:
             href = self.maybe_automatic_link
-            if href == data and self.absolute_url_matcher.match(href) and self.use_automatic_links:
+            if (href == data and self.absolute_url_matcher.match(href)
+                    and self.use_automatic_links):
                 self.o("<" + data + ">")
                 self.empty_link = False
                 return
