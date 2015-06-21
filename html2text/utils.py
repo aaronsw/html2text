@@ -1,6 +1,6 @@
 import sys
-from html2text import config
 
+from html2text import config
 from html2text.compat import htmlentitydefs
 
 
