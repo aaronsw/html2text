@@ -17,6 +17,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Arjoonn Sharma <gh: theSage21>
 * Ali Mohammad <gh: alawibaba>
 * Albert Berger <gh: nbdsp>
+* Etienne Millon <me@emillon.org>
 
 
 Maintainer:

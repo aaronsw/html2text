@@ -819,7 +819,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         return result
 
 
-def html2text(html, baseurl='', bodywidth=config.BODY_WIDTH):
+def html2text(html, baseurl='', bodywidth=None):
+    if bodywidth is None:
+        bodywidth = config.BODY_WIDTH
     h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
 
     return h.handle(html)

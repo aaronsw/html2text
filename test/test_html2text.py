@@ -65,6 +65,13 @@ def test_command(fn, *args):
     return result, actual
 
 
+def test_function(fn, **kwargs):
+    with open(fn) as inf:
+        actual = html2text.html2text(inf.read(), **kwargs)
+    result = get_baseline(fn)
+    return result, actual
+
+
 def get_dump_name(fn, suffix):
     return '%s-%s_output.md' % (os.path.splitext(fn)[0], suffix)
 
@@ -98,8 +105,13 @@ def generate_test(fn):
             result, actual = test_command(fn, *cmdline_args)
             self.assertEqual(result, actual)
 
+    def test_func(self):
+        result, actual = test_function(fn, **func_args)
+        self.assertEqual(result, actual)
+
     module_args = {}
     cmdline_args = []
+    func_args = {}
     base_fn = os.path.basename(fn).lower()
 
     if base_fn.startswith('google'):
@@ -126,6 +138,7 @@ def generate_test(fn):
         # module_args['unicode_snob'] = True
         module_args['body_width'] = 0
         cmdline_args.append('--body-width=0')
+        func_args['bodywidth'] = 0
 
     if base_fn.startswith('protect_links'):
         module_args['protect_links'] = True
@@ -152,18 +165,23 @@ def generate_test(fn):
     if base_fn.startswith('mark_code'):
         module_args['mark_code'] = True
         cmdline_args.append('--mark-code')
-        
-    return test_mod, test_cmd
+
+    if base_fn not in ['bodywidth_newline.html', 'abbr_tag.html']:
+        test_func = None
+
+    return test_mod, test_cmd, test_func
 
 # Originally from http://stackoverflow.com/questions/32899/\
 #    how-to-generate-dynamic-parametrized-unit-tests-in-python
 test_dir_name = os.path.dirname(os.path.realpath(__file__))
 for fn in glob.glob("%s/*.html" % test_dir_name):
     test_name = 'test_%s' % os.path.splitext(os.path.basename(fn))[0].lower()
-    test_m, test_c = generate_test(fn)
+    test_m, test_c, test_func = generate_test(fn)
     setattr(TestHTML2Text, test_name + "_mod", test_m)
     if test_c:
         setattr(TestHTML2Text, test_name + "_cmd", test_c)
+    if test_func:
+        setattr(TestHTML2Text, test_name + "_func", test_func)
 
 if __name__ == "__main__":
     unittest.main()
