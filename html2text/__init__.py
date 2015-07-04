@@ -72,6 +72,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
         self.mark_code = config.MARK_CODE
+        self.single_line_break = config.SINGLE_LINE_BREAK
+        self.use_automatic_links = config.USE_AUTOMATIC_LINKS
+        self.wrap_links = config.WRAP_LINKS  # covered in cli
 
         if out is None:  # pragma: no cover
             self.out = self.outtextf
@@ -796,7 +799,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         newlines = 0
         for para in text.split("\n"):
             if len(para) > 0:
-                if not skipwrap(para):
+                if not skipwrap(para, self.wrap_links):
                     result += "\n".join(wrap(para, self.body_width))
                     if para.endswith('  '):
                         result += "  \n"

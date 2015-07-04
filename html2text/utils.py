@@ -172,7 +172,11 @@ def list_numbering_start(attrs):
     return 0
 
 
-def skipwrap(para):
+def skipwrap(para, wrap_links):
+    # If it appears to contain a link
+    # don't wrap
+    if (len(config.RE_LINK.findall(para)) > 0) and not wrap_links:
+        return True
     # If the text begins with four spaces or one tab, it's a code block;
     # don't wrap
     if para[0:4] == '    ' or para[0] == '\t':
