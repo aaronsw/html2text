@@ -148,6 +148,10 @@ def generate_test(fn):
     if base_fn.startswith('no_inline_links'):
         module_args['inline_links'] = False
         cmdline_args.append('--reference-links')
+    
+    if base_fn.startswith('no_wrap_links'):
+        module_args['wrap_links'] = False
+        cmdline_args.append('--no-wrap-links')
 
     return test_mod, test_cmd
 

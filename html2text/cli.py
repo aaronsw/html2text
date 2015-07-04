@@ -11,6 +11,13 @@ def main():
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]',
                               version='%prog ' + __version__)
     p.add_option(
+        "--no-wrap-links",
+        dest="wrap_links",
+        action="store_false",
+        default=config.WRAP_LINKS,
+        help="wrap links during conversion"
+    )
+    p.add_option(
         "--ignore-emphasis",
         dest="ignore_emphasis",
         action="store_true",
@@ -188,5 +195,6 @@ def main():
     h.bypass_tables = options.bypass_tables
     h.single_line_break = options.single_line_break
     h.inline_links = options.inline_links
+    h.wrap_links = options.wrap_links
 
     wrapwrite(h.handle(data))
