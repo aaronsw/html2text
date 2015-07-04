@@ -78,6 +78,7 @@ simple indications of their function.
     - RE_SLASH_CHARS a string of slash escapeable characters
     - RE_MD_BACKSLASH_MATCHER to match \char
     - USE_AUTOMATIC_LINKS to convert <a href='http://xyz'>http://xyz</a> to <http://xyz>
+    - WRAP_LINKS to decide if links have to be wrapped during text wrapping
 
 To alter any option the procedure is to create a parser with
 `parser = html2text.HTML2Text()` and to set the option on the parser.
