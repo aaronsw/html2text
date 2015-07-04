@@ -8,6 +8,7 @@
 * Fix #61: Functionality added for optional use of automatic links.
 * Feature #80: ``title`` attribute is preserved in both inline and reference links.
 * Feature #82: More command line options. See docs.
+* Fix #84: Make bodywidth kwarg overridable using config.
 
 
 2015.6.12
