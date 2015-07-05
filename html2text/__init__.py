@@ -774,6 +774,11 @@ class HTML2Text(HTMLParser.HTMLParser):
         assert wrap, "Requires Python 2.3."
         result = ''
         newlines = 0
+        # I cannot think of a better solution for now.
+        # To avoid the non-wrap behaviour for entire paras
+        # because of the presence of a link in it
+        if not self.wrap_links:
+            self.inline_links = False
         for para in text.split("\n"):
             if len(para) > 0:
                 if not skipwrap(para, self.wrap_links):
