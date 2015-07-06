@@ -115,3 +115,5 @@ Command line options
 | `--no-skip-internal-links`                             | Turn off skipping of internal links
 | `--links-after-para`                                   | Put the links after the paragraph and not at end of document
 | `--mark-code`                                          | Mark code with [code]...[/code] blocks
+| `--no-wrap-links`                                      | Do not wrap links. implies `--reference-links`
+| `--decode_errors`=`HANDLER`                            | What to do in case an error is encountered. `ignore`, `strict`, `replace` etc.
