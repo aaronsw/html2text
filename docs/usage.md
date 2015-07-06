@@ -115,3 +115,4 @@ Command line options
 | `--no-skip-internal-links`                             | Turn off skipping of internal links
 | `--links-after-para`                                   | Put the links after the paragraph and not at end of document
 | `--mark-code`                                          | Mark code with [code]...[/code] blocks
+| `--no-wrap-links`                                      | Do not wrap links during text wrapping. Implies `--reference-links`

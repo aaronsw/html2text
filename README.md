@@ -15,27 +15,16 @@ html2text is a Python script that converts a page of HTML into clean, easy-to-re
 
 Usage: `html2text [(filename|url) [encoding]]`
 
-
 | Option                                                 | Description
 |--------------------------------------------------------|---------------------------------------------------
 | `--version`                                            | Show program's version number and exit
 | `-h`, `--help`                                         | Show this help message and exit
 | `--ignore-links`                                       | Don't include any formatting for links
-|`--protect-links`                                       | Protect links from line breaks surrounding them "+" with angle brackets
-|`--ignore-images`                                       | Don't include any formatting for images
-|`--images-to-alt`                                       | Discard image data, only keep alt text
-|`--images-with-size`                                    | Write image tags with height and width attrs as raw html to retain dimensions
-|`-g`, `--google-doc`                                    | Convert an html-exported Google Document
-|`-d`, `--dash-unordered-list`                           | Use a dash rather than a star for unordered list items
-|`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
-|`-i` `LIST_INDENT`, `--google-list-indent`=`LIST_INDENT`| Number of pixels Google indents nested lists
-|`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
 |`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
-| `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
-| `--single-line-break`                                  | Use a single line break after a block element rather than two.
 | `--reference-links`                                    | Use reference links instead of links to create markdown
 | `--mark-code`                                          | Mark preformatted and code blocks with [code]...[/code]
 
+For a complete list of options see the [docs](docs/usage.md)
 
 
 Or you can use it from within `Python`:
