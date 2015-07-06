@@ -172,7 +172,15 @@ def main():
         dest="mark_code",
         default=config.MARK_CODE,
         help="Mark program code blocks with [code]...[/code]"
-    )    
+    )
+    p.add_option(
+        "--decode-errors",
+        dest="decode_errors",
+        action="store",
+        type="string",
+        default=config.DECODE_ERRORS,
+        help="What to do in case of decode errors.'ignore', 'strict' and 'replace' are acceptable values"
+    )
     (options, args) = p.parse_args()
 
     # process input
@@ -208,7 +216,7 @@ def main():
         data = wrap_read()
 
     if hasattr(data, 'decode'):
-        data = data.decode(encoding)
+        data = data.decode(encoding, errors=options.decode_errors)
 
     h = HTML2Text(baseurl=baseurl)
     # handle options
