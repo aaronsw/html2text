@@ -79,6 +79,7 @@ simple indications of their function.
     - RE_MD_BACKSLASH_MATCHER to match \char
     - USE_AUTOMATIC_LINKS to convert <a href='http://xyz'>http://xyz</a> to <http://xyz>
     - MARK_CODE to wrap 'pre' blocks with [code]...[/code] tags
+    - WRAP_LINKS to decide if links have to be wrapped during text wrapping (implies INLINE_LINKS = False)
 
 To alter any option the procedure is to create a parser with
 `parser = html2text.HTML2Text()` and to set the option on the parser.
@@ -114,3 +115,4 @@ Command line options
 | `--no-skip-internal-links`                             | Turn off skipping of internal links
 | `--links-after-para`                                   | Put the links after the paragraph and not at end of document
 | `--mark-code`                                          | Mark code with [code]...[/code] blocks
+| `--no-wrap-links`                                      | Do not wrap links during text wrapping. Implies `--reference-links`

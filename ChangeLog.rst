@@ -1,3 +1,10 @@
+0000.0.00
+=========
+----
+
+* Fix #38: Long links wrapping controlled by `--no-wrap-links`.
+* Note: `--no-wrap-links` implies `--reference-links`
+
 2015.6.21
 =========
 ----

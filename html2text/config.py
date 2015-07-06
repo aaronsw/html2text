@@ -23,6 +23,8 @@ INLINE_LINKS = True
 # Protect links from line breaks surrounding them with angle brackets (in
 # addition to their square brackets)
 PROTECT_LINKS = False
+# WRAP_LINKS = True
+WRAP_LINKS = True
 
 # Number of pixels Google indents nested lists
 GOOGLE_LIST_INDENT = 36
@@ -45,6 +47,7 @@ RE_ORDERED_LIST_MATCHER = re.compile(r'\d+\.\s')
 RE_UNORDERED_LIST_MATCHER = re.compile(r'[-\*\+]\s')
 RE_MD_CHARS_MATCHER = re.compile(r"([\\\[\]\(\)])")
 RE_MD_CHARS_MATCHER_ALL = re.compile(r"([`\*_{}\[\]\(\)#!])")
+RE_LINK = re.compile(r"(\[.*?\] ?\(.*?\))|(\[.*?\]:.*?)")  # to find links in the text
 RE_MD_DOT_MATCHER = re.compile(r"""
     ^             # start of line
     (\s*\d+)      # optional whitespace and a number

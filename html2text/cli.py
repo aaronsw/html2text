@@ -13,6 +13,13 @@ def main():
         version='%prog ' + ".".join(map(str, __version__))
     )
     p.add_option(
+        "--no-wrap-links",
+        dest="wrap_links",
+        action="store_false",
+        default=config.WRAP_LINKS,
+        help="wrap links during conversion"
+    )
+    p.add_option(
         "--ignore-emphasis",
         dest="ignore_emphasis",
         action="store_true",
@@ -230,5 +237,6 @@ def main():
     h.skip_internal_links = options.skip_internal_links
     h.links_each_paragraph = options.links_each_paragraph
     h.mark_code = options.mark_code
+    h.wrap_links = options.wrap_links
 
     wrapwrite(h.handle(data))
