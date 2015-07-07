@@ -8,6 +8,16 @@ from html2text.utils import wrapwrite, wrap_read
 def main():
     baseurl = ''
 
+    class bcolors:  # pragma: no cover
+        HEADER = '\033[95m'
+        OKBLUE = '\033[94m'
+        OKGREEN = '\033[92m'
+        WARNING = '\033[93m'
+        FAIL = '\033[91m'
+        ENDC = '\033[0m'
+        BOLD = '\033[1m'
+        UNDERLINE = '\033[4m'
+
     p = optparse.OptionParser(
         '%prog [(filename|url) [encoding]]',
         version='%prog ' + ".".join(map(str, __version__))
@@ -172,7 +182,15 @@ def main():
         dest="mark_code",
         default=config.MARK_CODE,
         help="Mark program code blocks with [code]...[/code]"
-    )    
+    )
+    p.add_option(
+        "--decode-errors",
+        dest="decode_errors",
+        action="store",
+        type="string",
+        default=config.DECODE_ERRORS,
+        help="What to do in case of decode errors.'ignore', 'strict' and 'replace' are acceptable values"
+    )
     (options, args) = p.parse_args()
 
     # process input
@@ -208,7 +226,18 @@ def main():
         data = wrap_read()
 
     if hasattr(data, 'decode'):
-        data = data.decode(encoding)
+        try:
+            try:
+                data = data.decode(encoding, errors=options.decode_errors)
+            except TypeError:
+                # python 2.6.x does not have the errors option
+                data = data.decode(encoding)
+        except UnicodeDecodeError as err:
+            warning = bcolors.WARNING + "Warning:" + bcolors.ENDC
+            warning += ' Use the ' + bcolors.OKGREEN
+            warning += '--decode-errors=ignore' + bcolors.ENDC + 'flag.'
+            print(warning)
+            raise err
 
     h = HTML2Text(baseurl=baseurl)
     # handle options
