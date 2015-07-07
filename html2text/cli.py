@@ -8,7 +8,7 @@ from html2text.utils import wrapwrite, wrap_read
 def main():
     baseurl = ''
 
-    class bcolors:
+    class bcolors:  # pragma: no cover
         HEADER = '\033[95m'
         OKBLUE = '\033[94m'
         OKGREEN = '\033[92m'
