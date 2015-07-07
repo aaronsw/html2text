@@ -216,7 +216,11 @@ def main():
         data = wrap_read()
 
     if hasattr(data, 'decode'):
-        data = data.decode(encoding, errors=options.decode_errors)
+        try:
+            data = data.decode(encoding, errors=options.decode_errors)
+        except TypeError:
+            # python 2.6.x does not have the errors option
+            data = data.decode(encoding)
 
     h = HTML2Text(baseurl=baseurl)
     # handle options
