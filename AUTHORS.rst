@@ -18,6 +18,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Ali Mohammad <gh: alawibaba>
 * Albert Berger <gh: nbdsp>
 * Etienne Millon <me@emillon.org>
+* John C F <gh: critiqjo>
 
 
 Maintainer:

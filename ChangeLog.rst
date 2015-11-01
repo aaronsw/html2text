@@ -6,6 +6,13 @@
 * Note: `--no-wrap-links` implies `--reference-links`
 * Fix #87: Decode errors can be handled via command line.
 
+2015.10.27
+=========
+----
+
+* Feature #83: Add callback-on-tag.
+
+
 2015.6.21
 =========
 ----

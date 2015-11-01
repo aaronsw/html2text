@@ -75,6 +75,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.single_line_break = config.SINGLE_LINE_BREAK
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS
         self.wrap_links = config.WRAP_LINKS  # covered in cli
+        self.tag_callback = None
 
         if out is None:  # pragma: no cover
             self.out = self.outtextf
@@ -280,6 +281,10 @@ class HTML2Text(HTMLParser.HTMLParser):
             attrs = {}
         else:
             attrs = dict(attrs)
+
+        if self.tag_callback is not None:
+            if self.tag_callback(self, tag, attrs, start) is True:
+                return
 
         # first thing inside the anchor tag is another tag that produces some output
         if (start and not self.maybe_automatic_link is None
