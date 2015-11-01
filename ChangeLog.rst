@@ -5,11 +5,6 @@
 * Fix #38: Long links wrapping controlled by `--no-wrap-links`.
 * Note: `--no-wrap-links` implies `--reference-links`
 * Fix #87: Decode errors can be handled via command line.
-
-2015.10.27
-=========
-----
-
 * Feature #83: Add callback-on-tag.
 
 
