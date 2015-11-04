@@ -29,7 +29,7 @@ from html2text.utils import (
     skipwrap
 )
 
-__version__ = (2015, 6, 21)
+__version__ = (2015, 11, 4)
 
 
 # TODO:
