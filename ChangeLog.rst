@@ -4,8 +4,10 @@
 
 * Fix #38: Long links wrapping controlled by `--no-wrap-links`.
 * Note: `--no-wrap-links` implies `--reference-links`
-* Fix #87: Decode errors can be handled via command line.
 * Feature #83: Add callback-on-tag.
+* Fix #87: Decode errors can be handled via command line.
+* Feature #95: Docs, decode errors spelling mistake.
+* Fix #84: Make bodywidth kwarg overridable using config.
 
 
 2015.6.21
@@ -18,7 +20,6 @@
 * Fix #61: Functionality added for optional use of automatic links.
 * Feature #80: ``title`` attribute is preserved in both inline and reference links.
 * Feature #82: More command line options. See docs.
-* Fix #84: Make bodywidth kwarg overridable using config.
 
 
 2015.6.12
