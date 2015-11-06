@@ -72,8 +72,6 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
         self.mark_code = config.MARK_CODE
-        self.single_line_break = config.SINGLE_LINE_BREAK
-        self.use_automatic_links = config.USE_AUTOMATIC_LINKS
         self.wrap_links = config.WRAP_LINKS  # covered in cli
         self.tag_callback = None
 
