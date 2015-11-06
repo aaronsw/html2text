@@ -80,7 +80,7 @@ def element_style(attrs, style_def, parent_style):
     style = parent_style.copy()
     if 'class' in attrs:
         for css_class in attrs['class'].split():
-            css_style = style_def['.' + css_class]
+            css_style = style_def.get('.' + css_class, {})
             style.update(css_style)
     if 'style' in attrs:
         immediate_style = dumb_property_dict(attrs['style'])
