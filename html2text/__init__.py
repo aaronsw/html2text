@@ -306,7 +306,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 tag_style = element_style(attrs, self.style_def, parent_style)
                 self.tag_stack.append((tag, attrs, tag_style))
             else:
-                dummy, attrs, tag_style = self.tag_stack.pop()
+                dummy, attrs, tag_style = self.tag_stack.pop() if self.tag_stack else (None, {}, {})
                 if self.tag_stack:
                     parent_style = self.tag_stack[-1][2]
 
