@@ -365,9 +365,9 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.o(self.strong_mark)
         if tag in ['del', 'strike', 's']:
             if start:
-                self.o("<" + tag + ">")
+                self.o("~~")
             else:
-                self.o("</" + tag + ">")
+                self.o("~~")
 
         if self.google_doc:
             if not self.inheader:
