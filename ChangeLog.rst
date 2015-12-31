@@ -2,7 +2,7 @@
 =========
 ----
 
-* <s>, <strike>, <del> rendered as '~~text~~'
+* <s>, <strike>, <del> now rendered as ~~text~~
 
 2015.11.4
 =========
