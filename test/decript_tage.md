@@ -1,2 +1,2 @@
-<del>something</del> <strike>something</strike> <s>something</s>
+~~something~~ ~~something~~ ~~something~~
 
