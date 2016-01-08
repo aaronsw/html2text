@@ -1,8 +1,12 @@
-0000.00.00
+2016.1.8
 =========
 ----
 
-* <s>, <strike>, <del> now rendered as ~~text~~
+* Feature #99: Removed duplicated initialisation.
+* Fix #100: Get element style key error.
+* Fix #101: Fix error end tag pop exception
+* <s>, <strike>, <del> now rendered as ~~text~~.
+
 
 2015.11.4
 =========
