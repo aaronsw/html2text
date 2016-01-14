@@ -3,6 +3,7 @@
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
 import re
+import sys
 import cgi
 
 try:
@@ -44,7 +45,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                  appends lines of text).
             baseurl: base URL of the document we process
         """
-        HTMLParser.HTMLParser.__init__(self)
+        kwargs = {}
+        if sys.version_info >= (3, 4):
+            kwargs['convert_charrefs'] = False
+        HTMLParser.HTMLParser.__init__(self, **kwargs)
 
         # Config options
         self.split_next_td = False
