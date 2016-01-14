@@ -2,7 +2,7 @@ Introduction
 ============
 
 
-There are 5 components to the code. They are kept as seperate files in the
+There are 5 components to the code. They are kept as separate files in the
 html2text directory. This part of the documentation explains them bit by bit.
 
 
@@ -31,7 +31,7 @@ Used to provide various configuration settings to the converter. They are as fol
     - IGNORE_EMPHASIS
     - BYPASS_TABLES
     - SINGLE_LINE_BREAK to use a single line break rather than two
-    - UNIFIABLE is a dictionary which maps unicode abbrevations to ASCII
+    - UNIFIABLE is a dictionary which maps unicode abbreviations to ASCII
                 values
     - RE_SPACE for finding space-only lines
     - RE_UNESCAPE for finding html entities like &nbsp;
@@ -67,7 +67,7 @@ Some functions are:
     - wrapwrite                 :write to buffer
     - wrap_read                 :read from buffer
     - escape_md                 :escape md sensitive within other md
-    - escape_md_section         :escape md sensitive accrose whole doc
+    - escape_md_section         :escape md sensitive across whole doc
 
 
 cli.py
@@ -89,7 +89,7 @@ Command line interface for the code.
 |`-d`, `--dash-unordered-list`                           | Use a dash rather than a star for unordered list items
 |`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
 |`-i` `LIST_INDENT`, `--google-list-indent`=`LIST_INDENT`| Number of pixels Google indents nested lists
-|`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevent when `-g` is specified as well
+|`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevant when `-g` is specified as well
 |`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
 | `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
 | `--single-line-break`                                  | Use a single line break after a block element rather than two.
