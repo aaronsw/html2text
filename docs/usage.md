@@ -8,11 +8,24 @@ Installing
 
 These are the methods you can get the module installed:-
 
-    1. `pip install html2text` for those who have pip
-    2. Clone the repository from `https://github.com/Alir3z4/html2text.git`
-        1. `git clone https://github.com/Alir3z4/html2text`
-        2. `python setup build`
-        3. `python setup install`
+### PIP
+
+For those who have pip, we got your back.
+
+```
+$ pip install html2text
+```
+
+### Clone from Git Repository
+
+Clone the repository from https://github.com/Alir3z4/html2text
+
+```
+$ git clone --depth 1 https://github.com/Alir3z4/html2text.git
+$ python setup.py build
+$ python setup.py install
+```
+
 
 
 Basic Usage
