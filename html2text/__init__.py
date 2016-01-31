@@ -476,7 +476,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.o("![" + escape_md(alt) + "]")
                     if self.inline_links:
                         href = attrs.get('href') or ''
-                        self.o("(" + escape_md(href) + ")")
+                        self.o("(" + escape_md(urlparse.urljoin(self.baseurl, href)) + ")")
                     else:
                         i = self.previousIndex(attrs)
                         if i is not None:
