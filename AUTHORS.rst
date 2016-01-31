@@ -19,6 +19,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Albert Berger <gh: nbdsp>
 * Etienne Millon <me@emillon.org>
 * John C F <gh: critiqjo>
+* Mikhail Melnik <by.zumzoom@gmail.com>
 
 
 Maintainer:
