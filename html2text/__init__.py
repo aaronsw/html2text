@@ -420,9 +420,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                             try:
                                 title = escape_md(a['title'])
                             except KeyError:
-                                self.o("](" + escape_md(a['href']) + ")")
+                                self.o("](" + escape_md(urlparse.urljoin(self.baseurl, a['href'])) + ")")
                             else:
-                                self.o("](" + escape_md(a['href'])
+                                self.o("](" + escape_md(urlparse.urljoin(self.baseurl, a['href']))
                                        + ' "' + title + '" )')
                         else:
                             i = self.previousIndex(a)
@@ -476,7 +476,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.o("![" + escape_md(alt) + "]")
                     if self.inline_links:
                         href = attrs.get('href') or ''
-                        self.o("(" + escape_md(href) + ")")
+                        self.o("(" + escape_md(urlparse.urljoin(self.baseurl, href)) + ")")
                     else:
                         i = self.previousIndex(attrs)
                         if i is not None:

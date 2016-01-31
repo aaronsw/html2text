@@ -3,6 +3,7 @@
 ----
 
 * Fix #89: Python 3.5 support.
+* Fix #113: inplace baseurl substitution for <a> and <img> tags
 
 
 2016.1.8
