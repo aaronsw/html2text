@@ -173,6 +173,12 @@ def generate_test(fn):
     if base_fn not in ['bodywidth_newline.html', 'abbr_tag.html']:
         test_func = None
 
+    if base_fn == 'inplace_baseurl_substitution.html':
+        module_args['baseurl'] = 'http://brettterpstra.com'
+        module_args['body_width'] = 0
+        # there is no way to specify baseurl in cli :(
+        test_cmd = None
+
     return test_mod, test_cmd, test_func
 
 # Originally from http://stackoverflow.com/questions/32899/\
