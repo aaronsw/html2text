@@ -514,6 +514,8 @@ class HTML2Text(HTMLParser.HTMLParser):
             else:
                 if self.list:
                     self.list.pop()
+                    if (not self.google_doc) and (not self.list):
+                        self.o('\n')
             self.lastWasList = True
         else:
             self.lastWasList = False
