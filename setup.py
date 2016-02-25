@@ -1,6 +1,12 @@
 # coding: utf-8
 import sys
 from setuptools import setup, Command, find_packages
+try:
+    from pypandoc import convert
+    read_md = lambda f: convert(f, 'rst')
+except ImportError:
+    print("warning: pypandoc module not found, could not convert Markdown to RST")
+    read_md = lambda f: open(f, 'r').read()
 
 requires_list = []
 try:
@@ -36,6 +42,7 @@ setup(
     name="html2text",
     version=".".join(map(str, __import__('html2text').__version__)),
     description="Turn HTML into equivalent Markdown-structured text.",
+    long_description=read_md('README.md'),
     author="Aaron Swartz",
     author_email="me@aaronsw.com",
     maintainer='Alireza Savand',
