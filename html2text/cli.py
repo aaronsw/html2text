@@ -195,12 +195,13 @@ def main():
 
     # process input
     encoding = "utf-8"
+    if len(args) == 2:
+        encoding = args[1]
+    elif len(args) > 2:
+        p.error('Too many arguments')
+
     if len(args) > 0 and args[0] != '-':  # pragma: no cover
         file_ = args[0]
-        if len(args) == 2:
-            encoding = args[1]
-        if len(args) > 2:
-            p.error('Too many arguments')
 
         if file_.startswith('http://') or file_.startswith('https://'):
             baseurl = file_
