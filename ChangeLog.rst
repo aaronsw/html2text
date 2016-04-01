@@ -2,6 +2,7 @@
 =========
 ----
 
+* Fix #106: encoding by stdin
 * Fix #89: Python 3.5 support.
 * Fix #113: inplace baseurl substitution for <a> and <img> tags.
 * Feature #118: Update the badges to badge.kloud51.com
