@@ -814,7 +814,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         for para in text.split("\n"):
             if len(para) > 0:
                 if not skipwrap(para, self.wrap_links):
-                    result += "\n".join(wrap(para, self.body_width))
+                    result += "\n".join(
+                        wrap(para, self.body_width, break_long_words=False)
+                    )
                     if para.endswith('  '):
                         result += "  \n"
                         newlines = 1
