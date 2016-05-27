@@ -1,4 +1,5 @@
 import optparse
+import warnings
 
 from html2text.compat import urllib
 from html2text import HTML2Text, config, __version__
@@ -204,6 +205,8 @@ def main():
         file_ = args[0]
 
         if file_.startswith('http://') or file_.startswith('https://'):
+            warnings.warn("Support for retrieving html over network is set for deprecation by version (2017, 1, x)",
+                    DeprecationWarning)
             baseurl = file_
             j = urllib.urlopen(baseurl)
             data = j.read()
