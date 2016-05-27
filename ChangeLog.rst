@@ -1,3 +1,10 @@
+xxxx.x.x
+=========
+----
+
+* Fix #114: Break does not interrupt blockquotes
+* Deprecation warnings for URL retreival
+
 2016.4.2
 =========
 ----
