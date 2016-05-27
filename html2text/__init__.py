@@ -142,23 +142,20 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         try:
             nochr = unicode('')
+            unicode_character = unichr
         except NameError:
             nochr = str('')
+            unicode_character = chr
 
         self.pbr()
         self.o('', 0, 'end')
 
         outtext = nochr.join(self.outtextlist)
+
         if self.unicode_snob:
-            try:
-                nbsp = unichr(name2cp('nbsp'))
-            except NameError:
-                nbsp = chr(name2cp('nbsp'))
+            nbsp = unicode_character(name2cp('nbsp'))
         else:
-            try:
-                nbsp = unichr(32)
-            except NameError:
-                nbsp = chr(32)
+            nbsp = unicode_character(32)
         try:
             outtext = outtext.replace(unicode('&nbsp_place_holder;'), nbsp)
         except NameError:
@@ -331,7 +328,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.p()
 
         if tag == "br" and start:
-            self.o("  \n")
+            if self.blockquote > 0:
+                self.o("  \n> ")
+            else:
+                self.o("  \n")
 
         if tag == "hr" and start:
             self.p()
