@@ -27,7 +27,8 @@ from html2text.utils import (
     list_numbering_start,
     dumb_css_parser,
     escape_md_section,
-    skipwrap
+    skipwrap,
+    pad_tables_in_text
 )
 
 __version__ = (2016, 4, 2)
@@ -77,6 +78,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.hide_strikethrough = False  # covered in cli
         self.mark_code = config.MARK_CODE
         self.wrap_links = config.WRAP_LINKS  # covered in cli
+        self.pad_tables = config.PAD_TABLES  # covered in cli
         self.tag_callback = None
 
         if out is None:  # pragma: no cover
@@ -130,7 +132,11 @@ class HTML2Text(HTMLParser.HTMLParser):
     def handle(self, data):
         self.feed(data)
         self.feed("")
-        return self.optwrap(self.close())
+        markdown = self.optwrap(self.close())
+        if self.pad_tables:
+            return pad_tables_in_text(markdown)
+        else:
+            return markdown
 
     def outtextf(self, s):
         self.outtextlist.append(s)
@@ -556,8 +562,12 @@ class HTML2Text(HTMLParser.HTMLParser):
                         self.o('</{0}>'.format(tag))
 
             else:
-                if tag == "table" and start:
-                    self.table_start = True
+                if tag == "table":
+                    if start:
+                        self.table_start = True
+                    else:
+                        if self.pad_tables:
+                            self.o("  \n")
                 if tag in ["td", "th"] and start:
                     if self.split_next_td:
                         self.o("| ")
