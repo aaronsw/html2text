@@ -260,7 +260,7 @@ def reformat_table(lines, right_margin):
     new_lines = []
     for line in lines:
         cols = [x.rstrip() for x in line.split('|')]
-        if set(line.strip()) == {'-', '|'}:
+        if set(line.strip()) == set('-|):
             filler = '-'
             new_cols = [x.rstrip() + (filler * (M - len(x.rstrip())))
                         for x, M in zip(cols, max_width)]
