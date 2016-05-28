@@ -36,6 +36,7 @@ IMAGES_WITH_SIZE = False
 IGNORE_EMPHASIS = False
 MARK_CODE = False
 DECODE_ERRORS = 'strict'
+PAD_TABLES = False
 
 # Convert links with same href and text to <href> format if they are absolute links
 USE_AUTOMATIC_LINKS = True
@@ -43,6 +44,7 @@ USE_AUTOMATIC_LINKS = True
 # For checking space-only lines on line 771
 RE_SPACE = re.compile(r'\s\+')
 
+RE_TABLE_HEADER_MARKER = re.compile(r'(.+\|?)\n(---\|?)+')
 RE_UNESCAPE = re.compile(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));")
 RE_ORDERED_LIST_MATCHER = re.compile(r'\d+\.\s')
 RE_UNORDERED_LIST_MATCHER = re.compile(r'[-\*\+]\s')
