@@ -254,7 +254,8 @@ def reformat_table(lines, right_margin):
     max_width = [len(x.rstrip()) + right_margin for x in lines[0].split('|')]
     for line in lines:
         cols = [x.rstrip() for x in line.split('|')]
-        max_width = [max(len(x) + right_margin, old_len) for x, old_len in zip(cols, max_width)]
+        max_width = [max(len(x) + right_margin, old_len)
+                     for x, old_len in zip(cols, max_width)]
     
     # reformat
     new_lines = []
@@ -276,19 +277,22 @@ def pad_tables_in_text(text, right_margin=1):
     Provide padding for tables in the text
     """
     lines = text.split('\n')
-    table_buffer, altered_lines, table_widths, within_table = [], [], [], False
+    table_buffer, altered_lines, table_widths, table_started = [], [], [], False
     new_lines = []
     for line in lines:
-        if '|' in line:
-            if not within_table:
-                within_table = True
-            table_buffer.append(line)
-        else:
-            if within_table:
+        # Toogle table started
+        if (config.TABLE_MARKER_FOR_PAD in line):
+            table_started = not table_started
+            if not table_started:
                 table = reformat_table(table_buffer, right_margin)
                 new_lines.extend(table)
                 table_buffer = []
-                within_table = False
+                new_lines.append('')
+            continue
+        # Process lines
+        if table_started:
+            table_buffer.append(line)
+        else:
             new_lines.append(line)
     new_text = '\n'.join(new_lines)
     return new_text
