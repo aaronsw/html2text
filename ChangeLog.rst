@@ -4,7 +4,8 @@ xxxx.x.x
 
 * Fix #125: --pad_tables now pads table cells to make them look nice.
 * Fix #114: Break does not interrupt blockquotes
-* Deprecation warnings for URL retreival
+* Deprecation warnings for URL retrieval.
+
 
 2016.4.2
 =========
