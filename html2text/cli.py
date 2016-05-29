@@ -24,7 +24,7 @@ def main():
         version='%prog ' + ".".join(map(str, __version__))
     )
     p.add_option(
-        "--pad_tables",
+        "--pad-tables",
         dest="pad_tables",
         action="store_true",
         default=config.PAD_TABLES,

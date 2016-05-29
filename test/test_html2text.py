@@ -172,7 +172,7 @@ def generate_test(fn):
 
     if base_fn.startswith('pad_table'):
         module_args['pad_tables'] = True
-        cmdline_args.append('--pad_tables')
+        cmdline_args.append('--pad-tables')
 
     if base_fn not in ['bodywidth_newline.html', 'abbr_tag.html']:
         test_func = None
