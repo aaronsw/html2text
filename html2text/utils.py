@@ -244,3 +244,55 @@ def escape_md_section(text, snob=False):
     text = config.RE_MD_DASH_MATCHER.sub(r"\1\\\2", text)
 
     return text
+
+def reformat_table(lines, right_margin):
+    """
+    Given the lines of a table
+    padds the cells and returns the new lines
+    """
+    # find the maximum width of the columns
+    max_width = [len(x.rstrip()) + right_margin for x in lines[0].split('|')]
+    for line in lines:
+        cols = [x.rstrip() for x in line.split('|')]
+        max_width = [max(len(x) + right_margin, old_len)
+                     for x, old_len in zip(cols, max_width)]
+    
+    # reformat
+    new_lines = []
+    for line in lines:
+        cols = [x.rstrip() for x in line.split('|')]
+        if set(line.strip()) == set('-|'):
+            filler = '-'
+            new_cols = [x.rstrip() + (filler * (M - len(x.rstrip())))
+                        for x, M in zip(cols, max_width)]
+        else:
+            filler = ' '
+            new_cols = [x.rstrip() + (filler * (M - len(x.rstrip())))
+                        for x, M in zip(cols, max_width)]
+        new_lines.append('|'.join(new_cols))
+    return new_lines
+
+def pad_tables_in_text(text, right_margin=1):
+    """
+    Provide padding for tables in the text
+    """
+    lines = text.split('\n')
+    table_buffer, altered_lines, table_widths, table_started = [], [], [], False
+    new_lines = []
+    for line in lines:
+        # Toogle table started
+        if (config.TABLE_MARKER_FOR_PAD in line):
+            table_started = not table_started
+            if not table_started:
+                table = reformat_table(table_buffer, right_margin)
+                new_lines.extend(table)
+                table_buffer = []
+                new_lines.append('')
+            continue
+        # Process lines
+        if table_started:
+            table_buffer.append(line)
+        else:
+            new_lines.append(line)
+    new_text = '\n'.join(new_lines)
+    return new_text

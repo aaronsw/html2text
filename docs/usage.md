@@ -131,3 +131,4 @@ Command line options
 | `--mark-code`                                          | Mark code with [code]...[/code] blocks
 | `--no-wrap-links`                                      | Do not wrap links during text wrapping. Implies `--reference-links`
 | `--decode-errors`=`HANDLER`                            | What to do in case an error is encountered. `ignore`, `strict`, `replace` etc.
+| `--pad-tables`                                         | Use padding to make tables look good.
