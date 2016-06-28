@@ -31,7 +31,7 @@ def dumb_property_dict(style):
     """
     :returns: A hash of css attributes
     """
-    out = dict([(x.strip(), y.strip()) for x, y in
+    out = dict([(x.strip().lower(), y.strip().lower()) for x, y in
                 [z.split(':', 1) for z in
                  style.split(';') if ':' in z
                  ]
@@ -149,7 +149,7 @@ def google_fixed_width_font(style):
     font_family = ''
     if 'font-family' in style:
         font_family = style['font-family']
-    if 'Courier New' == font_family or 'Consolas' == font_family:
+    if 'courier new' == font_family or 'consolas' == font_family:
         return True
 
     return False

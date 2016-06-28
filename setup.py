@@ -1,6 +1,8 @@
 # coding: utf-8
 import sys
+
 from setuptools import setup, Command, find_packages
+
 try:
     from pypandoc import convert
     read_md = lambda f: convert(f, 'rst')
@@ -18,7 +20,8 @@ else:
 
 
 class RunTests(Command):
-    """New setup.py command to run all tests for the package.
+    """
+    New setup.py command to run all tests for the package.
     """
     description = "run all tests for the package"
 
@@ -62,7 +65,6 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
