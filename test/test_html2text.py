@@ -134,6 +134,10 @@ def generate_test(fn):
         module_args['bypass_tables'] = True
         cmdline_args.append('--bypass-tables')
 
+    if base_fn.startswith('table_ignore'):
+        module_args['ignore_tables'] = True
+        cmdline_args.append('--ignore-tables')
+
     if base_fn.startswith('bodywidth'):
         # module_args['unicode_snob'] = True
         module_args['body_width'] = 0
@@ -161,7 +165,7 @@ def generate_test(fn):
     if base_fn.startswith('no_inline_links'):
         module_args['inline_links'] = False
         cmdline_args.append('--reference-links')
-    
+
     if base_fn.startswith('no_wrap_links'):
         module_args['wrap_links'] = False
         cmdline_args.append('--no-wrap-links')

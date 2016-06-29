@@ -69,6 +69,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.images_with_size = config.IMAGES_WITH_SIZE  # covered in cli
         self.ignore_emphasis = config.IGNORE_EMPHASIS  # covered in cli
         self.bypass_tables = config.BYPASS_TABLES  # covered in cli
+        self.ignore_tables = config.IGNORE_TABLES  # covered in cli
         self.google_doc = False  # covered in cli
         self.ul_item_mark = '*'  # covered in cli
         self.emphasis_mark = '_'  # covered in cli
@@ -547,7 +548,16 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.start = 1
 
         if tag in ["table", "tr", "td", "th"]:
-            if self.bypass_tables:
+            if self.ignore_tables:
+                if tag == 'tr':
+                    if start:
+                        pass
+                    else:
+                        self.soft_br()
+                else:
+                    pass
+
+            elif self.bypass_tables:
                 if start:
                     self.soft_br()
                 if tag in ["td", "th"]:

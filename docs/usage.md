@@ -75,7 +75,8 @@ simple indications of their function.
     - IMAGES_TO_ALT
     - IMAGES_WITH_SIZE
     - IGNORE_EMPHASIS
-    - BYPASS_TABLES
+    - BYPASS_TABLES format tables in HTML rather than Markdown
+    - IGNORE_TABLES ignore table-related tags (table, th, td, tr) while keeping rows
     - SINGLE_LINE_BREAK to use a single line break rather than two
     - UNIFIABLE is a dictionary which maps unicode abbreviations to ASCII
                 values
@@ -120,6 +121,7 @@ Command line options
 |`-s`, `--hide-strikethrough`                            | Hide strike-through text. only relevant when `-g` is specified as well
 |`--escape-all`                                          | Escape all special characters.  Output is less readable, but avoids corner case formatting issues.
 | `--bypass-tables`                                      | Format tables in HTML rather than Markdown syntax.
+| `--ignore-tables`                                      | Ignore table-related tags (table, th, td, tr) while keeping rows.
 | `--single-line-break`                                  | Use a single line break after a block element rather than two.
 | `--reference-links`                                    | Use reference links instead of inline links to create markdown
 | `--ignore-emphasis`                                    | Ignore all emphasis formatting in the html.

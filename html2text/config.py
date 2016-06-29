@@ -119,7 +119,11 @@ UNIFIABLE = {
     'rlm': ''
 }
 
+# Format tables in HTML rather than Markdown syntax
 BYPASS_TABLES = False
+# Ignore table-related tags (table, th, td, tr) while keeping rows
+IGNORE_TABLES = False
+
 
 # Use a single line break after a block element rather an two line breaks.
 # NOTE: Requires body width setting to be 0.

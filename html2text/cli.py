@@ -147,6 +147,13 @@ def main():
         help="Format tables in HTML rather than Markdown syntax."
     )
     p.add_option(
+        "--ignore-tables",
+        action="store_true",
+        dest="ignore_tables",
+        default=config.IGNORE_TABLES,
+        help="Ignore table-related tags (table, th, td, tr) while keeping rows."
+    )
+    p.add_option(
         "--single-line-break",
         action="store_true",
         dest="single_line_break",
@@ -270,6 +277,7 @@ def main():
     h.hide_strikethrough = options.hide_strikethrough
     h.escape_snob = options.escape_snob
     h.bypass_tables = options.bypass_tables
+    h.ignore_tables = options.ignore_tables
     h.single_line_break = options.single_line_break
     h.inline_links = options.inline_links
     h.unicode_snob = options.unicode_snob
