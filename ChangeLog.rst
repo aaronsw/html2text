@@ -1,3 +1,10 @@
+xxxx.x.xx
+=========
+----
+
+* Default image alt text option created and set to a default of "Image"
+* Fix #136: --default-image-alt now takes a string as argument
+
 2016.5.29
 =========
 ----
