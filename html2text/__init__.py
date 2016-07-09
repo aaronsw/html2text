@@ -79,6 +79,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.mark_code = config.MARK_CODE
         self.wrap_links = config.WRAP_LINKS  # covered in cli
         self.pad_tables = config.PAD_TABLES  # covered in cli
+        self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
         self.tag_callback = None
 
         if out is None:  # pragma: no cover
@@ -445,7 +446,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             if 'src' in attrs:
                 if not self.images_to_alt:
                     attrs['href'] = attrs['src']
-                alt = attrs.get('alt') or ''
+                alt = attrs.get('alt') or self.default_image_alt or ''
 
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes

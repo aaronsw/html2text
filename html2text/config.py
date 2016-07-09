@@ -38,6 +38,7 @@ IMAGES_WITH_SIZE = False
 IGNORE_EMPHASIS = False
 MARK_CODE = False
 DECODE_ERRORS = 'strict'
+DEFAULT_IMAGE_ALT = 'Image'
 PAD_TABLES = False
 
 # Convert links with same href and text to <href> format if they are absolute links
