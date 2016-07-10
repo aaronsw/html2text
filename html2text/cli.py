@@ -24,6 +24,13 @@ def main():
         version='%prog ' + ".".join(map(str, __version__))
     )
     p.add_option(
+        "--default-image-alt",
+        dest="default_image_alt",
+        action="store",
+        type="str",
+        default=config.DEFAULT_IMAGE_ALT,
+        help="The default alt string for images with missing ones")
+    p.add_option(
         "--pad-tables",
         dest="pad_tables",
         action="store_true",
@@ -287,5 +294,6 @@ def main():
     h.mark_code = options.mark_code
     h.wrap_links = options.wrap_links
     h.pad_tables = options.pad_tables
+    h.default_image_alt = options.default_image_alt
 
     wrapwrite(h.handle(data))

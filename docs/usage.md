@@ -95,6 +95,7 @@ simple indications of their function.
     - MARK_CODE to wrap 'pre' blocks with [code]...[/code] tags
     - WRAP_LINKS to decide if links have to be wrapped during text wrapping (implies INLINE_LINKS = False)
     - DECODE_ERRORS to handle decoding errors. 'strict', 'ignore', 'replace' are the acceptable values.
+    - DEFAULT_IMAGE_ALT takes a string as value and is used whenever an image tag is missing an `alt` value. The default for this is an empty string '' to avoid backward breakage
 
 To alter any option the procedure is to create a parser with
 `parser = html2text.HTML2Text()` and to set the option on the parser.
@@ -134,3 +135,4 @@ Command line options
 | `--no-wrap-links`                                      | Do not wrap links during text wrapping. Implies `--reference-links`
 | `--decode-errors`=`HANDLER`                            | What to do in case an error is encountered. `ignore`, `strict`, `replace` etc.
 | `--pad-tables`                                         | Use padding to make tables look good.
+| `--default-image-alt`=`Image_Here`                     | Inserts the given `alt` text whever images are missing `alt` values.

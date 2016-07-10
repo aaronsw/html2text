@@ -1,3 +1,11 @@
+xxxx.x.xx
+=========
+----
+
+* Default image alt text option created and set to a default of empty string "" to maintain backward compatibility
+* Fix #136: --default-image-alt now takes a string as argument
+* Fix #113: Stop changing quiet levels on \/script tags.
+
 2016.5.29
 =========
 ----
