@@ -446,7 +446,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             if 'src' in attrs:
                 if not self.images_to_alt:
                     attrs['href'] = attrs['src']
-                alt = attrs.get('alt') or self.default_image_alt or ''
+                alt = attrs.get('alt') or self.default_image_alt
 
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes

@@ -286,5 +286,6 @@ def main():
     h.mark_code = options.mark_code
     h.wrap_links = options.wrap_links
     h.pad_tables = options.pad_tables
+    h.default_image_alt = options.default_image_alt
 
     wrapwrite(h.handle(data))

@@ -114,6 +114,10 @@ def generate_test(fn):
     func_args = {}
     base_fn = os.path.basename(fn).lower()
 
+    if base_fn.startswith('default_image_alt'):
+        module_args['default_image_alt'] = 'Image'
+        cmdline_args.append('--default-image-alt=Image')
+
     if base_fn.startswith('google'):
         module_args['google_doc'] = True
         cmdline_args.append('--googledoc')
