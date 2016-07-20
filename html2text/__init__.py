@@ -4,14 +4,13 @@
 from __future__ import division
 import re
 import sys
-import cgi
 
 try:
     from textwrap import wrap
 except ImportError:  # pragma: no cover
     pass
 
-from html2text.compat import urlparse, HTMLParser
+from html2text.compat import urlparse, HTMLParser, html_escape
 from html2text import config
 
 from html2text.utils import (
@@ -178,14 +177,14 @@ class HTML2Text(HTMLParser.HTMLParser):
     def handle_charref(self, c):
         charref = self.charref(c)
         if not self.code and not self.pre:
-            charref = cgi.escape(charref)
+            charref = html_escape(charref)
         self.handle_data(charref, True)
 
     def handle_entityref(self, c):
         entityref = self.entityref(c)
         if (not self.code and not self.pre
                 and entityref != '&nbsp_place_holder;'):
-            entityref = cgi.escape(entityref)
+            entityref = html_escape(entityref)
         self.handle_data(entityref, True)
 
     def handle_starttag(self, tag, attrs):
