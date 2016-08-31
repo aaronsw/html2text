@@ -23,7 +23,7 @@ Usage: `html2text [(filename|url) [encoding]]`
 | `--reference-links`                                    | Use reference links instead of links to create markdown
 | `--mark-code`                                          | Mark preformatted and code blocks with [code]...[/code]
 
-For a complete list of options see the [docs](docs/usage.md)
+For a complete list of options see the [docs](https://github.com/Alir3z4/html2text/blob/master/docs/usage.md)
 
 
 Or you can use it from within `Python`:
@@ -84,4 +84,4 @@ then open the `./htmlcov/index.html` file in your browser.
 
 ## Documentation
 
-Documentation lives [here](docs/index.md)
+Documentation lives [here](https://github.com/Alir3z4/html2text/blob/master/docs/usage.md)
