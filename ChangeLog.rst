@@ -6,6 +6,7 @@ xxxx.x.xx
 * Fix #136: --default-image-alt now takes a string as argument
 * Fix #113: Stop changing quiet levels on \/script tags.
 * Merge #126: Fix deprecation warning on py3 due to html.escape
+* Fix #145: Running test suite on Travis CI for Python 2.6.
 
 2016.5.29
 =========

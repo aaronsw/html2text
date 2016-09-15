@@ -10,7 +10,7 @@ python:
 install:
     - pip install coveralls==0.5
 before_script:
-  - '[ "${TRAVIS_PYTHON_VERSION}" = "2.6" ] && pip install --use-mirrors unittest2 || /bin/true'
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
   - export COVERAGE_PROCESS_START=$PWD/.coveragerc
 script:
   - PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text --rcfile=.coveragerc setup.py test -v
