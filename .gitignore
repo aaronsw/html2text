@@ -9,3 +9,4 @@ dist
 .coverage.*
 env/
 .c9/
+.vscode
