@@ -30,7 +30,7 @@ from html2text.utils import (
     pad_tables_in_text
 )
 
-__version__ = (2016, 5, 29)
+__version__ = (2016, 9, 19)
 
 
 # TODO:

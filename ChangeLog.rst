@@ -1,4 +1,4 @@
-xxxx.x.xx
+2016.9.19
 =========
 ----
 
@@ -7,6 +7,7 @@ xxxx.x.xx
 * Fix #113: Stop changing quiet levels on \/script tags.
 * Merge #126: Fix deprecation warning on py3 due to html.escape
 * Fix #145: Running test suite on Travis CI for Python 2.6.
+
 
 2016.5.29
 =========
