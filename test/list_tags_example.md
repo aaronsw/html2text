@@ -33,6 +33,6 @@ Drums
   2. some item
   3. some item
 
-  * somthing else here
+  * something else here
   * some item
 

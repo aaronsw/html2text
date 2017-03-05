@@ -135,4 +135,4 @@ Command line options
 | `--no-wrap-links`                                      | Do not wrap links during text wrapping. Implies `--reference-links`
 | `--decode-errors`=`HANDLER`                            | What to do in case an error is encountered. `ignore`, `strict`, `replace` etc.
 | `--pad-tables`                                         | Use padding to make tables look good.
-| `--default-image-alt`=`Image_Here`                     | Inserts the given `alt` text whever images are missing `alt` values.
+| `--default-image-alt`=`Image_Here`                     | Inserts the given `alt` text whenever images are missing `alt` values.

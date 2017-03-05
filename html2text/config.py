@@ -1,6 +1,6 @@
 import re
 
-# Use Unicode characters instead of their ascii psuedo-replacements
+# Use Unicode characters instead of their ascii pseudo-replacements
 UNICODE_SNOB = 0
 
 # Marker to use for marking tables for padding post processing
@@ -126,6 +126,6 @@ BYPASS_TABLES = False
 IGNORE_TABLES = False
 
 
-# Use a single line break after a block element rather an two line breaks.
+# Use a single line break after a block element rather than two line breaks.
 # NOTE: Requires body width setting to be 0.
 SINGLE_LINE_BREAK = False

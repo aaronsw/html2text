@@ -1,6 +1,6 @@
 # Processing empty hyperlinks
 
-This test checks wheter empty hyperlinks still appear in the markdown result.
+This test checks whether empty hyperlinks still appear in the markdown result.
 
 [](http://some.link)
 
