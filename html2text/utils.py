@@ -280,7 +280,7 @@ def pad_tables_in_text(text, right_margin=1):
     table_buffer, altered_lines, table_widths, table_started = [], [], [], False
     new_lines = []
     for line in lines:
-        # Toogle table started
+        # Toggle table started
         if (config.TABLE_MARKER_FOR_PAD in line):
             table_started = not table_started
             if not table_started:

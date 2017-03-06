@@ -21,7 +21,7 @@ Used to provide various configuration settings to the converter. They are as fol
     - LINKS_EACH_PARAGRAPH for putting links after every paragraph
     - BODY_WIDTH for wrapping long lines
     - SKIP_INTERNAL_LINKS to skip #local-anchor things
-    - INLNE_LINKS for formatting images and links
+    - INLINE_LINKS for formatting images and links
     - PROTECT_LINKS protect from line breaks
     - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
@@ -55,7 +55,7 @@ Some functions are:
 
     - name2cp                   :name to code point
     - hn                        :headings
-    - dumb_preperty_dict        :hash of css attrs
+    - dumb_property_dict        :hash of css attrs
     - dumb_css_parser           :returns a hash of css selectors, each
                                  containing a hash of css attrs
     - element_style             :hash of final style of element
