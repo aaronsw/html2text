@@ -2,6 +2,8 @@
 ==========
 ----
 
+* Fix #157: Fix images link with div wrap
+
 
 2016.9.19
 =========

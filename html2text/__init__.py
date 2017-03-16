@@ -331,6 +331,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.p()
                 else:
                     self.soft_br()
+            elif self.astack and tag == 'div':
+                pass
             else:
                 self.p()
 
