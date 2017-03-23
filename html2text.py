@@ -499,8 +499,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                 alt = attrs.get('alt', '')
                 self.o("![" + escape_md(alt) + "]")
 
+                title = attrs.get('title', '')
+
                 if self.inline_links:
-                    self.o("(" + escape_md(attrs['href']) + ")")
+                    self.o("(" + escape_md(attrs['href']) + (" \"{}\"".format(title) if title else "") + ")")
                 else:
                     i = self.previousIndex(attrs)
                     if i is not None:
