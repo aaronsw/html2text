@@ -3,6 +3,7 @@
 ----
 
 * Fix #157: Fix images link with div wrap
+* Fix #55: Fix error when empty title tags
 
 
 2016.9.19
