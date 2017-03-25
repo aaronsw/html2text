@@ -427,7 +427,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                             self.maybe_automatic_link = None
                         if self.inline_links:
                             try:
-                                title = escape_md(a['title'])
+                                if a['title'] is not None:
+                                    title = escape_md(a['title'])
+                                else:
+                                    title = ""
                             except KeyError:
                                 self.o("](" + escape_md(urlparse.urljoin(self.baseurl, a['href'])) + ")")
                             else:

@@ -20,6 +20,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Etienne Millon <me@emillon.org>
 * John C F <gh: critiqjo>
 * Mikhail Melnik <by.zumzoom@gmail.com>
+* Andres Rey
 
 
 Maintainer:
