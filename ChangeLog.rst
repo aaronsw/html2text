@@ -4,6 +4,7 @@
 
 * Fix #157: Fix images link with div wrap
 * Fix #55: Fix error when empty title tags
+* Fix #160: The html2text tests are failing on Windows and on Cygwin due to differences in eol handling between windows/*nix
 
 
 2016.9.19
