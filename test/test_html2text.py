@@ -89,7 +89,6 @@ def get_baseline(fn):
     name = get_baseline_name(fn)
     with codecs.open(name, mode='r', encoding='utf8') as f:
         out = f.read()
-    #f.close()
     out = cleanup_eol(out)
     return out
 
