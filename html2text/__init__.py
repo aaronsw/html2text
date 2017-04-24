@@ -660,7 +660,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
             if self.startpre:
                 #self.out(" :") #TODO: not output when already one there
-                if not data.startswith("\n"):  # <pre>stuff...
+                if not data.startswith("\n") and not data.startswith("\r\n"):  # <pre>stuff...
                     data = "\n" + data
                 if self.mark_code:
                     self.out("\n[code]")

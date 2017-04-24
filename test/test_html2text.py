@@ -17,6 +17,15 @@ logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
 import html2text
 
 
+def cleanup_eol(clean_str):
+    if os.name == 'nt' or sys.platform == 'cygwin':
+        # Fix the unwanted CR to CRCRLF replacement
+        # during text pipelining on Windows/cygwin
+        # on cygwin, os.name == 'posix', not nt
+        clean_str = re.sub(r'\r+', '\r', clean_str)
+        clean_str = clean_str.replace('\r\n', '\n')
+    return clean_str
+
 def test_module(fn, google_doc=False, **kwargs):
     h = html2text.HTML2Text()
     h.fn = fn
@@ -31,9 +40,9 @@ def test_module(fn, google_doc=False, **kwargs):
         setattr(h, k, v)
 
     result = get_baseline(fn)
-    inf = open(fn)
-    actual = h.handle(inf.read())
-    inf.close()
+    with open(fn) as inf:
+        actual = cleanup_eol(inf.read())
+        actual = h.handle(actual)
     return result, actual
 
 
@@ -56,11 +65,7 @@ def test_command(fn, *args):
 
     actual = out.decode('utf8')
 
-    if os.name == 'nt':
-        # Fix the unwanted CR to CRCRLF replacement
-        # during text pipelining on Windows/cygwin
-        actual = re.sub(r'\r+', '\r', actual)
-        actual = actual.replace('\r\n', '\n')
+    actual = cleanup_eol(actual)
 
     return result, actual
 
@@ -82,9 +87,9 @@ def get_baseline_name(fn):
 
 def get_baseline(fn):
     name = get_baseline_name(fn)
-    f = codecs.open(name, mode='r', encoding='utf8')
-    out = f.read()
-    f.close()
+    with codecs.open(name, mode='r', encoding='utf8') as f:
+        out = f.read()
+    out = cleanup_eol(out)
     return out
 
 

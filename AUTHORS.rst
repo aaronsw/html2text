@@ -21,6 +21,7 @@ The AUTHORS/Contributors are (and/or have been):
 * John C F <gh: critiqjo>
 * Mikhail Melnik <by.zumzoom@gmail.com>
 * Andres Rey
+* Ciprian Miclaus
 
 
 Maintainer:
