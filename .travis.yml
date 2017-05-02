@@ -3,14 +3,18 @@ python:
   - "2.6"
   - "2.7"
   - "pypy"
+  - "pypy3"
   - "3.2"
   - "3.3"
   - "3.4"
   - "3.5"
+  - "3.6"
 install:
     - pip install coveralls==0.5
 before_script:
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
+  # flake8 doesn't support Python 2.6
+  - if [[ $TRAVIS_PYTHON_VERSION != '2.6' ]]; then pip install flake8==3.3.0;flake8 .; fi
   - export COVERAGE_PROCESS_START=$PWD/.coveragerc
 script:
   - PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text --rcfile=.coveragerc setup.py test -v
