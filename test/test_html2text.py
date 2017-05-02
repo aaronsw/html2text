@@ -1,5 +1,7 @@
 import codecs
 import glob
+import html2text
+import logging
 import os
 import re
 import subprocess
@@ -9,12 +11,10 @@ if sys.version_info[:2] < (2, 7):
     import unittest2 as unittest
 else:
     import unittest
-import logging
+
 
 logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
                     level=logging.DEBUG)
-
-import html2text
 
 
 def cleanup_eol(clean_str):
@@ -25,6 +25,7 @@ def cleanup_eol(clean_str):
         clean_str = re.sub(r'\r+', '\r', clean_str)
         clean_str = clean_str.replace('\r\n', '\n')
     return clean_str
+
 
 def test_module(fn, google_doc=False, **kwargs):
     h = html2text.HTML2Text()
@@ -98,19 +99,19 @@ class TestHTML2Text(unittest.TestCase):
 
 
 def generate_test(fn):
-    def test_mod(self):
+    def _test_mod(self):
         self.maxDiff = None
         result, actual = test_module(fn, **module_args)
         self.assertEqual(result, actual)
 
-    def test_cmd(self):
+    def _test_cmd(self):
         # Because there is no command-line option to control unicode_snob
         if 'unicode_snob' not in module_args:
             self.maxDiff = None
             result, actual = test_command(fn, *cmdline_args)
             self.assertEqual(result, actual)
 
-    def test_func(self):
+    def _test_func(self):
         result, actual = test_function(fn, **func_args)
         self.assertEqual(result, actual)
 
@@ -189,14 +190,19 @@ def generate_test(fn):
 
     if base_fn not in ['bodywidth_newline.html', 'abbr_tag.html']:
         test_func = None
+    else:
+        test_func = _test_func
 
     if base_fn == 'inplace_baseurl_substitution.html':
         module_args['baseurl'] = 'http://brettterpstra.com'
         module_args['body_width'] = 0
         # there is no way to specify baseurl in cli :(
         test_cmd = None
+    else:
+        test_cmd = _test_cmd
 
-    return test_mod, test_cmd, test_func
+    return _test_mod, test_cmd, test_func
+
 
 # Originally from http://stackoverflow.com/questions/32899/\
 #    how-to-generate-dynamic-parametrized-unit-tests-in-python

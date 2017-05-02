@@ -3,11 +3,20 @@ import sys
 
 from setuptools import setup, Command, find_packages
 
+
+def read_md_convert(f):
+    return convert(f, 'rst')
+
+
+def read_md_open(f):
+    return open(f, 'r').read()
+
+
 try:
     from pypandoc import convert
-    read_md = lambda f: convert(f, 'rst')
+    read_md = read_md_convert
 except ImportError:
-    read_md = lambda f: open(f, 'r').read()
+    read_md = read_md_open
 
 requires_list = []
 try:

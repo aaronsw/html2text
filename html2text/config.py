@@ -41,7 +41,8 @@ DECODE_ERRORS = 'strict'
 DEFAULT_IMAGE_ALT = ''
 PAD_TABLES = False
 
-# Convert links with same href and text to <href> format if they are absolute links
+# Convert links with same href and text to <href> format
+# if they are absolute links
 USE_AUTOMATIC_LINKS = True
 
 # For checking space-only lines on line 771
@@ -52,7 +53,10 @@ RE_ORDERED_LIST_MATCHER = re.compile(r'\d+\.\s')
 RE_UNORDERED_LIST_MATCHER = re.compile(r'[-\*\+]\s')
 RE_MD_CHARS_MATCHER = re.compile(r"([\\\[\]\(\)])")
 RE_MD_CHARS_MATCHER_ALL = re.compile(r"([`\*_{}\[\]\(\)#!])")
-RE_LINK = re.compile(r"(\[.*?\] ?\(.*?\))|(\[.*?\]:.*?)")  # to find links in the text
+
+# to find links in the text
+RE_LINK = re.compile(r"(\[.*?\] ?\(.*?\))|(\[.*?\]:.*?)")
+
 RE_MD_DOT_MATCHER = re.compile(r"""
     ^             # start of line
     (\s*\d+)      # optional whitespace and a number
