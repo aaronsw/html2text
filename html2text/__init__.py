@@ -182,8 +182,9 @@ class HTML2Text(HTMLParser.HTMLParser):
 
     def handle_entityref(self, c):
         entityref = self.entityref(c)
-        if (not self.code and not self.pre
-                and entityref != '&nbsp_place_holder;'):
+        if not self.code and not \
+            self.pre and \
+                entityref != '&nbsp_place_holder;':
             entityref = html_escape(entityref)
         self.handle_data(entityref, True)
 
@@ -208,10 +209,11 @@ class HTML2Text(HTMLParser.HTMLParser):
             i += 1
             match = 0
 
-            if ('href' in a) and a['href'] == attrs['href']:
-                if ('title' in a) or ('title' in attrs):
-                    if (('title' in a) and ('title' in attrs) and
-                                a['title'] == attrs['title']):
+            if 'href' in a and a['href'] == attrs['href']:
+                if 'title' in a or 'title' in attrs:
+                    if 'title' in a and \
+                        'title' in attrs and \
+                            a['title'] == attrs['title']:
                         match = True
                 else:
                     match = True
@@ -229,8 +231,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         # handle Google's text emphasis
         strikethrough = 'line-through' in \
                         tag_emphasis and self.hide_strikethrough
-        bold = 'bold' in tag_emphasis and not 'bold' in parent_emphasis
-        italic = 'italic' in tag_emphasis and not 'italic' in parent_emphasis
+        bold = 'bold' in tag_emphasis and 'bold' not in parent_emphasis
+        italic = 'italic' in tag_emphasis and 'italic' not in parent_emphasis
         fixed = google_fixed_width_font(tag_style) and not \
             google_fixed_width_font(parent_style) and not self.pre
 
@@ -292,10 +294,11 @@ class HTML2Text(HTMLParser.HTMLParser):
             if self.tag_callback(self, tag, attrs, start) is True:
                 return
 
-        # first thing inside the anchor tag is another tag that produces some output
-        if (start and not self.maybe_automatic_link is None
-                and tag not in ['p', 'div', 'style', 'dl', 'dt']
-                and (tag != "img" or self.ignore_images)):
+        # first thing inside the anchor tag is another tag
+        # that produces some output
+        if (start and self.maybe_automatic_link is not None and
+                tag not in ['p', 'div', 'style', 'dl', 'dt'] and
+                (tag != "img" or self.ignore_images)):
             self.o("[")
             self.maybe_automatic_link = None
             self.empty_link = False
@@ -312,7 +315,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 tag_style = element_style(attrs, self.style_def, parent_style)
                 self.tag_stack.append((tag, attrs, tag_style))
             else:
-                dummy, attrs, tag_style = self.tag_stack.pop() if self.tag_stack else (None, {}, {})
+                dummy, attrs, tag_style = self.tag_stack.pop() \
+                    if self.tag_stack else (None, {}, {})
                 if self.tag_stack:
                     parent_style = self.tag_stack[-1][2]
 
@@ -404,15 +408,15 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if tag == "a" and not self.ignore_links:
             if start:
-                if ('href' in attrs) and \
-                        (attrs['href'] is not None) and \
-                        not (self.skip_internal_links and
-                                 attrs['href'].startswith('#')):
+                if 'href' in attrs and \
+                    attrs['href'] is not None and not \
+                        (self.skip_internal_links and
+                            attrs['href'].startswith('#')):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs['href']
                     self.empty_link = True
                     if self.protect_links:
-                        attrs['href'] = '<'+attrs['href']+'>'
+                        attrs['href'] = '<' + attrs['href'] + '>'
                 else:
                     self.astack.append(None)
             else:
@@ -432,10 +436,29 @@ class HTML2Text(HTMLParser.HTMLParser):
                                 else:
                                     title = ""
                             except KeyError:
-                                self.o("](" + escape_md(urlparse.urljoin(self.baseurl, a['href'])) + ")")
+                                self.o(
+                                    "](" +
+                                    escape_md(
+                                        urlparse.urljoin(
+                                            self.baseurl,
+                                            a['href']
+                                        )
+                                    ) +
+                                    ")"
+                                )
                             else:
-                                self.o("](" + escape_md(urlparse.urljoin(self.baseurl, a['href']))
-                                       + ' "' + title + '" )')
+                                self.o(
+                                    "](" +
+                                    escape_md(
+                                        urlparse.urljoin(
+                                            self.baseurl,
+                                            a['href']
+                                        )
+                                    ) +
+                                    ' "' +
+                                    title +
+                                    '" )'
+                                )
                         else:
                             i = self.previousIndex(a)
                             if i is not None:
@@ -468,7 +491,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     return
 
                 # If we have a link to create, output the start
-                if not self.maybe_automatic_link is None:
+                if self.maybe_automatic_link is not None:
                     href = self.maybe_automatic_link
                     if self.images_to_alt and escape_md(alt) == href and \
                             self.absolute_url_matcher.match(href):
@@ -488,7 +511,16 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.o("![" + escape_md(alt) + "]")
                     if self.inline_links:
                         href = attrs.get('href') or ''
-                        self.o("(" + escape_md(urlparse.urljoin(self.baseurl, href)) + ")")
+                        self.o(
+                            "(" +
+                            escape_md(
+                                urlparse.urljoin(
+                                    self.baseurl,
+                                    href
+                                )
+                            ) +
+                            ")"
+                        )
                     else:
                         i = self.previousIndex(attrs)
                         if i is not None:
@@ -581,11 +613,11 @@ class HTML2Text(HTMLParser.HTMLParser):
                     if start:
                         self.table_start = True
                         if self.pad_tables:
-                            self.o("<"+config.TABLE_MARKER_FOR_PAD+">")
+                            self.o("<" + config.TABLE_MARKER_FOR_PAD + ">")
                             self.o("  \n")
                     else:
                         if self.pad_tables:
-                            self.o("</"+config.TABLE_MARKER_FOR_PAD+">")
+                            self.o("</" + config.TABLE_MARKER_FOR_PAD + ">")
                             self.o("  \n")
                 if tag in ["td", "th"] and start:
                     if self.split_next_td:
@@ -659,8 +691,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return
 
             if self.startpre:
-                #self.out(" :") #TODO: not output when already one there
-                if not data.startswith("\n") and not data.startswith("\r\n"):  # <pre>stuff...
+                # self.out(" :") #TODO: not output when already one there
+                if not data.startswith("\n") and not data.startswith("\r\n"):
+                    # <pre>stuff...
                     data = "\n" + data
                 if self.mark_code:
                     self.out("\n[code]")
@@ -673,7 +706,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             if self.pre:
                 if not self.list:
                     bq += "    "
-                #else: list content is already partially indented
+                # else: list content is already partially indented
                 for i in range(len(self.list)):
                     bq += "    "
                 data = data.replace("\n", "\n" + bq)
@@ -705,8 +738,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.out(' ')
                 self.space = 0
 
-            if self.a and ((self.p_p == 2 and self.links_each_paragraph)
-                           or force == "end"):
+            if self.a and ((self.p_p == 2 and self.links_each_paragraph) or
+                           force == "end"):
                 if force == "end":
                     self.out("\n")
 
@@ -739,10 +772,10 @@ class HTML2Text(HTMLParser.HTMLParser):
         if self.style:
             self.style_def.update(dumb_css_parser(data))
 
-        if not self.maybe_automatic_link is None:
+        if self.maybe_automatic_link is not None:
             href = self.maybe_automatic_link
-            if (href == data and self.absolute_url_matcher.match(href)
-                    and self.use_automatic_links):
+            if (href == data and self.absolute_url_matcher.match(href) and
+                    self.use_automatic_links):
                 self.o("<" + data + ">")
                 self.empty_link = False
                 return
@@ -814,7 +847,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         nest_count = 0
         if 'margin-left' in style:
             nest_count = int(style['margin-left'][:-2]) \
-                         // self.google_list_indent
+                // self.google_list_indent
 
         return nest_count
 

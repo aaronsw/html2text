@@ -12,7 +12,6 @@ def name2cp(k):
 
 
 unifiable_n = {}
-
 for k in config.UNIFIABLE.keys():
     unifiable_n[name2cp(k)] = config.UNIFIABLE[k]
 
@@ -245,6 +244,7 @@ def escape_md_section(text, snob=False):
 
     return text
 
+
 def reformat_table(lines, right_margin):
     """
     Given the lines of a table
@@ -256,7 +256,7 @@ def reformat_table(lines, right_margin):
         cols = [x.rstrip() for x in line.split('|')]
         max_width = [max(len(x) + right_margin, old_len)
                      for x, old_len in zip(cols, max_width)]
-    
+
     # reformat
     new_lines = []
     for line in lines:
@@ -272,12 +272,13 @@ def reformat_table(lines, right_margin):
         new_lines.append('|'.join(new_cols))
     return new_lines
 
+
 def pad_tables_in_text(text, right_margin=1):
     """
     Provide padding for tables in the text
     """
     lines = text.split('\n')
-    table_buffer, altered_lines, table_widths, table_started = [], [], [], False
+    table_buffer, table_started = [], False
     new_lines = []
     for line in lines:
         # Toggle table started
