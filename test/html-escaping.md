@@ -1,8 +1,8 @@
-Escaped HTML like &lt;div&gt; or &amp; should remain escaped on output
+Escaped HTML like <div> or & should NOT remain escaped on output
 
     
     
-    ...unless that escaped HTML is in a <pre> tag
+    ...even when that escaped HTML is in a <pre> tag
 
 `...or a <code> tag`
 
