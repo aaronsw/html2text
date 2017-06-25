@@ -7,6 +7,7 @@
 * Fix #160: The html2text tests are failing on Windows and on Cygwin due to differences in eol handling between windows/*nix
 * Feature #164: Housekeeping: Add flake8 to the travis build, cleanup existing flake8 violations, add py3.6 and pypy3 to the travis build
 * Fix #109: Fix for unexpanded &lt; &gt; &amp;
+* Fix #143: Fix line wrapping for the lines starting with bold
 
 
 2016.9.19
