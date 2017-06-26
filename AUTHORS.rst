@@ -22,7 +22,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Mikhail Melnik <by.zumzoom@gmail.com>
 * Andres Rey
 * Ciprian Miclaus
-
+* Toshihiro Kamiya <kamiya@mbj.nifty.com>
 
 Maintainer:
 
