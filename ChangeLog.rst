@@ -9,6 +9,12 @@
 * Fix #109: Fix for unexpanded &lt; &gt; &amp;
 * Fix #143: Fix line wrapping for the lines starting with bold
 
+2017.7.27
+=========
+----
+
+* Adds support for numeric bold text indication in `font-weight`,
+  as used by Google (and presumably others.)
 
 2016.9.19
 =========

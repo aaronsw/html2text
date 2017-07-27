@@ -223,7 +223,15 @@ class HTML2Text(HTMLParser.HTMLParser):
         # handle Google's text emphasis
         strikethrough = 'line-through' in \
                         tag_emphasis and self.hide_strikethrough
-        bold = 'bold' in tag_emphasis and 'bold' not in parent_emphasis
+
+        # google and others may mark a font's weight as `bold` or `700`
+        bold = False
+        for bold_marker in config.BOLD_TEXT_STYLE_VALUES:
+            bold = (bold_marker in tag_emphasis
+                    and bold_marker not in parent_emphasis)
+            if bold is True:
+                break
+
         italic = 'italic' in tag_emphasis and 'italic' not in parent_emphasis
         fixed = google_fixed_width_font(tag_style) and not \
             google_fixed_width_font(parent_style) and not self.pre
