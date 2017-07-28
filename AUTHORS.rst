@@ -23,6 +23,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Andres Rey
 * Ciprian Miclaus
 * Toshihiro Kamiya <kamiya@mbj.nifty.com>
+* Matt Dennewitz <mattdennewitz@gmail.com>
 
 Maintainer:
 

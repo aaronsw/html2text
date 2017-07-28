@@ -31,6 +31,9 @@ WRAP_LINKS = True
 # Number of pixels Google indents nested lists
 GOOGLE_LIST_INDENT = 36
 
+# Values Google and others may use to indicate bold text
+BOLD_TEXT_STYLE_VALUES = ('bold', '700', '800', '900')
+
 IGNORE_ANCHORS = False
 IGNORE_IMAGES = False
 IMAGES_TO_ALT = False
