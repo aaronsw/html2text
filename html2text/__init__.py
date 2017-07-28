@@ -229,7 +229,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         for bold_marker in config.BOLD_TEXT_STYLE_VALUES:
             bold = (bold_marker in tag_emphasis
                     and bold_marker not in parent_emphasis)
-            if bold is True:
+            if bold:
                 break
 
         italic = 'italic' in tag_emphasis and 'italic' not in parent_emphasis
