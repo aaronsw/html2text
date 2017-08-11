@@ -119,6 +119,10 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.abbr_data = None  # last inner HTML (for abbr being defined)
         self.abbr_list = {}  # stack of abbreviations to write later
         self.baseurl = baseurl
+        self.stressed = False
+        self.preceding_stressed = False
+        self.preceding_data = None
+        self.current_tag = None
 
         try:
             del unifiable_n[name2cp('nbsp')]
@@ -276,6 +280,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.quiet -= 1
 
     def handle_tag(self, tag, attrs, start):
+        self.current_tag = tag
         # attrs is None for endtags
         if attrs is None:
             attrs = {}
@@ -368,15 +373,37 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.blockquote -= 1
                 self.p()
 
+        def no_preceding_space(self):
+            if self.preceding_data and re.match(r'[^\s]', self.preceding_data[-1]):
+                return True
+
         if tag in ['em', 'i', 'u'] and not self.ignore_emphasis:
-            self.o(self.emphasis_mark)
-        if tag in ['strong', 'b'] and not self.ignore_emphasis:
-            self.o(self.strong_mark)
-        if tag in ['del', 'strike', 's']:
-            if start:
-                self.o('~~')
+            if start and no_preceding_space(self):
+                emphasis = ' ' + self.emphasis_mark
             else:
-                self.o('~~')
+                emphasis = self.emphasis_mark
+
+            self.o(emphasis)
+            if start:
+                self.stressed = True
+        if tag in ['strong', 'b'] and not self.ignore_emphasis:
+            if start and no_preceding_space(self):
+                strong = ' ' + self.strong_mark
+            else:
+                strong = self.strong_mark
+
+            self.o(strong)
+            if start:
+                self.stressed = True
+        if tag in ['del', 'strike', 's']:
+            if start and no_preceding_space(self):
+                strike = ' ~~'
+            else:
+                strike = '~~'
+
+            self.o(strike)
+            if start:
+                self.stressed = True
 
         if self.google_doc:
             if not self.inheader:
@@ -761,6 +788,19 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.outcount += 1
 
     def handle_data(self, data, entity_char=False):
+
+        if self.stressed:
+            data = data.strip()
+            self.stressed = False
+            self.preceding_stressed = True
+        elif (self.preceding_stressed
+              and re.match(r'[^\s.!?]', data[0])
+              and not hn(self.current_tag)
+              and self.current_tag not in ['a', 'code', 'pre']):
+            # should match a letter or common punctuation
+            data = ' ' + data
+            self.preceding_stressed = False
+
         if self.style:
             self.style_def.update(dumb_css_parser(data))
 
@@ -778,6 +818,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if not self.code and not self.pre and not entity_char:
             data = escape_md_section(data, snob=self.escape_snob)
+        self.preceding_data = data
         self.o(data, 1)
 
     def unknown_decl(self, data):  # pragma: no cover
