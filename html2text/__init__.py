@@ -382,7 +382,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.p()
 
         def no_preceding_space(self):
-            if self.preceding_data and re.match(r'[^\s]', self.preceding_data[-1]):
+            if (self.preceding_data
+                    and re.match(r'[^\s]', self.preceding_data[-1])):
                 return True
 
         if tag in ['em', 'i', 'u'] and not self.ignore_emphasis:
