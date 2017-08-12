@@ -10,6 +10,7 @@
 * Fix #143: Fix line wrapping for the lines starting with bold
 * Adds support for numeric bold text indication in `font-weight`,
   as used by Google (and presumably others.)
+* Fix #173 and #142: Stripping whitespace in crucial markdown and adding whitespace as necessary
 
 
 2016.9.19

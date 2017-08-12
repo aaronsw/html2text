@@ -382,9 +382,8 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.p()
 
         def no_preceding_space(self):
-            if (self.preceding_data
-                    and re.match(r'[^\s]', self.preceding_data[-1])):
-                return True
+            return (self.preceding_data
+                    and re.match(r'[^\s]', self.preceding_data[-1]))
 
         if tag in ['em', 'i', 'u'] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
@@ -395,6 +394,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.o(emphasis)
             if start:
                 self.stressed = True
+
         if tag in ['strong', 'b'] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
                 strong = ' ' + self.strong_mark
@@ -404,6 +404,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.o(strong)
             if start:
                 self.stressed = True
+
         if tag in ['del', 'strike', 's']:
             if start and no_preceding_space(self):
                 strike = ' ~~'
@@ -797,7 +798,6 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.outcount += 1
 
     def handle_data(self, data, entity_char=False):
-
         if self.stressed:
             data = data.strip()
             self.stressed = False
