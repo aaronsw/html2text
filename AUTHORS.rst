@@ -24,6 +24,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Ciprian Miclaus
 * Toshihiro Kamiya <kamiya@mbj.nifty.com>
 * Matt Dennewitz <mattdennewitz@gmail.com>
+* Jonathan Sundqvist <sundqvist.jonathan@gmail.com>
 
 Maintainer:
 
