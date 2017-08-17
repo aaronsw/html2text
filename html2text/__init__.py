@@ -30,6 +30,13 @@ from html2text.utils import (
     pad_tables_in_text
 )
 
+try:
+    chr = unichr
+    nochr = unicode('')
+except NameError:
+    # python3 uses chr
+    nochr = str('')
+
 __version__ = (2016, 9, 19)
 
 
@@ -151,22 +158,15 @@ class HTML2Text(HTMLParser.HTMLParser):
     def close(self):
         HTMLParser.HTMLParser.close(self)
 
-        try:
-            nochr = unicode('')
-            unicode_character = unichr
-        except NameError:
-            nochr = str('')
-            unicode_character = chr
-
         self.pbr()
         self.o('', 0, 'end')
 
         outtext = nochr.join(self.outtextlist)
 
         if self.unicode_snob:
-            nbsp = unicode_character(name2cp('nbsp'))
+            nbsp = chr(name2cp('nbsp'))
         else:
-            nbsp = unicode_character(32)
+            nbsp = chr(32)
         try:
             outtext = outtext.replace(unicode('&nbsp_place_holder;'), nbsp)
         except NameError:
@@ -435,6 +435,12 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.abbr_title = None
                 self.abbr_data = ''
 
+        def link_url(self, link, title=""):
+            url = urlparse.urljoin(self.baseurl, link)
+            title = ' "{0}"'.format(title) if title.strip() else ''
+            self.o(']({url}{title})'.format(url=escape_md(url),
+                                            title=title))
+
         if tag == "a" and not self.ignore_links:
             if start:
                 if 'href' in attrs and \
@@ -460,34 +466,12 @@ class HTML2Text(HTMLParser.HTMLParser):
                             self.maybe_automatic_link = None
                         if self.inline_links:
                             try:
-                                if a['title'] is not None:
-                                    title = escape_md(a['title'])
-                                else:
-                                    title = ""
+                                title = a['title'] if a['title'] else ''
+                                title = escape_md(title)
                             except KeyError:
-                                self.o(
-                                    "](" +
-                                    escape_md(
-                                        urlparse.urljoin(
-                                            self.baseurl,
-                                            a['href']
-                                        )
-                                    ) +
-                                    ")"
-                                )
+                                link_url(self, a['href'], '')
                             else:
-                                self.o(
-                                    "](" +
-                                    escape_md(
-                                        urlparse.urljoin(
-                                            self.baseurl,
-                                            a['href']
-                                        )
-                                    ) +
-                                    ' "' +
-                                    title +
-                                    '" )'
-                                )
+                                link_url(self, a['href'], title)
                         else:
                             i = self.previousIndex(a)
                             if i is not None:
@@ -844,10 +828,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             return unifiable_n[c]
         else:
             try:
-                try:
-                    return unichr(c)
-                except NameError:  # Python3
-                    return chr(c)
+                return chr(c)
             except ValueError:  # invalid unicode
                 return ''
 
@@ -863,10 +844,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 if c == 'nbsp':
                     return config.UNIFIABLE[c]
                 else:
-                    try:
-                        return unichr(name2cp(c))
-                    except NameError:  # Python3
-                        return chr(name2cp(c))
+                    return chr(name2cp(c))
 
     def replaceEntities(self, s):
         s = s.group(1)
