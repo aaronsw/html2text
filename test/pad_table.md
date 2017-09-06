@@ -32,4 +32,11 @@ A     | B+C
 A+B   | C   
 A+B+C 
 
+One+Two | Three 
+--------|-------
+A       | B     | C 
+A       | B+C   
+A+B     | C     
+A+B+C   
+
 
