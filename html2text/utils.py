@@ -254,6 +254,16 @@ def reformat_table(lines, right_margin):
     max_width = [len(x.rstrip()) + right_margin for x in lines[0].split('|')]
     for line in lines:
         cols = [x.rstrip() for x in line.split('|')]
+
+        # don't drop any data if colspan attributes result in unequal lengths
+        if len(cols) < len(max_width):
+            cols += [''] * (len(max_width) - len(cols))
+        elif len(max_width) < len(cols):
+            max_width += [
+                len(x) + right_margin for x in
+                cols[-(len(cols) - len(max_width)):]
+            ]
+
         max_width = [max(len(x) + right_margin, old_len)
                      for x, old_len in zip(cols, max_width)]
 
