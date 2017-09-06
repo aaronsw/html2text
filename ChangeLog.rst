@@ -11,6 +11,7 @@
 * Adds support for numeric bold text indication in `font-weight`,
   as used by Google (and presumably others.)
 * Fix #173 and #142: Stripping whitespace in crucial markdown and adding whitespace as necessary
+* Don't drop any cell data on tables uneven row lengths (e.g. colspan in use)
 
 
 2016.9.19
