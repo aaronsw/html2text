@@ -252,8 +252,21 @@ def reformat_table(lines, right_margin):
     """
     # find the maximum width of the columns
     max_width = [len(x.rstrip()) + right_margin for x in lines[0].split('|')]
+    max_cols = len(max_width)
     for line in lines:
         cols = [x.rstrip() for x in line.split('|')]
+        num_cols = len(cols)
+
+        # don't drop any data if colspan attributes result in unequal lengths
+        if num_cols < max_cols:
+            cols += [''] * (max_cols - num_cols)
+        elif max_cols < num_cols:
+            max_width += [
+                len(x) + right_margin for x in
+                cols[-(num_cols - max_cols):]
+            ]
+            max_cols = num_cols
+
         max_width = [max(len(x) + right_margin, old_len)
                      for x, old_len in zip(cols, max_width)]
 

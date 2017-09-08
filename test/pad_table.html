@@ -22,5 +22,30 @@ some content between the tables<br>
         <tr> <td>Content 1</td> <td>Content 2 longer</td> <td><img src="http://lorempixel.com/200/200" alt="200"/> Image!</td> </tr>
     </table>
 
-something else entirely
+something else entirely<br>
+
+    <table>
+      <thead>
+        <tr><th>One</th><th>Two</th><th>Three</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>A</td><td>B</td><th>C</th></tr>
+        <tr><td>A</td><td colspan="2">B+C</td></tr>
+        <tr><td colspan="2">A+B</td><td>C</td></tr>
+        <tr><td colspan="3">A+B+C</td></tr>
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr><th colspan="2">One+Two</th><th>Three</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>A</td><td>B</td><th>C</th></tr>
+        <tr><td>A</td><td colspan="2">B+C</td></tr>
+        <tr><td colspan="2">A+B</td><td>C</td></tr>
+        <tr><td colspan="3">A+B+C</td></tr>
+      </tbody>
+    </table>
+
 </body> </html>

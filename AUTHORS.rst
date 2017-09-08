@@ -25,6 +25,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Toshihiro Kamiya <kamiya@mbj.nifty.com>
 * Matt Dennewitz <mattdennewitz@gmail.com>
 * Jonathan Sundqvist <sundqvist.jonathan@gmail.com>
+* Simon Meers <gh: DrMeers>
 
 Maintainer:
 
