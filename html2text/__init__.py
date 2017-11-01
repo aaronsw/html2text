@@ -437,8 +437,8 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         def link_url(self, link, title=""):
             url = urlparse.urljoin(self.baseurl, link)
-            title = ' "{0}"'.format(title) if title.strip() else ''
-            self.o(']({url}{title})'.format(url=escape_md(url),
+            title = u' "{0}"'.format(title) if title.strip() else ''
+            self.o(u']({url}{title})'.format(url=escape_md(url),
                                             title=title))
 
         if tag == "a" and not self.ignore_links:
