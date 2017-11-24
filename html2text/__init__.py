@@ -2,6 +2,7 @@
 # coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
+from __future__ import unicode_literals
 import re
 import sys
 
@@ -437,9 +438,9 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         def link_url(self, link, title=""):
             url = urlparse.urljoin(self.baseurl, link)
-            title = u' "{0}"'.format(title) if title.strip() else ''
-            self.o(u']({url}{title})'.format(url=escape_md(url),
-                                             title=title))
+            title = ' "{0}"'.format(title) if title.strip() else ''
+            self.o(']({url}{title})'.format(url=escape_md(url),
+                                            title=title))
 
         if tag == "a" and not self.ignore_links:
             if start:
