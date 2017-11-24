@@ -2,6 +2,7 @@
 # coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
 from __future__ import division
+from __future__ import unicode_literals
 import re
 import sys
 
