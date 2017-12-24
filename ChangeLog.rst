@@ -3,6 +3,7 @@
 ----
 
 * Add support for the <kbd> tag.
+* Add support for the <q> tag.
 
 
 2017.10.4

@@ -114,6 +114,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.pre = 0
         self.startpre = 0
         self.code = False
+        self.quote = False
         self.br_toggle = ''
         self.lastWasNL = 0
         self.lastWasList = False
@@ -436,6 +437,17 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.abbr_list[self.abbr_data] = self.abbr_title
                     self.abbr_title = None
                 self.abbr_data = ''
+
+        if tag == "q":
+            # Different languages use different quotation marks.
+            # It should be easy to change the punctuation characters.
+            if not self.quote:
+                # Open quote
+                self.o('"')
+            else:
+                # Close quote
+                self.o('"')
+            self.quote = not self.quote
 
         def link_url(self, link, title=""):
             url = urlparse.urljoin(self.baseurl, link)
