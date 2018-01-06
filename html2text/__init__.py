@@ -421,9 +421,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                 # handle some font attributes, but leave headers clean
                 self.handle_emphasis(start, tag_style, parent_style)
 
-        if tag in ["code", "tt"] and not self.pre:
+        if tag in ["kbd", "code", "tt"] and not self.pre:
             self.o('`')  # TODO: `` `this` ``
             self.code = not self.code
+
         if tag == "abbr":
             if start:
                 self.abbr_title = None
