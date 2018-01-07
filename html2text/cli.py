@@ -221,7 +221,7 @@ def main():
         action="store",
         type="str",
         default=config.OPEN_QUOTE,
-        help="The character used to open quotes (default: '{}')".format(config.OPEN_QUOTE)
+        help="The character used to open quotes",
     )
     p.add_option(
         "--close-quote",
@@ -229,7 +229,7 @@ def main():
         action="store",
         type="str",
         default=config.CLOSE_QUOTE,
-        help="The character used to close quotes (default: '{}')".format(config.CLOSE_QUOTE)
+        help="The character used to close quotes",
     )
     (options, args) = p.parse_args()
 
