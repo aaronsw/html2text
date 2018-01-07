@@ -89,6 +89,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.pad_tables = config.PAD_TABLES  # covered in cli
         self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
         self.tag_callback = None
+        self.open_quote = config.OPEN_QUOTE  # covered in cli
+        self.close_quote = config.CLOSE_QUOTE  # covered in cli
 
         if out is None:  # pragma: no cover
             self.out = self.outtextf
@@ -439,14 +441,10 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.abbr_data = ''
 
         if tag == "q":
-            # Different languages use different quotation marks.
-            # It should be easy to change the punctuation characters.
             if not self.quote:
-                # Open quote
-                self.o('"')
+                self.o(self.open_quote)
             else:
-                # Close quote
-                self.o('"')
+                self.o(self.close_quote)
             self.quote = not self.quote
 
         def link_url(self, link, title=""):
