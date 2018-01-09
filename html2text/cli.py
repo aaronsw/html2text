@@ -215,6 +215,22 @@ def main():
         help="What to do in case of decode errors.'ignore', 'strict' and "
              "'replace' are acceptable values"
     )
+    p.add_option(
+        "--open-quote",
+        dest="open_quote",
+        action="store",
+        type="str",
+        default=config.OPEN_QUOTE,
+        help="The character used to open quotes",
+    )
+    p.add_option(
+        "--close-quote",
+        dest="close_quote",
+        action="store",
+        type="str",
+        default=config.CLOSE_QUOTE,
+        help="The character used to close quotes",
+    )
     (options, args) = p.parse_args()
 
     # process input
@@ -302,5 +318,7 @@ def main():
     h.wrap_links = options.wrap_links
     h.pad_tables = options.pad_tables
     h.default_image_alt = options.default_image_alt
+    h.open_quote = options.open_quote
+    h.close_quote = options.close_quote
 
     wrapwrite(h.handle(data))

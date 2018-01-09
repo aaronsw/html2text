@@ -96,6 +96,8 @@ simple indications of their function.
     - WRAP_LINKS to decide if links have to be wrapped during text wrapping (implies INLINE_LINKS = False)
     - DECODE_ERRORS to handle decoding errors. 'strict', 'ignore', 'replace' are the acceptable values.
     - DEFAULT_IMAGE_ALT takes a string as value and is used whenever an image tag is missing an `alt` value. The default for this is an empty string '' to avoid backward breakage
+    - OPEN_QUOTE is the character used to open a quote when replacing the `<q>` tag. It defaults to `"`.
+    - CLOSE_QUOTE is the character used to close a quote when replacing the `<q>` tag. It defaults to `"`.
 
 To alter any option the procedure is to create a parser with
 `parser = html2text.HTML2Text()` and to set the option on the parser.
@@ -136,3 +138,5 @@ Command line options
 | `--decode-errors`=`HANDLER`                            | What to do in case an error is encountered. `ignore`, `strict`, `replace` etc.
 | `--pad-tables`                                         | Use padding to make tables look good.
 | `--default-image-alt`=`Image_Here`                     | Inserts the given `alt` text whenever images are missing `alt` values.
+| `--open-quote`=`"`                                     | Inserts the given text when opening a quote. Defaults to `"`.
+| `--close-quote`=`"`                                    | Inserts the given text when closing a quote. Defaults to `"`.

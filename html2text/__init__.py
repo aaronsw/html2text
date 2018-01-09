@@ -89,6 +89,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.pad_tables = config.PAD_TABLES  # covered in cli
         self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
         self.tag_callback = None
+        self.open_quote = config.OPEN_QUOTE  # covered in cli
+        self.close_quote = config.CLOSE_QUOTE  # covered in cli
 
         if out is None:  # pragma: no cover
             self.out = self.outtextf
@@ -114,6 +116,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.pre = 0
         self.startpre = 0
         self.code = False
+        self.quote = False
         self.br_toggle = ''
         self.lastWasNL = 0
         self.lastWasList = False
@@ -436,6 +439,13 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.abbr_list[self.abbr_data] = self.abbr_title
                     self.abbr_title = None
                 self.abbr_data = ''
+
+        if tag == "q":
+            if not self.quote:
+                self.o(self.open_quote)
+            else:
+                self.o(self.close_quote)
+            self.quote = not self.quote
 
         def link_url(self, link, title=""):
             url = urlparse.urljoin(self.baseurl, link)
