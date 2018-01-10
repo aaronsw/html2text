@@ -38,7 +38,7 @@ except NameError:
     # python3 uses chr
     nochr = str('')
 
-__version__ = (2018, 9, 1)
+__version__ = (2018, 1, 9)
 
 
 # TODO:
