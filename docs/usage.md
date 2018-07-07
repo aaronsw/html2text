@@ -99,6 +99,11 @@ simple indications of their function.
     - OPEN_QUOTE is the character used to open a quote when replacing the `<q>` tag. It defaults to `"`.
     - CLOSE_QUOTE is the character used to close a quote when replacing the `<q>` tag. It defaults to `"`.
 
+Options that are not in the config.py file:
+
+    - emphasis_mark is the character used when replacing the `<em>` tag. It defaults to `_`.
+    - strong_mark is the characer used when replacing the `<strong>` tag. It defaults to `**`.
+
 To alter any option the procedure is to create a parser with
 `parser = html2text.HTML2Text()` and to set the option on the parser.
 example: `parser.unicode_snob = True` to set the UNICODE_SNOB option.
