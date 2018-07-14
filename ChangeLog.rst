@@ -1,3 +1,10 @@
+0000.00.00
+==========
+----
+
+* Fix #201: handle &lrm;/&rlm; marks mid-text within stressed tags or right after stressed tags
+
+
 2018.9.1
 ========
 ----

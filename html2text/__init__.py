@@ -186,7 +186,16 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.handle_data(self.charref(c), True)
 
     def handle_entityref(self, c):
-        self.handle_data(self.entityref(c), True)
+        ref = self.entityref(c)
+
+        # ref may be an empty string (e.g. for &lrm;/&rlm; markers that should
+        # not contribute to the final output).
+        # self.handle_data cannot handle a zero-length string right after a
+        # stressed tag or mid-text within a stressed tag (text get split and
+        # self.stressed/self.preceding_stressed gets switched after the first
+        # part of that text).
+        if ref:
+            self.handle_data(ref, True)
 
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
