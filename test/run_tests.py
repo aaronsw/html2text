@@ -20,11 +20,18 @@ def test_module(fn, google_doc=False, **kwargs):
         h.body_width = 0
         h.hide_strikethrough = True
 
-    for k, v in kwargs.iteritems():
-        setattr(h, k, v)
+    if sys.version_info[0] == 3:
+        for k, v in kwargs.items():
+            setattr(h, k, v)
+    else:
+        for k, v in kwargs.iteritems():
+            setattr(h, k, v)
 
     result = get_baseline(fn)
-    actual = h.handle(file(fn).read())
+    if sys.version_info[0] == 3:
+        actual = h.handle(codecs.open(fn, mode='r', encoding='utf8').read())
+    else:
+        actual = h.handle(file(fn).read())
     return print_result(fn, 'module', result, actual)
 
 def test_command(fn, *args):
@@ -43,7 +50,10 @@ def test_command(fn, *args):
     cmd += [fn]
 
     result = get_baseline(fn)
-    actual = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read()
+    if sys.version_info[0] == 3:
+        actual = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read().decode('utf8')
+    else:
+        actual = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read()
 
     if os.name == 'nt':
         # Fix the unwanted CR to CRCRLF replacement
