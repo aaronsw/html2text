@@ -35,6 +35,11 @@ import optparse, re, sys, codecs, types
 try: from textwrap import wrap
 except: pass
 
+#support the python3 API 
+if sys.version_info[0] == 3:
+    unichr=chr
+    xrange=range
+
 # Use Unicode characters instead of their ascii psuedo-replacements
 UNICODE_SNOB = 0
 
@@ -543,7 +548,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     nest_count = self.google_nest_count(tag_style)
                 else:
                     nest_count = len(self.list)
-                self.o("  " * nest_count) #TODO: line up <ol><li>s > 9 correctly.
+                self.o("  " * int(nest_count)) #TODO: line up <ol><li>s > 9 correctly.
                 if li['name'] == "ul": self.o(self.ul_item_mark + " ")
                 elif li['name'] == "ol":
                     li['num'] += 1
