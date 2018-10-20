@@ -85,6 +85,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
         self.mark_code = config.MARK_CODE
+        self.wrap_list_items = config.WRAP_LIST_ITEMS  # covered in cli
         self.wrap_links = config.WRAP_LINKS  # covered in cli
         self.pad_tables = config.PAD_TABLES  # covered in cli
         self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
@@ -904,11 +905,15 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.inline_links = False
         for para in text.split("\n"):
             if len(para) > 0:
-                if not skipwrap(para, self.wrap_links):
-                    result += "\n".join(
-                        wrap(para, self.body_width, break_long_words=False)
-                    )
-                    if para.endswith('  '):
+                if not skipwrap(para, self.wrap_links, self.wrap_list_items):
+                    indent = ''
+                    if para.startswith('  ' + self.ul_item_mark):
+                        indent = '    '   # For list items.
+                    wrapped = wrap(para, self.body_width,
+                                   break_long_words=False,
+                                   subsequent_indent=indent)
+                    result += "\n".join(wrapped)
+                    if indent or para.endswith('  '):
                         result += "  \n"
                         newlines = 1
                     else:

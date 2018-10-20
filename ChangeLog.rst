@@ -1,3 +1,9 @@
+0000.0.0
+========
+----
+
+* Add support for wrapping list items.
+
 2018.9.1
 ========
 ----

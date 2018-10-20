@@ -220,6 +220,10 @@ def generate_test(fn):
         module_args['pad_tables'] = True
         cmdline_args.append('--pad-tables')
 
+    if base_fn.startswith('wrap_list_items'):
+        module_args['wrap_list_items'] = True
+        cmdline_args.append('--wrap-list-items')
+
     if base_fn not in ['bodywidth_newline.html', 'abbr_tag.html']:
         test_func = None
     else:

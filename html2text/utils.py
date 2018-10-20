@@ -171,7 +171,7 @@ def list_numbering_start(attrs):
     return 0
 
 
-def skipwrap(para, wrap_links):
+def skipwrap(para, wrap_links, wrap_list_items):
     # If it appears to contain a link
     # don't wrap
     if (len(config.RE_LINK.findall(para)) > 0) and not wrap_links:
@@ -191,7 +191,7 @@ def skipwrap(para, wrap_links):
     # but there's a <br>-inside-<span> case in one of the tests that
     # also depends upon it.
     if stripped[0:1] in ('-', '*') and not stripped[0:2] == '**':
-        return True
+        return not wrap_list_items
 
     # If the text begins with a single -, *, or +, followed by a space,
     # or an integer, followed by a ., followed by a space (in either
