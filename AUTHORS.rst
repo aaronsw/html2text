@@ -27,6 +27,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Jonathan Sundqvist <sundqvist.jonathan@gmail.com>
 * Simon Meers <gh: DrMeers>
 * Kurt McKee <contactme@kurtmckee.org>
+* Jonathan Vanasco <jonathan@findmeon.com>
 
 Maintainer:
 

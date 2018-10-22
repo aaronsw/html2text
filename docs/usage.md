@@ -72,6 +72,7 @@ simple indications of their function.
     - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
     - IGNORE_IMAGES
+    - IMAGES_AS_HTML always generate HTML tags for images; preserves `height`, `width`, `alt` if possible.
     - IMAGES_TO_ALT
     - IMAGES_WITH_SIZE
     - IGNORE_EMPHASIS
@@ -120,6 +121,7 @@ Command line options
 | `--ignore-links`                                       | Do not include any formatting for links
 |`--protect-links`                                       | Protect links from line breaks surrounding them "+" with angle brackets
 |`--ignore-images`                                       | Do not include any formatting for images
+|`--images-as-html`                                      | Always write image tags as raw html; preserves "height", "width" and "alt" if possible.
 |`--images-to-alt`                                       | Discard image data, only keep alt text
 |`--images-with-size`                                    | Write image tags with height and width attrs as raw html to retain dimensions
 |`-g`, `--google-doc`                                    | Convert an html-exported Google Document
