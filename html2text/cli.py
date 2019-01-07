@@ -275,11 +275,7 @@ def main():
 
     if hasattr(data, 'decode'):
         try:
-            try:
-                data = data.decode(encoding, errors=options.decode_errors)
-            except TypeError:
-                # python 2.6.x does not have the errors option
-                data = data.decode(encoding)
+            data = data.decode(encoding, options.decode_errors)
         except UnicodeDecodeError as err:
             warning = bcolors.WARNING + "Warning:" + bcolors.ENDC
             warning += ' Use the ' + bcolors.OKGREEN
