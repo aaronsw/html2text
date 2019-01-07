@@ -9,6 +9,10 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+matrix:
+  include:
+    - python: "3.7"
+      dist: xenial  # required for Python >= 3.7 (travis-ci/travis-ci#9069)
 before_install:
   # Python 3.2 needs setuptools < 30 - support for Py3.2 was dropped after that version
   - if [[ $TRAVIS_PYTHON_VERSION == '3.2' || $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then pip install -U 'setuptools<30'; fi
