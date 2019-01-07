@@ -279,7 +279,7 @@ def main():
         except UnicodeDecodeError as err:
             warning = bcolors.WARNING + "Warning:" + bcolors.ENDC
             warning += ' Use the ' + bcolors.OKGREEN
-            warning += '--decode-errors=ignore' + bcolors.ENDC + 'flag.'
+            warning += '--decode-errors=ignore' + bcolors.ENDC + ' flag.'
             print(warning)
             raise err
 
