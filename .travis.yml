@@ -4,7 +4,7 @@ python:
   - "2.7"
   - "pypy"
   - "pypy3"
-  - "3.2"
+  # - "3.2"  # Cython needs Python 2.6+ or 3.3+
   - "3.3"
   - "3.4"
   - "3.5"
