@@ -28,6 +28,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Simon Meers <gh: DrMeers>
 * Kurt McKee <contactme@kurtmckee.org>
 * Jacek Kołodziej <kolodziejj@gmail.com>
+* Jonathan Vanasco <jonathan@findmeon.com>
 
 Maintainer:
 

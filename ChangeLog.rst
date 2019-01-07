@@ -9,6 +9,13 @@
 ========
 ----
 
+* Feature #213: `images_as_html` config option to always generate an `img` html tag. preserves "height", "width" and "alt" if possible.
+
+
+2018.9.1
+========
+----
+
 * Fix #188: Non-ASCII in title attribute causes encode error.
 * Feature #194: Add support for the <kbd> tag.
 * Feature #193: Add support for the <q> tag.
