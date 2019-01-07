@@ -28,6 +28,8 @@ The AUTHORS/Contributors are (and/or have been):
 * Simon Meers <gh: DrMeers>
 * Kurt McKee <contactme@kurtmckee.org>
 * Germain Z. <gh: GermainZ>
+* Jacek Kołodziej <kolodziejj@gmail.com>
+* Jonathan Vanasco <jonathan@findmeon.com>
 
 Maintainer:
 

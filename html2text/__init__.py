@@ -72,6 +72,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.google_list_indent = config.GOOGLE_LIST_INDENT  # covered in cli
         self.ignore_links = config.IGNORE_ANCHORS  # covered in cli
         self.ignore_images = config.IGNORE_IMAGES  # covered in cli
+        self.images_as_html = config.IMAGES_AS_HTML  # covered in cli
         self.images_to_alt = config.IMAGES_TO_ALT  # covered in cli
         self.images_with_size = config.IMAGES_WITH_SIZE  # covered in cli
         self.ignore_emphasis = config.IGNORE_EMPHASIS  # covered in cli
@@ -187,7 +188,16 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.handle_data(self.charref(c), True)
 
     def handle_entityref(self, c):
-        self.handle_data(self.entityref(c), True)
+        ref = self.entityref(c)
+
+        # ref may be an empty string (e.g. for &lrm;/&rlm; markers that should
+        # not contribute to the final output).
+        # self.handle_data cannot handle a zero-length string right after a
+        # stressed tag or mid-text within a stressed tag (text get split and
+        # self.stressed/self.preceding_stressed gets switched after the first
+        # part of that text).
+        if ref:
+            self.handle_data(ref, True)
 
     def handle_starttag(self, tag, attrs):
         self.handle_tag(tag, attrs, 1)
@@ -504,8 +514,8 @@ class HTML2Text(HTMLParser.HTMLParser):
 
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes
-                if self.images_with_size and \
-                        ("width" in attrs or "height" in attrs):
+                if self.images_as_html or (self.images_with_size and \
+                        ("width" in attrs or "height" in attrs)):
                     self.o("<img src='" + attrs["src"] + "' ")
                     if "width" in attrs:
                         self.o("width='" + attrs["width"] + "' ")

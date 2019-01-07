@@ -26,6 +26,7 @@ Used to provide various configuration settings to the converter. They are as fol
     - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
     - IGNORE_IMAGES
+    - IMAGES_AS_HTML always generate HTML tags for images; preserves `height`, `width`, `alt` if possible.
     - IMAGES_TO_ALT
     - IMAGES_WITH_SIZE
     - IGNORE_EMPHASIS
@@ -86,6 +87,7 @@ Command line interface for the code.
 |`--ignore-images`                                       | Do not include any formatting for images
 |`--images-to-alt`                                       | Discard image data, only keep alt text
 |`--images-with-size`                                    | Write image tags with height and width attrs as raw html to retain dimensions
+|`--images-as-html`                                      | Always write image tags as raw html; preserves "height", "width" and "alt" if possible.
 |`-g`, `--google-doc`                                    | Convert an html-exported Google Document
 |`-d`, `--dash-unordered-list`                           | Use a dash rather than a star for unordered list items
 |`-b` `BODY_WIDTH`, `--body-width`=`BODY_WIDTH`          | Number of characters per output line, `0` for no wrap
