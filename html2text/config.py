@@ -30,6 +30,9 @@ PROTECT_LINKS = False
 # WRAP_LINKS = True
 WRAP_LINKS = True
 
+# Wrap list items.
+WRAP_LIST_ITEMS = False
+
 # Number of pixels Google indents nested lists
 GOOGLE_LIST_INDENT = 36
 
