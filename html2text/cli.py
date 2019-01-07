@@ -79,6 +79,14 @@ def main():
         help="don't include any formatting for images"
     )
     p.add_option(
+        "--images-as-html",
+        dest="images_as_html",
+        action="store_true",
+        default=config.IMAGES_AS_HTML,
+        help="Always write image tags as raw html; preserves `height`, `width` "
+             "and `alt` if possible."
+    )
+    p.add_option(
         "--images-to-alt",
         dest="images_to_alt",
         action="store_true",
@@ -297,6 +305,7 @@ def main():
     h.ignore_links = options.ignore_links
     h.protect_links = options.protect_links
     h.ignore_images = options.ignore_images
+    h.images_as_html = options.images_as_html
     h.images_to_alt = options.images_to_alt
     h.images_with_size = options.images_with_size
     h.google_doc = options.google_doc
