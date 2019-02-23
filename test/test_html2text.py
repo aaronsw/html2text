@@ -1,16 +1,11 @@
 import codecs
 import glob
 import html2text
-import logging
 import os
 import re
 import subprocess
 import sys
 import unittest
-
-
-logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
-                    level=logging.DEBUG)
 
 
 def cleanup_eol(clean_str):

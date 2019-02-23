@@ -1,10 +1,5 @@
 import html2text
-import logging
 import unittest
-
-
-logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
-                    level=logging.DEBUG)
 
 
 class TestMemleak(unittest.TestCase):
