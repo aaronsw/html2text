@@ -1,7 +1,5 @@
 import argparse
-import warnings
 
-from html2text.compat import urllib
 from html2text import HTML2Text, config, __version__
 from html2text.utils import wrapwrite, wrap_read
 
@@ -245,19 +243,8 @@ def main():
     args = p.parse_args()
 
     if args.filename and args.filename != '-':  # pragma: no cover
-        if (args.filename.startswith('http://') or
-                args.filename.startswith('https://')):
-            warnings.warn(
-                "Support for retrieving html over network is set for "
-                "deprecation by version (2017, 1, x)",
-                DeprecationWarning
-            )
-            baseurl = args.filename
-            j = urllib.urlopen(baseurl)
-            data = j.read()
-        else:
-            with open(args.filename, 'rb') as fp:
-                data = fp.read()
+        with open(args.filename, 'rb') as fp:
+            data = fp.read()
     else:
         data = wrap_read()
 
