@@ -63,7 +63,7 @@ Hello, [world](http://earth.google.com/)!
 
 ## How to install
 
-`html2text` is available on pypi
+`html2text` is available on PyPI
 https://pypi.python.org/pypi/html2text
 
 ```
