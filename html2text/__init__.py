@@ -514,8 +514,10 @@ class HTML2Text(HTMLParser.HTMLParser):
 
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes
-                if self.images_as_html or (self.images_with_size and \
-                        ("width" in attrs or "height" in attrs)):
+                if self.images_as_html or (
+                        self.images_with_size and
+                        ("width" in attrs or "height" in attrs)
+                ):
                     self.o("<img src='" + attrs["src"] + "' ")
                     if "width" in attrs:
                         self.o("width='" + attrs["width"] + "' ")
