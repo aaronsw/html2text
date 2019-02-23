@@ -183,7 +183,7 @@
 ----
 
 * Feature #29, #27: Add simple table support with bypass option.
-* Fix #20: Replace project website with: http://alir3z4.github.io/html2text/ .
+* Fix #20: Replace project website with: https://alir3z4.github.io/html2text/ .
 
 
 2014.9.8
