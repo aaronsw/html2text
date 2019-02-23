@@ -2,11 +2,11 @@
 
 [![Build Status](https://secure.travis-ci.org/Alir3z4/html2text.png)](http://travis-ci.org/Alir3z4/html2text)
 [![Coverage Status](https://coveralls.io/repos/Alir3z4/html2text/badge.png)](https://coveralls.io/r/Alir3z4/html2text)
-[![Downloads](http://badge.kloud51.com/pypi/d/html2text.png)](https://pypi.python.org/pypi/html2text/)
-[![Version](http://badge.kloud51.com/pypi/v/html2text.png)](https://pypi.python.org/pypi/html2text/)
-[![Wheel?](http://badge.kloud51.com/pypi/wheel/html2text.png)](https://pypi.python.org/pypi/html2text/)
-[![Format](http://badge.kloud51.com/pypi/format/html2text.png)](https://pypi.python.org/pypi/html2text/)
-[![License](http://badge.kloud51.com/pypi/license/html2text.png)](https://pypi.python.org/pypi/html2text/)
+[![Downloads](http://badge.kloud51.com/pypi/d/html2text.png)](https://pypi.org/project/html2text/)
+[![Version](http://badge.kloud51.com/pypi/v/html2text.png)](https://pypi.org/project/html2text/)
+[![Wheel?](http://badge.kloud51.com/pypi/wheel/html2text.png)](https://pypi.org/project/html2text/)
+[![Format](http://badge.kloud51.com/pypi/format/html2text.png)](https://pypi.org/project/html2text/)
+[![License](http://badge.kloud51.com/pypi/license/html2text.png)](https://pypi.org/project/html2text/)
 
 
 html2text is a Python script that converts a page of HTML into clean, easy-to-read plain ASCII text. Better yet, that ASCII also happens to be valid Markdown (a text-to-HTML format).
@@ -64,7 +64,7 @@ Hello, [world](http://earth.google.com/)!
 ## How to install
 
 `html2text` is available on pypi
-https://pypi.python.org/pypi/html2text
+https://pypi.org/project/html2text/
 
 ```
 $ pip install html2text
