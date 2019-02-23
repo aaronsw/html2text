@@ -5,6 +5,7 @@
 * Add support for wrapping list items.
 * Fix #201: handle &lrm;/&rlm; marks mid-text within stressed tags or right after stressed tags.
 * Feature #213: `images_as_html` config option to always generate an `img` html tag. preserves "height", "width" and "alt" if possible.
+* Remove support for end-of-life Pythons. Now requires Python 2.7 or 3.4+.
 
 2018.9.1
 ========

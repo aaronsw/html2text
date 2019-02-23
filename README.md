@@ -73,10 +73,10 @@ $ pip install html2text
 
 ## How to run unit tests
 
-    PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v
+    coverage run --source=html2text setup.py test
 
 To see the coverage results:
-    
+
     coverage combine
     coverage html
 
