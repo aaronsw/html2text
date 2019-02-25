@@ -240,7 +240,7 @@ def generate_test(fn):
     return _test_mod, test_cmd, test_func
 
 
-# Originally from https://stackoverflow.com/questions/32899/how-do-you-generate-dynamic-parameterized-unit-tests-in-python
+# Originally from https://stackoverflow.com/q/32899
 #    how-to-generate-dynamic-parametrized-unit-tests-in-python
 test_dir_name = os.path.dirname(os.path.realpath(__file__))
 for fn in glob.glob("%s/*.html" % test_dir_name):
