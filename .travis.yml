@@ -1,31 +1,22 @@
+dist: xenial
 language: python
 python:
-  - "2.6"
   - "2.7"
-  - "pypy"
-  - "pypy3"
-  # - "3.2"  # Cython needs Python 2.6+ or 3.3+
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.6"
-matrix:
-  include:
-    - python: "3.7"
-      dist: xenial  # required for Python >= 3.7 (travis-ci/travis-ci#9069)
-before_install:
-  # Python 3.2 needs setuptools < 30 - support for Py3.2 was dropped after that version
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.2' || $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then pip install -U 'setuptools<30'; fi
+  - "3.7"
+  - "pypy2.7-6.0"
+  - "pypy3.5-6.0"
 install:
-    - pip install coveralls==0.5
+  - pip install coveralls
 before_script:
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
-  # flake8 doesn't support Python 2.6
-  - if [[ $TRAVIS_PYTHON_VERSION != '2.6' ]]; then pip install flake8==3.3.0;flake8 .; fi
+  - pip install flake8
+  - flake8
   - export COVERAGE_PROCESS_START=$PWD/.coveragerc
 script:
-  - PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text --rcfile=.coveragerc setup.py test -v
+  - coverage run --source=html2text setup.py test
   - coverage combine
   - coverage report
 after_success:
-    coveralls --rcfile=.coveragerc
+    coveralls

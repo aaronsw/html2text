@@ -138,7 +138,7 @@ Command line options
 | `--ignore-emphasis`                                    | Ignore all emphasis formatting in the html.
 | `-e`, `--asterisk-emphasis`                            | Use asterisk rather than underscore to emphasize text
 | `--unicode-snob`                                       | Use unicode throughout instead of ASCII
-| `--no-automatic-links`                                 | Do not use automatic links like <http://google.com>
+| `--no-automatic-links`                                 | Do not use automatic links like <https://www.google.com/>
 | `--no-skip-internal-links`                             | Turn off skipping of internal links
 | `--links-after-para`                                   | Put the links after the paragraph and not at end of document
 | `--mark-code`                                          | Mark code with [code]...[/code] blocks

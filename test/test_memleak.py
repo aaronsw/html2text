@@ -1,10 +1,6 @@
 import html2text
 import logging
-import sys
-if sys.version_info[:2] < (2, 7):
-    import unittest2 as unittest
-else:
-    import unittest
+import unittest
 
 
 logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
