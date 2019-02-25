@@ -14,7 +14,7 @@ ESCAPE_SNOB = 0
 # Put the links after each paragraph instead of at the end.
 LINKS_EACH_PARAGRAPH = 0
 
-# Wrap long lines at position. 0 for no wrapping. (Requires Python 2.3.)
+# Wrap long lines at position. 0 for no wrapping.
 BODY_WIDTH = 78
 
 # Don't show internal links (href="#local-anchor") -- corresponding link

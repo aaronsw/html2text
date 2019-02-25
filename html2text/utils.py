@@ -12,7 +12,7 @@ def name2cp(k):
 
 
 unifiable_n = {}
-for k in config.UNIFIABLE.keys():
+for k in config.UNIFIABLE:
     unifiable_n[name2cp(k)] = config.UNIFIABLE[k]
 
 
@@ -30,12 +30,10 @@ def dumb_property_dict(style):
     """
     :returns: A hash of css attributes
     """
-    out = dict([(x.strip().lower(), y.strip().lower()) for x, y in
-                [z.split(':', 1) for z in
-                 style.split(';') if ':' in z
-                 ]
-                ]
-               )
+    out = {
+        x.strip().lower(): y.strip().lower()
+        for x, y in [z.split(':', 1) for z in style.split(';') if ':' in z]
+    }
 
     return out
 
@@ -59,8 +57,7 @@ def dumb_css_parser(data):
     # support older pythons
     elements = [x.split('{') for x in data.split('}') if '{' in x.strip()]
     try:
-        elements = dict([(a.strip(), dumb_property_dict(b))
-                         for a, b in elements])
+        elements = {a.strip(): dumb_property_dict(b) for a, b in elements}
     except ValueError:  # pragma: no cover
         elements = {}  # not that important
 
