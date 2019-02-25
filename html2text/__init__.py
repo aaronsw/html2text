@@ -954,9 +954,3 @@ def unescape(s, unicode_snob=False):
     h.unicode_snob = unicode_snob
 
     return h.unescape(s)
-
-
-if __name__ == "__main__":
-    from html2text.cli import main
-
-    main()

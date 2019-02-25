@@ -40,7 +40,7 @@ def test_module(fn, google_doc=False, **kwargs):
 
 def test_command(fn, *args):
     args = list(args)
-    cmd = [sys.executable, '-m', 'html2text.__init__']
+    cmd = [sys.executable, '-m', 'html2text']
 
     if '--googledoc' in args:
         args.remove('--googledoc')

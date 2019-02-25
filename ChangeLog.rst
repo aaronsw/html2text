@@ -7,6 +7,7 @@
 * Feature #213: `images_as_html` config option to always generate an `img` html tag. preserves "height", "width" and "alt" if possible.
 * Remove support for end-of-life Pythons. Now requires Python 2.7 or 3.4+.
 * Remove support for retrieving HTML over the network.
+* Add ``__main__.py`` module to allow running the CLI using ``python -m html2text ...``.
 
 2018.1.9
 ========
