@@ -5,11 +5,7 @@ from __future__ import division
 from __future__ import unicode_literals
 import re
 import sys
-
-try:
-    from textwrap import wrap
-except ImportError:  # pragma: no cover
-    pass
+from textwrap import wrap
 
 from html2text.compat import urlparse, HTMLParser
 from html2text import config
@@ -460,7 +456,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         def link_url(self, link, title=""):
             url = urlparse.urljoin(self.baseurl, link)
-            title = ' "{0}"'.format(title) if title.strip() else ''
+            title = ' "{}"'.format(title) if title.strip() else ''
             self.o(']({url}{title})'.format(url=escape_md(url),
                                             title=title))
 
@@ -514,8 +510,10 @@ class HTML2Text(HTMLParser.HTMLParser):
 
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes
-                if self.images_as_html or (self.images_with_size and \
-                        ("width" in attrs or "height" in attrs)):
+                if self.images_as_html or (
+                        self.images_with_size and
+                        ("width" in attrs or "height" in attrs)
+                ):
                     self.o("<img src='" + attrs["src"] + "' ")
                     if "width" in attrs:
                         self.o("width='" + attrs["width"] + "' ")
@@ -635,14 +633,14 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.soft_br()
                 if tag in ["td", "th"]:
                     if start:
-                        self.o('<{0}>\n\n'.format(tag))
+                        self.o('<{}>\n\n'.format(tag))
                     else:
-                        self.o('\n</{0}>'.format(tag))
+                        self.o('\n</{}>'.format(tag))
                 else:
                     if start:
-                        self.o('<{0}>'.format(tag))
+                        self.o('<{}>'.format(tag))
                     else:
-                        self.o('</{0}>'.format(tag))
+                        self.o('</{}>'.format(tag))
 
             else:
                 if tag == "table":
@@ -847,7 +845,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         else:
             c = int(name)
 
-        if not self.unicode_snob and c in unifiable_n.keys():
+        if not self.unicode_snob and c in unifiable_n:
             return unifiable_n[c]
         else:
             try:
@@ -856,7 +854,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return ''
 
     def entityref(self, c):
-        if not self.unicode_snob and c in config.UNIFIABLE.keys():
+        if not self.unicode_snob and c in config.UNIFIABLE:
             return config.UNIFIABLE[c]
         else:
             try:
@@ -905,7 +903,6 @@ class HTML2Text(HTMLParser.HTMLParser):
         if not self.body_width:
             return text
 
-        assert wrap, "Requires Python 2.3."
         result = ''
         newlines = 0
         # I cannot think of a better solution for now.

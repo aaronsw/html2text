@@ -6,11 +6,7 @@ import os
 import re
 import subprocess
 import sys
-
-if sys.version_info[:2] < (2, 7):
-    import unittest2 as unittest
-else:
-    import unittest
+import unittest
 
 
 logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
@@ -79,7 +75,7 @@ def test_function(fn, **kwargs):
 
 
 def get_dump_name(fn, suffix):
-    return '%s-%s_output.md' % (os.path.splitext(fn)[0], suffix)
+    return '{}-{}_output.md'.format(os.path.splitext(fn)[0], suffix)
 
 
 def get_baseline_name(fn):
@@ -244,7 +240,7 @@ def generate_test(fn):
     return _test_mod, test_cmd, test_func
 
 
-# Originally from http://stackoverflow.com/questions/32899/\
+# Originally from https://stackoverflow.com/questions/32899/how-do-you-generate-dynamic-parameterized-unit-tests-in-python
 #    how-to-generate-dynamic-parametrized-unit-tests-in-python
 test_dir_name = os.path.dirname(os.path.realpath(__file__))
 for fn in glob.glob("%s/*.html" % test_dir_name):
@@ -255,6 +251,3 @@ for fn in glob.glob("%s/*.html" % test_dir_name):
         setattr(TestHTML2Text, test_name + "_cmd", test_c)
     if test_func:
         setattr(TestHTML2Text, test_name + "_func", test_func)
-
-if __name__ == "__main__":
-    unittest.main()

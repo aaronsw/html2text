@@ -1,65 +1,23 @@
 # coding: utf-8
-import sys
-
-from setuptools import setup, Command, find_packages
+from setuptools import setup
 
 
-def read_md_convert(f):
-    return convert(f, 'rst')
-
-
-def read_md_open(f):
-    return open(f, 'r').read()
-
-
-try:
-    from pypandoc import convert
-    read_md = read_md_convert
-except ImportError:
-    read_md = read_md_open
-
-requires_list = []
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-else:
-    if sys.version_info <= (2, 6):
-        requires_list.append("unittest2")
-
-
-class RunTests(Command):
-    """
-    New setup.py command to run all tests for the package.
-    """
-    description = "run all tests for the package"
-
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        tests = unittest.TestLoader().discover('.')
-        runner = unittest.TextTestRunner()
-        results = runner.run(tests)
-        sys.exit(not results.wasSuccessful())
+def readall(f):
+    with open(f) as fp:
+        return fp.read()
 
 
 setup(
     name="html2text",
     version=".".join(map(str, __import__('html2text').__version__)),
     description="Turn HTML into equivalent Markdown-structured text.",
-    long_description=read_md('README.md'),
+    long_description=readall('README.md'),
+    long_description_content_type="text/markdown",
     author="Aaron Swartz",
     author_email="me@aaronsw.com",
     maintainer='Alireza Savand',
     maintainer_email='alireza.savand@gmail.com',
     url='https://github.com/Alir3z4/html2text/',
-    cmdclass={'test': RunTests},
     platforms='OS Independent',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -68,25 +26,23 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.4',
-        'Programming Language :: Python :: 2.5',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
     ],
-    entry_points="""
-        [console_scripts]
-        html2text=html2text.cli:main
-    """,
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+    entry_points={
+        'console_scripts': [
+            'html2text = html2text.cli:main',
+        ]
+    },
     license='GNU GPL 3',
-    requires=requires_list,
-    packages=find_packages(exclude=['test']),
+    packages=['html2text'],
     include_package_data=True,
     zip_safe=False,
 )
