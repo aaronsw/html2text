@@ -43,7 +43,5 @@ setup(
     },
     license='GNU GPL 3',
     packages=['html2text'],
-    include_package_data=True,
-    zip_safe=False,
     test_suite='test',
 )
