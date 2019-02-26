@@ -69,10 +69,6 @@ def test_function(fn, **kwargs):
     return result, actual
 
 
-def get_dump_name(fn, suffix):
-    return '{}-{}_output.md'.format(os.path.splitext(fn)[0], suffix)
-
-
 def get_baseline_name(fn):
     return os.path.splitext(fn)[0] + '.md'
 
