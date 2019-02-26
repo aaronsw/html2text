@@ -3,16 +3,16 @@ from __future__ import unicode_literals
 import re
 
 # Use Unicode characters instead of their ascii pseudo-replacements
-UNICODE_SNOB = 0
+UNICODE_SNOB = False
 
 # Marker to use for marking tables for padding post processing
 TABLE_MARKER_FOR_PAD = "special_marker_for_table_padding"
 # Escape all special characters.  Output is less readable, but avoids
 # corner case formatting issues.
-ESCAPE_SNOB = 0
+ESCAPE_SNOB = False
 
 # Put the links after each paragraph instead of at the end.
-LINKS_EACH_PARAGRAPH = 0
+LINKS_EACH_PARAGRAPH = False
 
 # Wrap long lines at position. 0 for no wrapping.
 BODY_WIDTH = 78
