@@ -867,16 +867,6 @@ class HTML2Text(HTMLParser.HTMLParser):
                 else:
                     return chr(name2cp(c))
 
-    def replaceEntities(self, s):
-        s = s.group(1)
-        if s[0] == "#":
-            return self.charref(s[1:])
-        else:
-            return self.entityref(s)
-
-    def unescape(self, s):
-        return config.RE_UNESCAPE.sub(self.replaceEntities, s)
-
     def google_nest_count(self, style):
         """
         Calculate the nesting count of google doc lists
@@ -947,10 +937,3 @@ def html2text(html, baseurl='', bodywidth=None):
     h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
 
     return h.handle(html)
-
-
-def unescape(s, unicode_snob=False):
-    h = HTML2Text()
-    h.unicode_snob = unicode_snob
-
-    return h.unescape(s)

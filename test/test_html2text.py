@@ -82,21 +82,6 @@ def get_baseline(fn):
 
 
 class TestHTML2Text(unittest.TestCase):
-
-    def test_html_escape(self):
-        self.assertEqual(
-            html2text.compat.html_escape('<pre>and then<div> & other tags'),
-            '&lt;pre&gt;and then&lt;div&gt; &amp; other tags'
-        )
-
-    def test_unescape(self):
-        self.assertEqual(
-            '<pre>and then<div> & other tags',
-            html2text.unescape(
-                '&lt;pre&gt;and then&lt;div&gt; &amp; other tags'
-            )
-        )
-
     def _skip_certain_tags(self, h2t, tag, attrs, start):
         if tag == 'b':
             return True

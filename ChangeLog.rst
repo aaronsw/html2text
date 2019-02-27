@@ -9,6 +9,12 @@
 * Remove support for retrieving HTML over the network.
 * Add ``__main__.py`` module to allow running the CLI using ``python -m html2text ...``.
 * Fix #237: correct spacing when a HTML entity follows a non-stressed tags which follow a stressed tag.
+* Remove unused or deprecated:
+  * ``html2text.compat.escape()``
+  * ``html2text.config.RE_UNESCAPE``
+  * ``html2text.HTML2Text.replaceEntities()``
+  * ``html2text.HTML2Text.unescape()``
+  * ``html2text.unescape()``
 
 2018.1.9
 ========

@@ -82,7 +82,6 @@ simple indications of their function.
     - UNIFIABLE is a dictionary which maps unicode abbreviations to ASCII
                 values
     - RE_SPACE for finding space-only lines
-    - RE_UNESCAPE for finding html entities like &nbsp;
     - RE_ORDERED_LIST_MATCHER for matching ordered lists in MD
     - RE_UNORDERED_LIST_MATCHER for matching unordered list matcher in MD
     - RE_MD_CHARS_MATCHER for matching Md \,[,],( and )
