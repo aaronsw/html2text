@@ -73,11 +73,10 @@ $ pip install html2text
 
 ## How to run unit tests
 
-    coverage run --source=html2text setup.py test
+    tox
 
 To see the coverage results:
 
-    coverage combine
     coverage html
 
 then open the `./htmlcov/index.html` file in your browser.

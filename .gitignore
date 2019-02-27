@@ -9,3 +9,5 @@ dist
 env/
 .c9/
 .vscode
+.tox/
+htmlcov/

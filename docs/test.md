@@ -6,11 +6,9 @@ Testing is essential.
 Run the tests
 -------------
 
-`PYTHONPATH=$PYTHONPATH:. coverage run --source=html2text setup.py test -v`
+`tox`
 
 Coverage results can be seen with
-
-`coverage combine`
 
 `coverage html`
 
