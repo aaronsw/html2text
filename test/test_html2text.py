@@ -215,7 +215,12 @@ def generate_test(fn):
         module_args['wrap_list_items'] = True
         cmdline_args.append('--wrap-list-items')
 
-    if base_fn not in ['bodywidth_newline.html', 'abbr_tag.html']:
+    func_compat = [
+        'abbr_tag.html',
+        'bodywidth_newline.html',
+        'stressed_with_html_entities.html'
+    ]
+    if base_fn not in func_compat:
         test_func = None
     else:
         test_func = _test_func

@@ -8,6 +8,7 @@
 * Remove support for end-of-life Pythons. Now requires Python 2.7 or 3.4+.
 * Remove support for retrieving HTML over the network.
 * Add ``__main__.py`` module to allow running the CLI using ``python -m html2text ...``.
+* Fix #237: correct spacing when a HTML entity follows a non-stressed tags which follow a stressed tag.
 
 2018.1.9
 ========

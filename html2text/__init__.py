@@ -807,12 +807,12 @@ class HTML2Text(HTMLParser.HTMLParser):
             data = data.strip()
             self.stressed = False
             self.preceding_stressed = True
-        elif (self.preceding_stressed
-              and re.match(r'[^\s.!?]', data[0])
-              and not hn(self.current_tag)
-              and self.current_tag not in ['a', 'code', 'pre']):
-            # should match a letter or common punctuation
-            data = ' ' + data
+        elif self.preceding_stressed:
+            if (re.match(r'[^\s.!?]', data[0])
+                    and not hn(self.current_tag)
+                    and self.current_tag not in ['a', 'code', 'pre']):
+                # should match a letter or common punctuation
+                data = ' ' + data
             self.preceding_stressed = False
 
         if self.style:
