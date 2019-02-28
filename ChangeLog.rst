@@ -4,7 +4,7 @@
 
 * Add support for wrapping list items.
 * Fix #201: handle &lrm;/&rlm; marks mid-text within stressed tags or right after stressed tags.
-* Feature #213: `images_as_html` config option to always generate an `img` html tag. preserves "height", "width" and "alt" if possible.
+* Feature #213: ``images_as_html`` config option to always generate an ``img`` html tag. preserves "height", "width" and "alt" if possible.
 * Remove support for end-of-life Pythons. Now requires Python 2.7 or 3.4+.
 * Remove support for retrieving HTML over the network.
 * Add ``__main__.py`` module to allow running the CLI using ``python -m html2text ...``.
@@ -29,7 +29,7 @@
 * Feature #164: Housekeeping: Add flake8 to the travis build, cleanup existing flake8 violations, add py3.6 and pypy3 to the travis build
 * Fix #109: Fix for unexpanded &lt; &gt; &amp;
 * Fix #143: Fix line wrapping for the lines starting with bold
-* Adds support for numeric bold text indication in `font-weight`,
+* Adds support for numeric bold text indication in ``font-weight``,
   as used by Google (and presumably others.)
 * Fix #173 and #142: Stripping whitespace in crucial markdown and adding whitespace as necessary
 * Don't drop any cell data on tables uneven row lengths (e.g. colspan in use)
@@ -80,8 +80,8 @@
 =========
 ----
 
-* Fix #38: Long links wrapping controlled by `--no-wrap-links`.
-* Note: `--no-wrap-links` implies `--reference-links`
+* Fix #38: Long links wrapping controlled by ``--no-wrap-links``.
+* Note: ``--no-wrap-links`` implies ``--reference-links``
 * Feature #83: Add callback-on-tag.
 * Fix #87: Decode errors can be handled via command line.
 * Feature #95: Docs, decode errors spelling mistake.
@@ -143,7 +143,7 @@
 =========
 ----
 
-* Fix #38: Anchor tags with empty text or with `<img>` tags inside are no longer stripped.
+* Fix #38: Anchor tags with empty text or with ``<img>`` tags inside are no longer stripped.
 
 
 2014.12.29
@@ -170,8 +170,8 @@
 =========
 ----
 
-* Feature: Update `README.md` with usage examples.
-* Fix #35: Remove `py_modules` from `setup.py`.
+* Feature: Update ``README.md`` with usage examples.
+* Fix #35: Remove ``py_modules`` from ``setup.py``.
 * Fix #36: Excludes tests from being installed as a separate module.
 * Fix #37: Don't hardcode the path to the installed binary.
 * Fix: Readme typo in running cli.
