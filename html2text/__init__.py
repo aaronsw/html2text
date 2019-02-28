@@ -835,10 +835,6 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.preceding_data = data
         self.o(data, 1)
 
-    def unknown_decl(self, data):  # pragma: no cover
-        # TODO: what is this doing here?
-        pass
-
     def charref(self, name):
         if name[0] in ['x', 'X']:
             c = int(name[1:], 16)

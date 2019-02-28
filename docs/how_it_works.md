@@ -129,7 +129,6 @@ The class defines methods:
     - soft_br
     - o
     - handle_data
-    - unknown_decl
     - charref
     - entityref
     - google_nest_count
