@@ -52,8 +52,7 @@ def test_command(fn, *args):
     cmd += [fn]
 
     result = get_baseline(fn)
-    pid = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    out, _ = pid.communicate()
+    out = subprocess.check_output(cmd)
 
     actual = out.decode('utf8')
 
