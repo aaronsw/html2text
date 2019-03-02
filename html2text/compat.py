@@ -9,4 +9,4 @@ else:
     import html.entities as htmlentitydefs
     import html.parser as HTMLParser
 
-__all__ = ['HTMLParser', 'htmlentitydefs', 'urlparse']
+__all__ = ["HTMLParser", "htmlentitydefs", "urlparse"]
