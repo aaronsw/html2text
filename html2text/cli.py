@@ -7,7 +7,7 @@ from html2text.utils import wrapwrite, wrap_read
 def main():
     baseurl = ''
 
-    class bcolors:  # pragma: no cover
+    class bcolors:
         HEADER = '\033[95m'
         OKBLUE = '\033[94m'
         OKGREEN = '\033[92m'
@@ -242,7 +242,7 @@ def main():
     p.add_argument('encoding', nargs='?', default='utf-8')
     args = p.parse_args()
 
-    if args.filename and args.filename != '-':  # pragma: no cover
+    if args.filename and args.filename != '-':
         with open(args.filename, 'rb') as fp:
             data = fp.read()
     else:
