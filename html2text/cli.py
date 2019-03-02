@@ -1,7 +1,7 @@
 import argparse
 
-from html2text import HTML2Text, config, __version__
-from html2text.utils import wrapwrite, wrap_read
+from html2text import HTML2Text, __version__, config
+from html2text.utils import wrap_read, wrapwrite
 
 
 def main():

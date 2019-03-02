@@ -1,29 +1,28 @@
 # coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-from __future__ import division
-from __future__ import unicode_literals
+from __future__ import division, unicode_literals
+
 import re
 import sys
 from textwrap import wrap
 
-from html2text.compat import urlparse, HTMLParser
 from html2text import config
-
+from html2text.compat import HTMLParser, urlparse
 from html2text.utils import (
-    name2cp,
-    unifiable_n,
-    google_text_emphasis,
-    google_fixed_width_font,
-    element_style,
-    hn,
-    google_has_height,
-    escape_md,
-    google_list_style,
-    list_numbering_start,
     dumb_css_parser,
+    element_style,
+    escape_md,
     escape_md_section,
+    google_fixed_width_font,
+    google_has_height,
+    google_list_style,
+    google_text_emphasis,
+    hn,
+    list_numbering_start,
+    name2cp,
+    pad_tables_in_text,
     skipwrap,
-    pad_tables_in_text
+    unifiable_n,
 )
 
 try:

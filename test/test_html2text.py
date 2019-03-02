@@ -1,12 +1,12 @@
 import codecs
 import glob
-import html2text
 import os
-import pytest
 import re
 import subprocess
 import sys
 
+import html2text
+import pytest
 
 skip = object()
 
