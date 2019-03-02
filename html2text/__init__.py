@@ -167,10 +167,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             nbsp = chr(name2cp("nbsp"))
         else:
             nbsp = chr(32)
-        try:
-            outtext = outtext.replace(unicode("&nbsp_place_holder;"), nbsp)
-        except NameError:
-            outtext = outtext.replace("&nbsp_place_holder;", nbsp)
+        outtext = outtext.replace("&nbsp_place_holder;", nbsp)
 
         # Clear self.outtextlist to avoid memory leak of its content to
         # the next handling.
