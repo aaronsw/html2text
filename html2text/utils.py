@@ -11,9 +11,7 @@ def name2cp(k):
     return htmlentitydefs.name2codepoint[k]
 
 
-unifiable_n = {}
-for k in config.UNIFIABLE:
-    unifiable_n[name2cp(k)] = config.UNIFIABLE[k]
+unifiable_n = {name2cp(k): v for k, v in config.UNIFIABLE.items() if k != "nbsp"}
 
 
 def hn(tag):

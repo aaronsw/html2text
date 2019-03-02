@@ -131,10 +131,6 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.preceding_data = None
         self.current_tag = None
 
-        try:
-            del unifiable_n[name2cp("nbsp")]
-        except KeyError:
-            pass
         config.UNIFIABLE["nbsp"] = "&nbsp_place_holder;"
 
     def feed(self, data):
