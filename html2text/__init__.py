@@ -101,8 +101,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.quiet = 0
         self.p_p = 0  # number of newline character to print before next output
         self.outcount = 0
-        self.start = 1
-        self.space = 0
+        self.start = True
+        self.space = False
         self.a = []
         self.astack = []
         self.maybe_automatic_link = None
@@ -111,12 +111,12 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.acount = 0
         self.list = []
         self.blockquote = 0
-        self.pre = 0
-        self.startpre = 0
+        self.pre = False
+        self.startpre = False
         self.code = False
         self.quote = False
         self.br_toggle = ''
-        self.lastWasNL = 0
+        self.lastWasNL = False
         self.lastWasList = False
         self.style = 0
         self.style_def = {}
@@ -214,7 +214,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         i = -1
         for a in self.a:
             i += 1
-            match = 0
+            match = False
 
             if 'href' in a and a['href'] == attrs['href']:
                 if 'title' in a or 'title' in attrs:
@@ -272,7 +272,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             if bold or italic or fixed:
                 # there must not be whitespace before closing emphasis mark
                 self.emphasis -= 1
-                self.space = 0
+                self.space = False
             if fixed:
                 if self.drop_white_space:
                     # empty emphasis, drop it
@@ -386,7 +386,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             if start:
                 self.p()
                 self.o('> ', 0, 1)
-                self.start = 1
+                self.start = True
                 self.blockquote += 1
             else:
                 self.blockquote -= 1
@@ -616,7 +616,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 elif li['name'] == "ol":
                     li['num'] += 1
                     self.o(str(li['num']) + ". ")
-                self.start = 1
+                self.start = True
 
         if tag in ["table", "tr", "td", "th"]:
             if self.ignore_tables:
@@ -673,10 +673,10 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if tag == "pre":
             if start:
-                self.startpre = 1
-                self.pre = 1
+                self.startpre = True
+                self.pre = True
             else:
-                self.pre = 0
+                self.pre = False
                 if self.mark_code:
                     self.out("\n[/code]")
             self.p()
@@ -719,7 +719,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 # (see entityref)
                 data = re.sub(r'\s+', r' ', data)
                 if data and data[0] == ' ':
-                    self.space = 1
+                    self.space = True
                     data = data[1:]
             if not data and not force:
                 return
@@ -746,31 +746,31 @@ class HTML2Text(HTMLParser.HTMLParser):
                 data = data.replace("\n", "\n" + bq)
 
             if self.startpre:
-                self.startpre = 0
+                self.startpre = False
                 if self.list:
                     # use existing initial indentation
                     data = data.lstrip("\n")
 
             if self.start:
-                self.space = 0
+                self.space = False
                 self.p_p = 0
-                self.start = 0
+                self.start = False
 
             if force == 'end':
                 # It's the end.
                 self.p_p = 0
                 self.out("\n")
-                self.space = 0
+                self.space = False
 
             if self.p_p:
                 self.out((self.br_toggle + '\n' + bq) * self.p_p)
-                self.space = 0
+                self.space = False
                 self.br_toggle = ''
 
             if self.space:
                 if not self.lastWasNL:
                     self.out(' ')
-                self.space = 0
+                self.space = False
 
             if self.a and ((self.p_p == 2 and self.links_each_paragraph) or
                            force == "end"):
