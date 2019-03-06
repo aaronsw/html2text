@@ -88,9 +88,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.open_quote = config.OPEN_QUOTE  # covered in cli
         self.close_quote = config.CLOSE_QUOTE  # covered in cli
 
-        if out is None:  # pragma: no cover
+        if out is None:
             self.out = self.outtextf
-        else:  # pragma: no cover
+        else:
             self.out = out
 
         # empty list to store output characters before they are "joined"
@@ -207,7 +207,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.a list. If the set of attributes is not found, returns None
         :rtype: int
         """
-        if 'href' not in attrs:  # pragma: no cover
+        if 'href' not in attrs:
             return None
         i = -1
         for a in self.a:
