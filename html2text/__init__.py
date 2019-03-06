@@ -207,7 +207,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.a list. If the set of attributes is not found, returns None
         :rtype: int
         """
-        if 'href' not in attrs:
+        if "href" not in attrs:
             return None
         i = -1
         for a in self.a:
