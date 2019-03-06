@@ -27,10 +27,10 @@ from html2text.utils import (
 
 try:
     chr = unichr
-    nochr = unicode('')
+    nochr = unicode("")
 except NameError:
     # python3 uses chr
-    nochr = str('')
+    nochr = str("")
 
 __version__ = (2018, 1, 9)
 
@@ -40,7 +40,7 @@ __version__ = (2018, 1, 9)
 
 
 class HTML2Text(HTMLParser.HTMLParser):
-    def __init__(self, out=None, baseurl='', bodywidth=config.BODY_WIDTH):
+    def __init__(self, out=None, baseurl="", bodywidth=config.BODY_WIDTH):
         """
         Input parameters:
             out: possible custom replacement for self.outtextf (which
@@ -49,7 +49,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         """
         kwargs = {}
         if sys.version_info >= (3, 4):
-            kwargs['convert_charrefs'] = False
+            kwargs["convert_charrefs"] = False
         HTMLParser.HTMLParser.__init__(self, **kwargs)
 
         # Config options
@@ -73,9 +73,9 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.bypass_tables = config.BYPASS_TABLES  # covered in cli
         self.ignore_tables = config.IGNORE_TABLES  # covered in cli
         self.google_doc = False  # covered in cli
-        self.ul_item_mark = '*'  # covered in cli
-        self.emphasis_mark = '_'  # covered in cli
-        self.strong_mark = '**'
+        self.ul_item_mark = "*"  # covered in cli
+        self.emphasis_mark = "_"  # covered in cli
+        self.strong_mark = "**"
         self.single_line_break = config.SINGLE_LINE_BREAK  # covered in cli
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
@@ -105,7 +105,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.astack = []
         self.maybe_automatic_link = None
         self.empty_link = False
-        self.absolute_url_matcher = re.compile(r'^[a-zA-Z+]+://')
+        self.absolute_url_matcher = re.compile(r"^[a-zA-Z+]+://")
         self.acount = 0
         self.list = []
         self.blockquote = 0
@@ -113,7 +113,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.startpre = False
         self.code = False
         self.quote = False
-        self.br_toggle = ''
+        self.br_toggle = ""
         self.lastWasNL = False
         self.lastWasList = False
         self.style = 0
@@ -132,10 +132,10 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.current_tag = None
 
         try:
-            del unifiable_n[name2cp('nbsp')]
+            del unifiable_n[name2cp("nbsp")]
         except KeyError:
             pass
-        config.UNIFIABLE['nbsp'] = '&nbsp_place_holder;'
+        config.UNIFIABLE["nbsp"] = "&nbsp_place_holder;"
 
     def feed(self, data):
         data = data.replace("</' + 'script>", "</ignore>")
@@ -153,24 +153,24 @@ class HTML2Text(HTMLParser.HTMLParser):
     def outtextf(self, s):
         self.outtextlist.append(s)
         if s:
-            self.lastWasNL = s[-1] == '\n'
+            self.lastWasNL = s[-1] == "\n"
 
     def close(self):
         HTMLParser.HTMLParser.close(self)
 
         self.pbr()
-        self.o('', 0, 'end')
+        self.o("", 0, "end")
 
         outtext = nochr.join(self.outtextlist)
 
         if self.unicode_snob:
-            nbsp = chr(name2cp('nbsp'))
+            nbsp = chr(name2cp("nbsp"))
         else:
             nbsp = chr(32)
         try:
-            outtext = outtext.replace(unicode('&nbsp_place_holder;'), nbsp)
+            outtext = outtext.replace(unicode("&nbsp_place_holder;"), nbsp)
         except NameError:
-            outtext = outtext.replace('&nbsp_place_holder;', nbsp)
+            outtext = outtext.replace("&nbsp_place_holder;", nbsp)
 
         # Clear self.outtextlist to avoid memory leak of its content to
         # the next handling.
@@ -207,18 +207,20 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.a list. If the set of attributes is not found, returns None
         :rtype: int
         """
-        if 'href' not in attrs:
+        if "href" not in attrs:
             return None
         i = -1
         for a in self.a:
             i += 1
             match = False
 
-            if 'href' in a and a['href'] == attrs['href']:
-                if 'title' in a or 'title' in attrs:
-                    if 'title' in a and \
-                        'title' in attrs and \
-                            a['title'] == attrs['title']:
+            if "href" in a and a["href"] == attrs["href"]:
+                if "title" in a or "title" in attrs:
+                    if (
+                        "title" in a
+                        and "title" in attrs
+                        and a["title"] == attrs["title"]
+                    ):
                         match = True
                 else:
                     match = True
@@ -234,20 +236,21 @@ class HTML2Text(HTMLParser.HTMLParser):
         parent_emphasis = google_text_emphasis(parent_style)
 
         # handle Google's text emphasis
-        strikethrough = 'line-through' in \
-                        tag_emphasis and self.hide_strikethrough
+        strikethrough = "line-through" in tag_emphasis and self.hide_strikethrough
 
         # google and others may mark a font's weight as `bold` or `700`
         bold = False
         for bold_marker in config.BOLD_TEXT_STYLE_VALUES:
-            bold = (bold_marker in tag_emphasis
-                    and bold_marker not in parent_emphasis)
+            bold = bold_marker in tag_emphasis and bold_marker not in parent_emphasis
             if bold:
                 break
 
-        italic = 'italic' in tag_emphasis and 'italic' not in parent_emphasis
-        fixed = google_fixed_width_font(tag_style) and not \
-            google_fixed_width_font(parent_style) and not self.pre
+        italic = "italic" in tag_emphasis and "italic" not in parent_emphasis
+        fixed = (
+            google_fixed_width_font(tag_style)
+            and not google_fixed_width_font(parent_style)
+            and not self.pre
+        )
 
         if start:
             # crossed-out text must be handled before other attributes
@@ -263,7 +266,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.o(self.strong_mark)
                 self.drop_white_space += 1
             if fixed:
-                self.o('`')
+                self.o("`")
                 self.drop_white_space += 1
                 self.code = True
         else:
@@ -276,7 +279,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     # empty emphasis, drop it
                     self.drop_white_space -= 1
                 else:
-                    self.o('`')
+                    self.o("`")
                 self.code = False
             if bold:
                 if self.drop_white_space:
@@ -310,9 +313,12 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         # first thing inside the anchor tag is another tag
         # that produces some output
-        if (start and self.maybe_automatic_link is not None and
-                tag not in ['p', 'div', 'style', 'dl', 'dt'] and
-                (tag != "img" or self.ignore_images)):
+        if (
+            start
+            and self.maybe_automatic_link is not None
+            and tag not in ["p", "div", "style", "dl", "dt"]
+            and (tag != "img" or self.ignore_images)
+        ):
             self.o("[")
             self.maybe_automatic_link = None
             self.empty_link = False
@@ -329,8 +335,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                 tag_style = element_style(attrs, self.style_def, parent_style)
                 self.tag_stack.append((tag, attrs, tag_style))
             else:
-                dummy, attrs, tag_style = self.tag_stack.pop() \
-                    if self.tag_stack else (None, {}, {})
+                dummy, attrs, tag_style = (
+                    self.tag_stack.pop() if self.tag_stack else (None, {}, {})
+                )
                 if self.tag_stack:
                     parent_style = self.tag_stack[-1][2]
 
@@ -338,18 +345,18 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.p()
             if start:
                 self.inheader = True
-                self.o(hn(tag) * "#" + ' ')
+                self.o(hn(tag) * "#" + " ")
             else:
                 self.inheader = False
                 return  # prevent redundant emphasis marks on headers
 
-        if tag in ['p', 'div']:
+        if tag in ["p", "div"]:
             if self.google_doc:
                 if start and google_has_height(tag_style):
                     self.p()
                 else:
                     self.soft_br()
-            elif self.astack and tag == 'div':
+            elif self.astack and tag == "div":
                 pass
             else:
                 self.p()
@@ -365,7 +372,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.o("* * *")
             self.p()
 
-        if tag in ["head", "style", 'script']:
+        if tag in ["head", "style", "script"]:
             if start:
                 self.quiet += 1
             else:
@@ -383,7 +390,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         if tag == "blockquote":
             if start:
                 self.p()
-                self.o('> ', 0, 1)
+                self.o("> ", 0, 1)
                 self.start = True
                 self.blockquote += 1
             else:
@@ -391,12 +398,11 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.p()
 
         def no_preceding_space(self):
-            return (self.preceding_data
-                    and re.match(r'[^\s]', self.preceding_data[-1]))
+            return self.preceding_data and re.match(r"[^\s]", self.preceding_data[-1])
 
-        if tag in ['em', 'i', 'u'] and not self.ignore_emphasis:
+        if tag in ["em", "i", "u"] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
-                emphasis = ' ' + self.emphasis_mark
+                emphasis = " " + self.emphasis_mark
             else:
                 emphasis = self.emphasis_mark
 
@@ -404,9 +410,9 @@ class HTML2Text(HTMLParser.HTMLParser):
             if start:
                 self.stressed = True
 
-        if tag in ['strong', 'b'] and not self.ignore_emphasis:
+        if tag in ["strong", "b"] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
-                strong = ' ' + self.strong_mark
+                strong = " " + self.strong_mark
             else:
                 strong = self.strong_mark
 
@@ -414,11 +420,11 @@ class HTML2Text(HTMLParser.HTMLParser):
             if start:
                 self.stressed = True
 
-        if tag in ['del', 'strike', 's']:
+        if tag in ["del", "strike", "s"]:
             if start and no_preceding_space(self):
-                strike = ' ~~'
+                strike = " ~~"
             else:
-                strike = '~~'
+                strike = "~~"
 
             self.o(strike)
             if start:
@@ -430,20 +436,20 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.handle_emphasis(start, tag_style, parent_style)
 
         if tag in ["kbd", "code", "tt"] and not self.pre:
-            self.o('`')  # TODO: `` `this` ``
+            self.o("`")  # TODO: `` `this` ``
             self.code = not self.code
 
         if tag == "abbr":
             if start:
                 self.abbr_title = None
-                self.abbr_data = ''
-                if ('title' in attrs):
-                    self.abbr_title = attrs['title']
+                self.abbr_data = ""
+                if "title" in attrs:
+                    self.abbr_title = attrs["title"]
             else:
                 if self.abbr_title is not None:
                     self.abbr_list[self.abbr_data] = self.abbr_title
                     self.abbr_title = None
-                self.abbr_data = ''
+                self.abbr_data = ""
 
         if tag == "q":
             if not self.quote:
@@ -454,21 +460,21 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         def link_url(self, link, title=""):
             url = urlparse.urljoin(self.baseurl, link)
-            title = ' "{}"'.format(title) if title.strip() else ''
-            self.o(']({url}{title})'.format(url=escape_md(url),
-                                            title=title))
+            title = ' "{}"'.format(title) if title.strip() else ""
+            self.o("]({url}{title})".format(url=escape_md(url), title=title))
 
         if tag == "a" and not self.ignore_links:
             if start:
-                if 'href' in attrs and \
-                    attrs['href'] is not None and not \
-                        (self.skip_internal_links and
-                            attrs['href'].startswith('#')):
+                if (
+                    "href" in attrs
+                    and attrs["href"] is not None
+                    and not (self.skip_internal_links and attrs["href"].startswith("#"))
+                ):
                     self.astack.append(attrs)
-                    self.maybe_automatic_link = attrs['href']
+                    self.maybe_automatic_link = attrs["href"]
                     self.empty_link = True
                     if self.protect_links:
-                        attrs['href'] = '<' + attrs['href'] + '>'
+                        attrs["href"] = "<" + attrs["href"] + ">"
                 else:
                     self.astack.append(None)
             else:
@@ -483,34 +489,33 @@ class HTML2Text(HTMLParser.HTMLParser):
                             self.maybe_automatic_link = None
                         if self.inline_links:
                             try:
-                                title = a['title'] if a['title'] else ''
+                                title = a["title"] if a["title"] else ""
                                 title = escape_md(title)
                             except KeyError:
-                                link_url(self, a['href'], '')
+                                link_url(self, a["href"], "")
                             else:
-                                link_url(self, a['href'], title)
+                                link_url(self, a["href"], title)
                         else:
                             i = self.previousIndex(a)
                             if i is not None:
                                 a = self.a[i]
                             else:
                                 self.acount += 1
-                                a['count'] = self.acount
-                                a['outcount'] = self.outcount
+                                a["count"] = self.acount
+                                a["outcount"] = self.outcount
                                 self.a.append(a)
-                            self.o("][" + str(a['count']) + "]")
+                            self.o("][" + str(a["count"]) + "]")
 
         if tag == "img" and start and not self.ignore_images:
-            if 'src' in attrs:
+            if "src" in attrs:
                 if not self.images_to_alt:
-                    attrs['href'] = attrs['src']
-                alt = attrs.get('alt') or self.default_image_alt
+                    attrs["href"] = attrs["src"]
+                alt = attrs.get("alt") or self.default_image_alt
 
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes
                 if self.images_as_html or (
-                        self.images_with_size and
-                        ("width" in attrs or "height" in attrs)
+                    self.images_with_size and ("width" in attrs or "height" in attrs)
                 ):
                     self.o("<img src='" + attrs["src"] + "' ")
                     if "width" in attrs:
@@ -525,8 +530,11 @@ class HTML2Text(HTMLParser.HTMLParser):
                 # If we have a link to create, output the start
                 if self.maybe_automatic_link is not None:
                     href = self.maybe_automatic_link
-                    if self.images_to_alt and escape_md(alt) == href and \
-                            self.absolute_url_matcher.match(href):
+                    if (
+                        self.images_to_alt
+                        and escape_md(alt) == href
+                        and self.absolute_url_matcher.match(href)
+                    ):
                         self.o("<" + escape_md(alt) + ">")
                         self.empty_link = False
                         return
@@ -542,16 +550,9 @@ class HTML2Text(HTMLParser.HTMLParser):
                 else:
                     self.o("![" + escape_md(alt) + "]")
                     if self.inline_links:
-                        href = attrs.get('href') or ''
+                        href = attrs.get("href") or ""
                         self.o(
-                            "(" +
-                            escape_md(
-                                urlparse.urljoin(
-                                    self.baseurl,
-                                    href
-                                )
-                            ) +
-                            ")"
+                            "(" + escape_md(urlparse.urljoin(self.baseurl, href)) + ")"
                         )
                     else:
                         i = self.previousIndex(attrs)
@@ -559,18 +560,18 @@ class HTML2Text(HTMLParser.HTMLParser):
                             attrs = self.a[i]
                         else:
                             self.acount += 1
-                            attrs['count'] = self.acount
-                            attrs['outcount'] = self.outcount
+                            attrs["count"] = self.acount
+                            attrs["outcount"] = self.outcount
                             self.a.append(attrs)
-                        self.o("[" + str(attrs['count']) + "]")
+                        self.o("[" + str(attrs["count"]) + "]")
 
-        if tag == 'dl' and start:
+        if tag == "dl" and start:
             self.p()
-        if tag == 'dt' and not start:
+        if tag == "dt" and not start:
             self.pbr()
-        if tag == 'dd' and start:
-            self.o('    ')
-        if tag == 'dd' and not start:
+        if tag == "dd" and start:
+            self.o("    ")
+        if tag == "dd" and not start:
             self.pbr()
 
         if tag in ["ol", "ul"]:
@@ -583,42 +584,39 @@ class HTML2Text(HTMLParser.HTMLParser):
                 else:
                     list_style = tag
                 numbering_start = list_numbering_start(attrs)
-                self.list.append({
-                    'name': list_style,
-                    'num': numbering_start
-                })
+                self.list.append({"name": list_style, "num": numbering_start})
             else:
                 if self.list:
                     self.list.pop()
                     if (not self.google_doc) and (not self.list):
-                        self.o('\n')
+                        self.o("\n")
             self.lastWasList = True
         else:
             self.lastWasList = False
 
-        if tag == 'li':
+        if tag == "li":
             self.pbr()
             if start:
                 if self.list:
                     li = self.list[-1]
                 else:
-                    li = {'name': 'ul', 'num': 0}
+                    li = {"name": "ul", "num": 0}
                 if self.google_doc:
                     nest_count = self.google_nest_count(tag_style)
                 else:
                     nest_count = len(self.list)
                 # TODO: line up <ol><li>s > 9 correctly.
                 self.o("  " * nest_count)
-                if li['name'] == "ul":
+                if li["name"] == "ul":
                     self.o(self.ul_item_mark + " ")
-                elif li['name'] == "ol":
-                    li['num'] += 1
-                    self.o(str(li['num']) + ". ")
+                elif li["name"] == "ol":
+                    li["num"] += 1
+                    self.o(str(li["num"]) + ". ")
                 self.start = True
 
         if tag in ["table", "tr", "td", "th"]:
             if self.ignore_tables:
-                if tag == 'tr':
+                if tag == "tr":
                     if start:
                         pass
                     else:
@@ -631,14 +629,14 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.soft_br()
                 if tag in ["td", "th"]:
                     if start:
-                        self.o('<{}>\n\n'.format(tag))
+                        self.o("<{}>\n\n".format(tag))
                     else:
-                        self.o('\n</{}>'.format(tag))
+                        self.o("\n</{}>".format(tag))
                 else:
                     if start:
-                        self.o('<{}>'.format(tag))
+                        self.o("<{}>".format(tag))
                     else:
-                        self.o('</{}>'.format(tag))
+                        self.o("</{}>".format(tag))
 
             else:
                 if tag == "table":
@@ -692,7 +690,7 @@ class HTML2Text(HTMLParser.HTMLParser):
     def soft_br(self):
         "Soft breaks"
         self.pbr()
-        self.br_toggle = '  '
+        self.br_toggle = "  "
 
     def o(self, data, puredata=0, force=0):
         """
@@ -708,15 +706,15 @@ class HTML2Text(HTMLParser.HTMLParser):
                 lstripped_data = data.lstrip()
                 if self.drop_white_space and not (self.pre or self.code):
                     data = lstripped_data
-                if lstripped_data != '':
+                if lstripped_data != "":
                     self.drop_white_space = 0
 
             if puredata and not self.pre:
                 # This is a very dangerous call ... it could mess up
                 # all handling of &nbsp; when not handled properly
                 # (see entityref)
-                data = re.sub(r'\s+', r' ', data)
-                if data and data[0] == ' ':
+                data = re.sub(r"\s+", r" ", data)
+                if data and data[0] == " ":
                     self.space = True
                     data = data[1:]
             if not data and not force:
@@ -731,7 +729,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.out("\n[code]")
                     self.p_p = 0
 
-            bq = (">" * self.blockquote)
+            bq = ">" * self.blockquote
             if not (force and data and data[0] == ">") and self.blockquote:
                 bq += " "
 
@@ -754,34 +752,39 @@ class HTML2Text(HTMLParser.HTMLParser):
                 self.p_p = 0
                 self.start = False
 
-            if force == 'end':
+            if force == "end":
                 # It's the end.
                 self.p_p = 0
                 self.out("\n")
                 self.space = False
 
             if self.p_p:
-                self.out((self.br_toggle + '\n' + bq) * self.p_p)
+                self.out((self.br_toggle + "\n" + bq) * self.p_p)
                 self.space = False
-                self.br_toggle = ''
+                self.br_toggle = ""
 
             if self.space:
                 if not self.lastWasNL:
-                    self.out(' ')
+                    self.out(" ")
                 self.space = False
 
-            if self.a and ((self.p_p == 2 and self.links_each_paragraph) or
-                           force == "end"):
+            if self.a and (
+                (self.p_p == 2 and self.links_each_paragraph) or force == "end"
+            ):
                 if force == "end":
                     self.out("\n")
 
                 newa = []
                 for link in self.a:
-                    if self.outcount > link['outcount']:
-                        self.out("   [" + str(link['count']) + "]: " +
-                                 urlparse.urljoin(self.baseurl, link['href']))
-                        if 'title' in link:
-                            self.out(" (" + link['title'] + ")")
+                    if self.outcount > link["outcount"]:
+                        self.out(
+                            "   ["
+                            + str(link["count"])
+                            + "]: "
+                            + urlparse.urljoin(self.baseurl, link["href"])
+                        )
+                        if "title" in link:
+                            self.out(" (" + link["title"] + ")")
                         self.out("\n")
                     else:
                         newa.append(link)
@@ -811,11 +814,13 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.stressed = False
             self.preceding_stressed = True
         elif self.preceding_stressed:
-            if (re.match(r'[^\s.!?]', data[0])
-                    and not hn(self.current_tag)
-                    and self.current_tag not in ['a', 'code', 'pre']):
+            if (
+                re.match(r"[^\s.!?]", data[0])
+                and not hn(self.current_tag)
+                and self.current_tag not in ["a", "code", "pre"]
+            ):
                 # should match a letter or common punctuation
-                data = ' ' + data
+                data = " " + data
             self.preceding_stressed = False
 
         if self.style:
@@ -823,8 +828,11 @@ class HTML2Text(HTMLParser.HTMLParser):
 
         if self.maybe_automatic_link is not None:
             href = self.maybe_automatic_link
-            if (href == data and self.absolute_url_matcher.match(href) and
-                    self.use_automatic_links):
+            if (
+                href == data
+                and self.absolute_url_matcher.match(href)
+                and self.use_automatic_links
+            ):
                 self.o("<" + data + ">")
                 self.empty_link = False
                 return
@@ -839,7 +847,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.o(data, 1)
 
     def charref(self, name):
-        if name[0] in ['x', 'X']:
+        if name[0] in ["x", "X"]:
             c = int(name[1:], 16)
         else:
             c = int(name)
@@ -850,7 +858,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             try:
                 return chr(c)
             except ValueError:  # invalid unicode
-                return ''
+                return ""
 
     def entityref(self, c):
         if not self.unicode_snob and c in config.UNIFIABLE:
@@ -859,9 +867,9 @@ class HTML2Text(HTMLParser.HTMLParser):
             try:
                 name2cp(c)
             except KeyError:
-                return "&" + c + ';'
+                return "&" + c + ";"
             else:
-                if c == 'nbsp':
+                if c == "nbsp":
                     return config.UNIFIABLE[c]
                 else:
                     return chr(name2cp(c))
@@ -875,9 +883,8 @@ class HTML2Text(HTMLParser.HTMLParser):
         :rtype: int
         """
         nest_count = 0
-        if 'margin-left' in style:
-            nest_count = int(style['margin-left'][:-2]) \
-                // self.google_list_indent
+        if "margin-left" in style:
+            nest_count = int(style["margin-left"][:-2]) // self.google_list_indent
 
         return nest_count
 
@@ -892,7 +899,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         if not self.body_width:
             return text
 
-        result = ''
+        result = ""
         newlines = 0
         # I cannot think of a better solution for now.
         # To avoid the non-wrap behaviour for entire paras
@@ -902,14 +909,17 @@ class HTML2Text(HTMLParser.HTMLParser):
         for para in text.split("\n"):
             if len(para) > 0:
                 if not skipwrap(para, self.wrap_links, self.wrap_list_items):
-                    indent = ''
-                    if para.startswith('  ' + self.ul_item_mark):
-                        indent = '    '   # For list items.
-                    wrapped = wrap(para, self.body_width,
-                                   break_long_words=False,
-                                   subsequent_indent=indent)
+                    indent = ""
+                    if para.startswith("  " + self.ul_item_mark):
+                        indent = "    "  # For list items.
+                    wrapped = wrap(
+                        para,
+                        self.body_width,
+                        break_long_words=False,
+                        subsequent_indent=indent,
+                    )
                     result += "\n".join(wrapped)
-                    if indent or para.endswith('  '):
+                    if indent or para.endswith("  "):
                         result += "  \n"
                         newlines = 1
                     else:
@@ -930,7 +940,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         return result
 
 
-def html2text(html, baseurl='', bodywidth=None):
+def html2text(html, baseurl="", bodywidth=None):
     if bodywidth is None:
         bodywidth = config.BODY_WIDTH
     h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
