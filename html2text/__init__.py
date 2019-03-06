@@ -801,6 +801,11 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.outcount += 1
 
     def handle_data(self, data, entity_char=False):
+        if not data:
+            # Data may be empty for some HTML entities. For example,
+            # LEFT-TO-RIGHT MARK.
+            return
+
         if self.stressed:
             data = data.strip()
             self.stressed = False
