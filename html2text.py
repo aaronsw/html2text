@@ -730,6 +730,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         assert wrap, "Requires Python 2.3."
         result = ''
         newlines = 0
+        reList = re.compile('(^[ ]+[0-9]+\. )|(^[ ]+[%s] )' %(self.ul_item_mark))
         for para in text.split("\n"):
             if len(para) > 0:
                 if not skipwrap(para):
@@ -740,6 +741,17 @@ class HTML2Text(HTMLParser.HTMLParser):
                     else:
                         result += "\n\n"
                         newlines = 2
+                # Handle list item
+                elif reList.match(para):
+                    list_prefix = reList.search(para).group()
+                    indent_width = len(list_prefix)
+                    indent_spaces =  ' ' * indent_width
+                    list_width = BODY_WIDTH - indent_width
+                    wrapped = wrap(para, list_width)
+                    result += wrapped[0] + "\n"
+                    for line in wrapped[1:]:
+                        result += indent_spaces + line + "\n"
+                    newlines = 1
                 else:
                     if not onlywhite(para):
                         result += para + "\n"
