@@ -36,7 +36,7 @@ def main():
         dest="wrap_links",
         action="store_false",
         default=config.WRAP_LINKS,
-        help="wrap links during conversion",
+        help="don't wrap links during conversion",
     )
     p.add_argument(
         "--wrap-list-items",
