@@ -858,14 +858,14 @@ class HTML2Text(HTMLParser.HTMLParser):
             return config.UNIFIABLE[c]
         else:
             try:
-                name2cp(c)
+                cp = name2cp(c)
             except KeyError:
                 return "&" + c + ";"
             else:
                 if c == "nbsp":
                     return config.UNIFIABLE[c]
                 else:
-                    return chr(name2cp(c))
+                    return chr(cp)
 
     def google_nest_count(self, style):
         """
