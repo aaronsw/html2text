@@ -1,13 +1,12 @@
-# coding: utf-8
 """html2text: Turn HTML into equivalent Markdown-structured text."""
-from __future__ import division, unicode_literals
 
+import html.entities
+import html.parser
 import re
-import sys
+import urllib.parse as urlparse
 from textwrap import wrap
 
 from html2text import config
-from html2text.compat import HTMLParser, urlparse
 from html2text.utils import (
     dumb_css_parser,
     element_style,
@@ -19,18 +18,10 @@ from html2text.utils import (
     google_text_emphasis,
     hn,
     list_numbering_start,
-    name2cp,
     pad_tables_in_text,
     skipwrap,
     unifiable_n,
 )
-
-try:
-    chr = unichr
-    nochr = unicode("")
-except NameError:
-    # python3 uses chr
-    nochr = str("")
 
 __version__ = (2019, 8, 11)
 
@@ -39,7 +30,7 @@ __version__ = (2019, 8, 11)
 # Support decoded entities with UNIFIABLE.
 
 
-class HTML2Text(HTMLParser.HTMLParser):
+class HTML2Text(html.parser.HTMLParser):
     def __init__(self, out=None, baseurl="", bodywidth=config.BODY_WIDTH):
         """
         Input parameters:
@@ -47,10 +38,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                  appends lines of text).
             baseurl: base URL of the document we process
         """
-        kwargs = {}
-        if sys.version_info >= (3, 4):
-            kwargs["convert_charrefs"] = False
-        HTMLParser.HTMLParser.__init__(self, **kwargs)
+        super().__init__(convert_charrefs=False)
 
         # Config options
         self.split_next_td = False
@@ -135,7 +123,7 @@ class HTML2Text(HTMLParser.HTMLParser):
 
     def feed(self, data):
         data = data.replace("</' + 'script>", "</ignore>")
-        HTMLParser.HTMLParser.feed(self, data)
+        super().feed(data)
 
     def handle(self, data):
         self.feed(data)
@@ -152,17 +140,17 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.lastWasNL = s[-1] == "\n"
 
     def close(self):
-        HTMLParser.HTMLParser.close(self)
+        super().close()
 
         self.pbr()
         self.o("", force="end")
 
-        outtext = nochr.join(self.outtextlist)
+        outtext = "".join(self.outtextlist)
 
         if self.unicode_snob:
-            nbsp = chr(name2cp("nbsp"))
+            nbsp = html.entities.html5["nbsp;"]
         else:
-            nbsp = chr(32)
+            nbsp = " "
         outtext = outtext.replace("&nbsp_place_holder;", nbsp)
 
         # Clear self.outtextlist to avoid memory leak of its content to
@@ -858,14 +846,14 @@ class HTML2Text(HTMLParser.HTMLParser):
             return config.UNIFIABLE[c]
         else:
             try:
-                cp = name2cp(c)
+                ch = html.entities.html5[c + ";"]
             except KeyError:
                 return "&" + c + ";"
             else:
                 if c == "nbsp":
                     return config.UNIFIABLE[c]
                 else:
-                    return chr(cp)
+                    return ch
 
     def google_nest_count(self, style):
         """

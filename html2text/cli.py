@@ -1,7 +1,7 @@
 import argparse
+import sys
 
 from html2text import HTML2Text, __version__, config
-from html2text.utils import wrap_read, wrapwrite
 
 
 def main():
@@ -256,7 +256,7 @@ def main():
         with open(args.filename, "rb") as fp:
             data = fp.read()
     else:
-        data = wrap_read()
+        data = sys.stdin.buffer.read()
 
     try:
         data = data.decode(args.encoding, args.decode_errors)
@@ -303,4 +303,4 @@ def main():
     h.open_quote = args.open_quote
     h.close_quote = args.close_quote
 
-    wrapwrite(h.handle(data))
+    sys.stdout.write(h.handle(data))

@@ -65,8 +65,6 @@ Some functions are:
     - google_fixed_width_font   :check for fixed width font
     - list_numbering_start      :extract numbering from list elem attrs
     - skipwrap                  :skip wrap for give para or not?
-    - wrapwrite                 :write to buffer
-    - wrap_read                 :read from buffer
     - escape_md                 :escape md sensitive within other md
     - escape_md_section         :escape md sensitive across whole doc
 

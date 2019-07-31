@@ -1,4 +1,3 @@
-import codecs
 import glob
 import os
 import re
@@ -189,7 +188,7 @@ def test_command(fn, cmdline_args):
     result = get_baseline(fn)
     out = subprocess.check_output(cmd)
 
-    actual = out.decode("utf8")
+    actual = out.decode()
 
     actual = cleanup_eol(actual)
 
@@ -210,7 +209,7 @@ def get_baseline_name(fn):
 
 def get_baseline(fn):
     name = get_baseline_name(fn)
-    with codecs.open(name, mode="r", encoding="utf8") as f:
+    with open(name, encoding="utf-8") as f:
         out = f.read()
     return cleanup_eol(out)
 

@@ -1,17 +1,12 @@
-import sys
+import html.entities
 
 from html2text import config
-from html2text.compat import htmlentitydefs
 
-
-def name2cp(k):
-    """Return sname to codepoint"""
-    if k == "apos":
-        return ord("'")
-    return htmlentitydefs.name2codepoint[k]
-
-
-unifiable_n = {name2cp(k): v for k, v in config.UNIFIABLE.items() if k != "nbsp"}
+unifiable_n = {
+    html.entities.name2codepoint[k]: v
+    for k, v in config.UNIFIABLE.items()
+    if k != "nbsp"
+}
 
 
 def hn(tag):
@@ -185,24 +180,6 @@ def skipwrap(para, wrap_links, wrap_list_items):
         config.RE_ORDERED_LIST_MATCHER.match(stripped)
         or config.RE_UNORDERED_LIST_MATCHER.match(stripped)
     )
-
-
-def wrapwrite(text):
-    text = text.encode("utf-8")
-    try:  # Python3
-        sys.stdout.buffer.write(text)
-    except AttributeError:
-        sys.stdout.write(text)
-
-
-def wrap_read():
-    """
-    :rtype: str
-    """
-    try:
-        return sys.stdin.read()
-    except AttributeError:
-        return sys.stdin.buffer.read()
 
 
 def escape_md(text):
