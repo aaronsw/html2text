@@ -16,12 +16,10 @@ unifiable_n = {name2cp(k): v for k, v in config.UNIFIABLE.items() if k != "nbsp"
 
 def hn(tag):
     if tag[0] == "h" and len(tag) == 2:
-        try:
-            n = int(tag[1])
-            if n in range(1, 10):
-                return n
-        except ValueError:
-            return 0
+        n = tag[1]
+        if "0" < n <= "9":
+            return int(n)
+    return 0
 
 
 def dumb_property_dict(style):
