@@ -155,7 +155,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         HTMLParser.HTMLParser.close(self)
 
         self.pbr()
-        self.o("", 0, "end")
+        self.o("", force="end")
 
         outtext = nochr.join(self.outtextlist)
 
@@ -383,7 +383,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         if tag == "blockquote":
             if start:
                 self.p()
-                self.o("> ", 0, 1)
+                self.o("> ", force=True)
                 self.start = True
                 self.blockquote += 1
             else:
@@ -685,7 +685,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.pbr()
         self.br_toggle = "  "
 
-    def o(self, data, puredata=0, force=0):
+    def o(self, data, puredata=False, force=False):
         """
         Deal with indentation and whitespace
         """
@@ -837,7 +837,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         if not self.code and not self.pre and not entity_char:
             data = escape_md_section(data, snob=self.escape_snob)
         self.preceding_data = data
-        self.o(data, 1)
+        self.o(data, puredata=True)
 
     def charref(self, name):
         if name[0] in ["x", "X"]:
