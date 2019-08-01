@@ -108,10 +108,7 @@ def google_has_height(style):
 
     :rtype: bool
     """
-    if "height" in style:
-        return True
-
-    return False
+    return "height" in style
 
 
 def google_text_emphasis(style):
@@ -143,10 +140,7 @@ def google_fixed_width_font(style):
     font_family = ""
     if "font-family" in style:
         font_family = style["font-family"]
-    if "courier new" == font_family or "consolas" == font_family:
-        return True
-
-    return False
+    return "courier new" == font_family or "consolas" == font_family
 
 
 def list_numbering_start(attrs):
@@ -191,12 +185,10 @@ def skipwrap(para, wrap_links, wrap_list_items):
     # If the text begins with a single -, *, or +, followed by a space,
     # or an integer, followed by a ., followed by a space (in either
     # case optionally proceeded by whitespace), it's a list; don't wrap.
-    if config.RE_ORDERED_LIST_MATCHER.match(
-        stripped
-    ) or config.RE_UNORDERED_LIST_MATCHER.match(stripped):
-        return True
-
-    return False
+    return bool(
+        config.RE_ORDERED_LIST_MATCHER.match(stripped)
+        or config.RE_UNORDERED_LIST_MATCHER.match(stripped)
+    )
 
 
 def wrapwrite(text):
