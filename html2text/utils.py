@@ -28,12 +28,10 @@ def dumb_property_dict(style):
     """
     :returns: A hash of css attributes
     """
-    out = {
+    return {
         x.strip().lower(): y.strip().lower()
         for x, y in [z.split(":", 1) for z in style.split(";") if ":" in z]
     }
-
-    return out
 
 
 def dumb_css_parser(data):
@@ -298,5 +296,4 @@ def pad_tables_in_text(text, right_margin=1):
             table_buffer.append(line)
         else:
             new_lines.append(line)
-    new_text = "\n".join(new_lines)
-    return new_text
+    return "\n".join(new_lines)

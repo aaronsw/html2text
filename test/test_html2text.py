@@ -212,8 +212,7 @@ def get_baseline(fn):
     name = get_baseline_name(fn)
     with codecs.open(name, mode="r", encoding="utf8") as f:
         out = f.read()
-    out = cleanup_eol(out)
-    return out
+    return cleanup_eol(out)
 
 
 def test_tag_callback():
