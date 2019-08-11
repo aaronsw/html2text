@@ -190,11 +190,9 @@ class HTML2Text(html.parser.HTMLParser):
         """
         if "href" not in attrs:
             return None
-        i = -1
-        for a in self.a:
-            i += 1
-            match = False
 
+        match = False
+        for i, a in enumerate(self.a):
             if "href" in a and a["href"] == attrs["href"]:
                 if "title" in a or "title" in attrs:
                     if (
@@ -208,6 +206,7 @@ class HTML2Text(html.parser.HTMLParser):
 
             if match:
                 return i
+        return None
 
     def handle_emphasis(self, start, tag_style, parent_style):
         """
