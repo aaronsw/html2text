@@ -844,16 +844,11 @@ class HTML2Text(html.parser.HTMLParser):
     def entityref(self, c):
         if not self.unicode_snob and c in config.UNIFIABLE:
             return config.UNIFIABLE[c]
-        else:
-            try:
-                ch = html.entities.html5[c + ";"]
-            except KeyError:
-                return "&" + c + ";"
-            else:
-                if c == "nbsp":
-                    return config.UNIFIABLE[c]
-                else:
-                    return ch
+        try:
+            ch = html.entities.html5[c + ";"]
+        except KeyError:
+            return "&" + c + ";"
+        return config.UNIFIABLE[c] if c == "nbsp" else ch
 
     def google_nest_count(self, style):
         """
