@@ -175,10 +175,10 @@ class HTML2Text(html.parser.HTMLParser):
             self.handle_data(ref, True)
 
     def handle_starttag(self, tag, attrs):
-        self.handle_tag(tag, attrs, 1)
+        self.handle_tag(tag, attrs, start=True)
 
     def handle_endtag(self, tag):
-        self.handle_tag(tag, None, 0)
+        self.handle_tag(tag, None, start=False)
 
     def previousIndex(self, attrs):
         """
