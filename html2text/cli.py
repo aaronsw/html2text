@@ -4,7 +4,7 @@ import sys
 from . import HTML2Text, __version__, config
 
 
-def main():
+def main() -> None:
     baseurl = ""
 
     class bcolors:
@@ -259,7 +259,7 @@ def main():
         data = sys.stdin.buffer.read()
 
     try:
-        data = data.decode(args.encoding, args.decode_errors)
+        html = data.decode(args.encoding, args.decode_errors)
     except UnicodeDecodeError as err:
         warning = bcolors.WARNING + "Warning:" + bcolors.ENDC
         warning += " Use the " + bcolors.OKGREEN
@@ -303,4 +303,4 @@ def main():
     h.open_quote = args.open_quote
     h.close_quote = args.close_quote
 
-    sys.stdout.write(h.handle(data))
+    sys.stdout.write(h.handle(html))

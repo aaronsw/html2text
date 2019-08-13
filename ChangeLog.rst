@@ -1,3 +1,9 @@
+UNRELEASED
+==========
+----
+
+* Add type annotations.
+
 2019.9.26
 =========
 ----

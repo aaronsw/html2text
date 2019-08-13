@@ -36,4 +36,6 @@ setup(
     entry_points={"console_scripts": ["html2text = html2text.cli:main"]},
     license="GNU GPL 3",
     packages=["html2text"],
+    package_data={"html2text": ["py.typed"]},
+    zip_safe=False,
 )

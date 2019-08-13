@@ -1,4 +1,5 @@
 import html.entities
+from typing import Dict, List, Optional
 
 from . import config
 
@@ -9,7 +10,7 @@ unifiable_n = {
 }
 
 
-def hn(tag):
+def hn(tag: str) -> int:
     if tag[0] == "h" and len(tag) == 2:
         n = tag[1]
         if "0" < n <= "9":
@@ -17,7 +18,7 @@ def hn(tag):
     return 0
 
 
-def dumb_property_dict(style):
+def dumb_property_dict(style: str) -> Dict[str, str]:
     """
     :returns: A hash of css attributes
     """
@@ -27,7 +28,7 @@ def dumb_property_dict(style):
     }
 
 
-def dumb_css_parser(data):
+def dumb_css_parser(data: str) -> Dict[str, Dict[str, str]]:
     """
     :type data: str
 
@@ -44,16 +45,20 @@ def dumb_css_parser(data):
 
     # parse the css. reverted from dictionary comprehension in order to
     # support older pythons
-    elements = [x.split("{") for x in data.split("}") if "{" in x.strip()]
+    pairs = [x.split("{") for x in data.split("}") if "{" in x.strip()]
     try:
-        elements = {a.strip(): dumb_property_dict(b) for a, b in elements}
+        elements = {a.strip(): dumb_property_dict(b) for a, b in pairs}
     except ValueError:
         elements = {}  # not that important
 
     return elements
 
 
-def element_style(attrs, style_def, parent_style):
+def element_style(
+    attrs: Dict[str, Optional[str]],
+    style_def: Dict[str, Dict[str, str]],
+    parent_style: Dict[str, str],
+) -> Dict[str, str]:
     """
     :type attrs: dict
     :type style_def: dict
@@ -64,17 +69,19 @@ def element_style(attrs, style_def, parent_style):
     """
     style = parent_style.copy()
     if "class" in attrs:
+        assert attrs["class"] is not None
         for css_class in attrs["class"].split():
             css_style = style_def.get("." + css_class, {})
             style.update(css_style)
     if "style" in attrs:
+        assert attrs["style"] is not None
         immediate_style = dumb_property_dict(attrs["style"])
         style.update(immediate_style)
 
     return style
 
 
-def google_list_style(style):
+def google_list_style(style: Dict[str, str]) -> str:
     """
     Finds out whether this is an ordered or unordered list
 
@@ -90,7 +97,7 @@ def google_list_style(style):
     return "ol"
 
 
-def google_has_height(style):
+def google_has_height(style: Dict[str, str]) -> bool:
     """
     Check if the style of the element has the 'height' attribute
     explicitly defined
@@ -102,7 +109,7 @@ def google_has_height(style):
     return "height" in style
 
 
-def google_text_emphasis(style):
+def google_text_emphasis(style: Dict[str, str]) -> List[str]:
     """
     :type style: dict
 
@@ -120,7 +127,7 @@ def google_text_emphasis(style):
     return emphasis
 
 
-def google_fixed_width_font(style):
+def google_fixed_width_font(style: Dict[str, str]) -> bool:
     """
     Check if the css of the current element defines a fixed width font
 
@@ -134,7 +141,7 @@ def google_fixed_width_font(style):
     return "courier new" == font_family or "consolas" == font_family
 
 
-def list_numbering_start(attrs):
+def list_numbering_start(attrs: Dict[str, Optional[str]]) -> int:
     """
     Extract numbering from list element attributes
 
@@ -143,6 +150,7 @@ def list_numbering_start(attrs):
     :rtype: int or None
     """
     if "start" in attrs:
+        assert attrs["start"] is not None
         try:
             return int(attrs["start"]) - 1
         except ValueError:
@@ -151,7 +159,7 @@ def list_numbering_start(attrs):
     return 0
 
 
-def skipwrap(para, wrap_links, wrap_list_items):
+def skipwrap(para: str, wrap_links: bool, wrap_list_items: bool) -> bool:
     # If it appears to contain a link
     # don't wrap
     if (len(config.RE_LINK.findall(para)) > 0) and not wrap_links:
@@ -182,7 +190,7 @@ def skipwrap(para, wrap_links, wrap_list_items):
     )
 
 
-def escape_md(text):
+def escape_md(text: str) -> str:
     """
     Escapes markdown-sensitive characters within other markdown
     constructs.
@@ -190,7 +198,7 @@ def escape_md(text):
     return config.RE_MD_CHARS_MATCHER.sub(r"\\\1", text)
 
 
-def escape_md_section(text, snob=False):
+def escape_md_section(text: str, snob: bool = False) -> str:
     """
     Escapes markdown-sensitive characters across whole document sections.
     """
@@ -206,7 +214,7 @@ def escape_md_section(text, snob=False):
     return text
 
 
-def reformat_table(lines, right_margin):
+def reformat_table(lines: List[str], right_margin: int) -> List[str]:
     """
     Given the lines of a table
     padds the cells and returns the new lines
@@ -249,12 +257,13 @@ def reformat_table(lines, right_margin):
     return new_lines
 
 
-def pad_tables_in_text(text, right_margin=1):
+def pad_tables_in_text(text: str, right_margin: int = 1) -> str:
     """
     Provide padding for tables in the text
     """
     lines = text.split("\n")
-    table_buffer, table_started = [], False
+    table_buffer = []  # type: List[str]
+    table_started = False
     new_lines = []
     for line in lines:
         # Toggle table started

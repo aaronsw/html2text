@@ -11,3 +11,4 @@ env/
 .vscode
 .tox/
 htmlcov/
+.mypy_cache/
