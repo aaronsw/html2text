@@ -557,7 +557,7 @@ class HTML2Text(html.parser.HTMLParser):
 
         if tag in ["ol", "ul"]:
             # Google Docs create sub lists as top level lists
-            if (not self.list) and (not self.lastWasList):
+            if not self.list and not self.lastWasList:
                 self.p()
             if start:
                 if self.google_doc:
@@ -569,7 +569,7 @@ class HTML2Text(html.parser.HTMLParser):
             else:
                 if self.list:
                     self.list.pop()
-                    if (not self.google_doc) and (not self.list):
+                    if not self.google_doc and not self.list:
                         self.o("\n")
             self.lastWasList = True
         else:
