@@ -430,7 +430,7 @@ class HTML2Text(html.parser.HTMLParser):
                 if self.abbr_title is not None:
                     self.abbr_list[self.abbr_data] = self.abbr_title
                     self.abbr_title = None
-                self.abbr_data = ""
+                self.abbr_data = None
 
         if tag == "q":
             if not self.quote:
