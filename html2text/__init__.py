@@ -23,7 +23,7 @@ from html2text.utils import (
     unifiable_n,
 )
 
-__version__ = (2019, 8, 11)
+__version__ = (2019, 9, 26)
 
 
 # TODO:
