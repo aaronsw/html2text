@@ -6,6 +6,8 @@
 * Remove the trailing whitespaces that were added after wrapping list items & blockquotes.
 * Remove support for Python ≤ 3.4. Now requires Python 3.5+.
 * Fix memory leak when processing a document containing a ``<abbr>`` tag.
+* Fix ``AttributeError`` when reading text from stdin.
+* Fix ``UnicodeEncodeError`` when writing output to stdout.
 
 
 2019.8.11
