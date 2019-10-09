@@ -717,8 +717,7 @@ class HTML2Text(html.parser.HTMLParser):
                 if not self.list:
                     bq += "    "
                 # else: list content is already partially indented
-                for i in range(len(self.list)):
-                    bq += "    "
+                bq += "    " * len(self.list)
                 data = data.replace("\n", "\n" + bq)
 
             if self.startpre:
