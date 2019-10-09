@@ -6,8 +6,8 @@ import re
 import urllib.parse as urlparse
 from textwrap import wrap
 
-from html2text import config
-from html2text.utils import (
+from . import config
+from .utils import (
     dumb_css_parser,
     element_style,
     escape_md,

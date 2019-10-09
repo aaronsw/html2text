@@ -1,3 +1,3 @@
-from html2text.cli import main
+from .cli import main
 
 main()

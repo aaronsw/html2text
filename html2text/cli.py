@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from html2text import HTML2Text, __version__, config
+from . import HTML2Text, __version__, config
 
 
 def main():

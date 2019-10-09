@@ -1,6 +1,6 @@
 import html.entities
 
-from html2text import config
+from . import config
 
 unifiable_n = {
     html.entities.name2codepoint[k]: v
