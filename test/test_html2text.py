@@ -40,8 +40,7 @@ def generate_testdata():
 
         if base_fn.find("unicode") >= 0:
             module_args["unicode_snob"] = True
-            # There is no command-line option to control unicode_snob.
-            cmdline_args = skip
+            cmdline_args.append("--unicode-snob")
             func_args = skip
 
         if base_fn.find("flip_emphasis") >= 0:
