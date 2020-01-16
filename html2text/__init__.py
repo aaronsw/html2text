@@ -26,7 +26,7 @@ from .utils import (
     unifiable_n,
 )
 
-__version__ = (2019, 9, 26)
+__version__ = (2020, 1, 16)
 
 
 # TODO:

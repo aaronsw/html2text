@@ -1,8 +1,12 @@
-UNRELEASED
-==========
+2020.1.16
+=========
 ----
 
 * Add type annotations.
+* Add support for Python 3.8.
+* Performance improvements when ``wrap_links`` is ``False`` (the default).
+* Configure setuptools using setup.cfg.
+
 
 2019.9.26
 =========
