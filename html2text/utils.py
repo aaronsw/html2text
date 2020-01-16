@@ -162,7 +162,7 @@ def list_numbering_start(attrs: Dict[str, Optional[str]]) -> int:
 def skipwrap(para: str, wrap_links: bool, wrap_list_items: bool) -> bool:
     # If it appears to contain a link
     # don't wrap
-    if (len(config.RE_LINK.findall(para)) > 0) and not wrap_links:
+    if not wrap_links and config.RE_LINK.search(para):
         return True
     # If the text begins with four spaces or one tab, it's a code block;
     # don't wrap
