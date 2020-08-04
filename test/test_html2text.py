@@ -4,8 +4,9 @@ import re
 import subprocess
 import sys
 
-import html2text
 import pytest
+
+import html2text
 
 skip = object()
 
