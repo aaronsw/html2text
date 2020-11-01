@@ -31,6 +31,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Jacek Kołodziej <kolodziejj@gmail.com>
 * Jonathan Vanasco <jonathan@findmeon.com>
 * Jon Dufresne <jon.dufresne@gmail.com>
+* Mike Borsetti
 
 Maintainer:
 

@@ -348,7 +348,7 @@ class HTML2Text(html.parser.HTMLParser):
                     self.p()
                 else:
                     self.soft_br()
-            elif self.astack and tag == "div":
+            elif self.astack:
                 pass
             else:
                 self.p()
@@ -484,6 +484,7 @@ class HTML2Text(html.parser.HTMLParser):
                             self.empty_link = False
                             self.maybe_automatic_link = None
                         if self.inline_links:
+                            self.p_p = 0
                             title = a.get("title") or ""
                             title = escape_md(title)
                             link_url(self, a["href"], title)
