@@ -334,14 +334,28 @@ class HTML2Text(html.parser.HTMLParser):
                     parent_style = self.tag_stack[-1][2]
 
         if hn(tag):
-            if self.outtextlist[-1] != '[':
-                self.p()
-            if start:
-                self.inheader = True
-                self.o(hn(tag) * "#" + " ")
+            # check if nh is inside of an 'a' tag (incorrect but found in the wild)
+            if self.astack:
+                if start:
+                    self.inheader = True
+                    # are inside link name, so only add '#' if it can appear before '['
+                    if self.outtextlist and self.outtextlist[-1] == '[':
+                        self.outtextlist.pop()
+                        self.space = False
+                        self.o(hn(tag) * "#" + " ")
+                        self.o('[')
+                else:
+                    self.p_p = 0  # don't break up link name
+                    self.inheader = False
+                    return  # prevent redundant emphasis marks on headers
             else:
-                self.inheader = False
-                return  # prevent redundant emphasis marks on headers
+                self.p()
+                if start:
+                    self.inheader = True
+                    self.o(hn(tag) * "#" + " ")
+                else:
+                    self.inheader = False
+                    return  # prevent redundant emphasis marks on headers
 
         if tag in ["p", "div"]:
             if self.google_doc:
