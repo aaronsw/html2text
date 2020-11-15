@@ -339,11 +339,11 @@ class HTML2Text(html.parser.HTMLParser):
                 if start:
                     self.inheader = True
                     # are inside link name, so only add '#' if it can appear before '['
-                    if self.outtextlist and self.outtextlist[-1] == '[':
+                    if self.outtextlist and self.outtextlist[-1] == "[":
                         self.outtextlist.pop()
                         self.space = False
                         self.o(hn(tag) * "#" + " ")
-                        self.o('[')
+                        self.o("[")
                 else:
                     self.p_p = 0  # don't break up link name
                     self.inheader = False
