@@ -334,7 +334,8 @@ class HTML2Text(html.parser.HTMLParser):
                     parent_style = self.tag_stack[-1][2]
 
         if hn(tag):
-            self.p()
+            if self.outtextlist[-1] != '[':
+                self.p()
             if start:
                 self.inheader = True
                 self.o(hn(tag) * "#" + " ")
