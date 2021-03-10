@@ -32,6 +32,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Jonathan Vanasco <jonathan@findmeon.com>
 * Jon Dufresne <jon.dufresne@gmail.com>
 * Edward Ross <edward@skeptric.com>
+* Mike Borsetti
 
 Maintainer:
 

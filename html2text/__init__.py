@@ -334,13 +334,28 @@ class HTML2Text(html.parser.HTMLParser):
                     parent_style = self.tag_stack[-1][2]
 
         if hn(tag):
-            self.p()
-            if start:
-                self.inheader = True
-                self.o(hn(tag) * "#" + " ")
+            # check if nh is inside of an 'a' tag (incorrect but found in the wild)
+            if self.astack:
+                if start:
+                    self.inheader = True
+                    # are inside link name, so only add '#' if it can appear before '['
+                    if self.outtextlist and self.outtextlist[-1] == "[":
+                        self.outtextlist.pop()
+                        self.space = False
+                        self.o(hn(tag) * "#" + " ")
+                        self.o("[")
+                else:
+                    self.p_p = 0  # don't break up link name
+                    self.inheader = False
+                    return  # prevent redundant emphasis marks on headers
             else:
-                self.inheader = False
-                return  # prevent redundant emphasis marks on headers
+                self.p()
+                if start:
+                    self.inheader = True
+                    self.o(hn(tag) * "#" + " ")
+                else:
+                    self.inheader = False
+                    return  # prevent redundant emphasis marks on headers
 
         if tag in ["p", "div"]:
             if self.google_doc:
@@ -348,7 +363,7 @@ class HTML2Text(html.parser.HTMLParser):
                     self.p()
                 else:
                     self.soft_br()
-            elif self.astack and tag == "div":
+            elif self.astack:
                 pass
             else:
                 self.p()
@@ -487,6 +502,7 @@ class HTML2Text(html.parser.HTMLParser):
                             self.empty_link = False
                             self.maybe_automatic_link = None
                         if self.inline_links:
+                            self.p_p = 0
                             title = a.get("title") or ""
                             title = escape_md(title)
                             link_url(self, a["href"], title)
