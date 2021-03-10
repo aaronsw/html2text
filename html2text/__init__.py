@@ -611,11 +611,19 @@ class HTML2Text(html.parser.HTMLParser):
                 else:
                     li = ListElement("ul", 0)
                 if self.google_doc:
-                    nest_count = self.google_nest_count(tag_style)
+                    self.o("  " * self.google_nest_count(tag_style))
                 else:
-                    nest_count = len(self.list)
-                # TODO: line up <ol><li>s > 9 correctly.
-                self.o("  " * nest_count)
+                    # Indent two spaces per list, except use three spaces for an
+                    # unordered list inside an ordered list.
+                    # https://spec.commonmark.org/0.28/#motivation
+                    # TODO: line up <ol><li>s > 9 correctly.
+                    parent_list = None
+                    for list in self.list:
+                        self.o(
+                            "   " if parent_list == "ol" and list.name == "ul" else "  "
+                        )
+                        parent_list = list.name
+
                 if li.name == "ul":
                     self.o(self.ul_item_mark + " ")
                 elif li.name == "ol":
