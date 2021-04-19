@@ -102,6 +102,11 @@ def generate_testdata():
             cmdline_args.append("--reference-links")
             func_args = skip
 
+        if base_fn.startswith("no_mailto_links"):
+            module_args["ignore_mailto_links"] = True
+            cmdline_args.append("--ignore-mailto-links")
+            func_args = skip
+
         if base_fn.startswith("no_wrap_links"):
             module_args["wrap_links"] = False
             cmdline_args.append("--no-wrap-links")

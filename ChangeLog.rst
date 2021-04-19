@@ -6,6 +6,7 @@ UNRELEASED
 * Add support for Python 3.9.
 * Fix extra line breaks inside html link text (between '[' and ']')
 * Fix #344: indent ``<ul>`` inside ``<ol>`` three spaces instead of two to comply with CommonMark, GFM, etc.
+* Add ``ignore_mailto_links`` config option to ignore ``mailto:`` style links.
 
 2020.1.16
 =========
