@@ -78,6 +78,7 @@ class HTML2Text(html.parser.HTMLParser):
         self.mark_code = config.MARK_CODE
         self.wrap_list_items = config.WRAP_LIST_ITEMS  # covered in cli
         self.wrap_links = config.WRAP_LINKS  # covered in cli
+        self.wrap_tables = config.WRAP_TABLES
         self.pad_tables = config.PAD_TABLES  # covered in cli
         self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
         self.tag_callback = None
@@ -922,7 +923,9 @@ class HTML2Text(html.parser.HTMLParser):
             self.inline_links = False
         for para in text.split("\n"):
             if len(para) > 0:
-                if not skipwrap(para, self.wrap_links, self.wrap_list_items):
+                if not skipwrap(
+                    para, self.wrap_links, self.wrap_list_items, self.wrap_tables
+                ):
                     indent = ""
                     if para.startswith("  " + self.ul_item_mark):
                         # list item continuation: add a double indent to the

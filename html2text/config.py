@@ -31,6 +31,9 @@ WRAP_LINKS = True
 # Wrap list items.
 WRAP_LIST_ITEMS = False
 
+# Wrap tables
+WRAP_TABLES = False
+
 # Number of pixels Google indents nested lists
 GOOGLE_LIST_INDENT = 36
 
@@ -62,6 +65,9 @@ RE_MD_CHARS_MATCHER_ALL = re.compile(r"([`\*_{}\[\]\(\)#!])")
 
 # to find links in the text
 RE_LINK = re.compile(r"(\[.*?\] ?\(.*?\))|(\[.*?\]:.*?)")
+
+# to find table separators
+RE_TABLE = re.compile(r" \| ")
 
 RE_MD_DOT_MATCHER = re.compile(
     r"""
