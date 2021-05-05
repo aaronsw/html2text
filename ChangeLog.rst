@@ -2,6 +2,7 @@ UNRELEASED
 ==========
 ----
 
+* Fix #332: Insert at most one space for multiple emphasis
 * Feature #318: Make padded tables more similar to pandoc's pipe_tables.
 * Add support for Python 3.9.
 * Fix extra line breaks inside html link text (between '[' and ']')

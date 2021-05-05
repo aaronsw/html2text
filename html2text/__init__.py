@@ -412,6 +412,7 @@ class HTML2Text(html.parser.HTMLParser):
         if tag in ["em", "i", "u"] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
                 emphasis = " " + self.emphasis_mark
+                self.preceding_data += " "
             else:
                 emphasis = self.emphasis_mark
 
@@ -422,6 +423,7 @@ class HTML2Text(html.parser.HTMLParser):
         if tag in ["strong", "b"] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
                 strong = " " + self.strong_mark
+                self.preceding_data += " "
             else:
                 strong = self.strong_mark
 
@@ -432,6 +434,7 @@ class HTML2Text(html.parser.HTMLParser):
         if tag in ["del", "strike", "s"]:
             if start and no_preceding_space(self):
                 strike = " ~~"
+                self.preceding_data += " "
             else:
                 strike = "~~"
 
