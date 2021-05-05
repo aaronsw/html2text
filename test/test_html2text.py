@@ -122,6 +122,11 @@ def generate_testdata():
             cmdline_args.append("--wrap-list-items")
             func_args = skip
 
+        if base_fn.startswith("wrap_tables"):
+            module_args["wrap_tables"] = True
+            cmdline_args.append("--wrap-tables")
+            func_args = skip
+
         if base_fn == "inplace_baseurl_substitution.html":
             module_args["baseurl"] = "http://brettterpstra.com"
             module_args["body_width"] = 0

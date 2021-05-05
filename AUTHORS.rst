@@ -33,6 +33,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Jon Dufresne <jon.dufresne@gmail.com>
 * Edward Ross <edward@skeptric.com>
 * Mike Borsetti
+* Gregory Anders <greg@gpanders.com>
 
 Maintainer:
 

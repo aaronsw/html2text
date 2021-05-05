@@ -95,6 +95,7 @@ simple indications of their function.
     - MARK_CODE to wrap 'pre' blocks with [code]...[/code] tags
     - WRAP_LINKS to decide if links have to be wrapped during text wrapping (implies INLINE_LINKS = False)
     - WRAP_LIST_ITEMS to decide if list items have to be wrapped during text wrapping
+    - WRAP_TABLES to decide if tables have to be wrapped during text wrapping
     - DECODE_ERRORS to handle decoding errors. 'strict', 'ignore', 'replace' are the acceptable values.
     - DEFAULT_IMAGE_ALT takes a string as value and is used whenever an image tag is missing an `alt` value. The default for this is an empty string '' to avoid backward breakage
     - OPEN_QUOTE is the character used to open a quote when replacing the `<q>` tag. It defaults to `"`.
@@ -143,6 +144,7 @@ Command line options
 | `--mark-code`                                          | Mark code with [code]...[/code] blocks
 | `--no-wrap-links`                                      | Do not wrap links during text wrapping. Implies `--reference-links`
 | `--wrap-list-items`                                    | Wrap list items during text wrapping.
+| `--wrap-tables`                                        | Wrap tables during text wrapping.
 | `--decode-errors`=`HANDLER`                            | What to do in case an error is encountered. `ignore`, `strict`, `replace` etc.
 | `--pad-tables`                                         | Use padding to make tables look good.
 | `--default-image-alt`=`Image_Here`                     | Inserts the given `alt` text whenever images are missing `alt` values.

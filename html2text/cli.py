@@ -46,6 +46,13 @@ def main() -> None:
         help="wrap list items during conversion",
     )
     p.add_argument(
+        "--wrap-tables",
+        dest="wrap_tables",
+        action="store_true",
+        default=config.WRAP_TABLES,
+        help="wrap tables",
+    )
+    p.add_argument(
         "--ignore-emphasis",
         dest="ignore_emphasis",
         action="store_true",
@@ -298,6 +305,7 @@ def main() -> None:
     h.mark_code = args.mark_code
     h.wrap_links = args.wrap_links
     h.wrap_list_items = args.wrap_list_items
+    h.wrap_tables = args.wrap_tables
     h.pad_tables = args.pad_tables
     h.default_image_alt = args.default_image_alt
     h.open_quote = args.open_quote
