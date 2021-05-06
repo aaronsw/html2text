@@ -3,6 +3,7 @@
 import html.entities
 import html.parser
 import re
+import string
 import urllib.parse as urlparse
 from textwrap import wrap
 from typing import Dict, List, Optional, Tuple, Union
@@ -79,6 +80,7 @@ class HTML2Text(html.parser.HTMLParser):
         self.mark_code = config.MARK_CODE
         self.wrap_list_items = config.WRAP_LIST_ITEMS  # covered in cli
         self.wrap_links = config.WRAP_LINKS  # covered in cli
+        self.wrap_tables = config.WRAP_TABLES
         self.pad_tables = config.PAD_TABLES  # covered in cli
         self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
         self.tag_callback = None
@@ -405,14 +407,20 @@ class HTML2Text(html.parser.HTMLParser):
                 self.blockquote -= 1
                 self.p()
 
-        def no_preceding_space(self: HTML2Text) -> bool:
-            return bool(
-                self.preceding_data and re.match(r"[^\s]", self.preceding_data[-1])
-            )
-
         if tag in ["em", "i", "u"] and not self.ignore_emphasis:
-            if start and no_preceding_space(self):
+            # Separate with a space if we immediately follow an alphanumeric
+            # character, since otherwise Markdown won't render the emphasis
+            # marks, and we'll be left with eg 'foo_bar_' visible.
+            # (Don't add a space otherwise, though, since there isn't one in the
+            # original HTML.)
+            if (
+                start
+                and self.preceding_data
+                and self.preceding_data[-1] not in string.whitespace
+                and self.preceding_data[-1] not in string.punctuation
+            ):
                 emphasis = " " + self.emphasis_mark
+                self.preceding_data += " "
             else:
                 emphasis = self.emphasis_mark
 
@@ -421,8 +429,17 @@ class HTML2Text(html.parser.HTMLParser):
                 self.stressed = True
 
         if tag in ["strong", "b"] and not self.ignore_emphasis:
-            if start and no_preceding_space(self):
+            # Separate with space if we immediately follow an * character, since
+            # without it, Markdown won't render the resulting *** correctly.
+            # (Don't add a space otherwise, though, since there isn't one in the
+            # original HTML.)
+            if (
+                start
+                and self.preceding_data
+                and self.preceding_data[-1] == self.strong_mark[0]
+            ):
                 strong = " " + self.strong_mark
+                self.preceding_data += " "
             else:
                 strong = self.strong_mark
 
@@ -431,8 +448,9 @@ class HTML2Text(html.parser.HTMLParser):
                 self.stressed = True
 
         if tag in ["del", "strike", "s"]:
-            if start and no_preceding_space(self):
+            if start and self.preceding_data and self.preceding_data[-1] == "~":
                 strike = " ~~"
+                self.preceding_data += " "
             else:
                 strike = "~~"
 
@@ -838,7 +856,7 @@ class HTML2Text(html.parser.HTMLParser):
             self.preceding_stressed = True
         elif self.preceding_stressed:
             if (
-                re.match(r"[^\s.!?]", data[0])
+                re.match(r"[^][(){}\s.!?]", data[0])
                 and not hn(self.current_tag)
                 and self.current_tag not in ["a", "code", "pre"]
             ):
@@ -926,7 +944,9 @@ class HTML2Text(html.parser.HTMLParser):
             self.inline_links = False
         for para in text.split("\n"):
             if len(para) > 0:
-                if not skipwrap(para, self.wrap_links, self.wrap_list_items):
+                if not skipwrap(
+                    para, self.wrap_links, self.wrap_list_items, self.wrap_tables
+                ):
                     indent = ""
                     if para.startswith("  " + self.ul_item_mark):
                         # list item continuation: add a double indent to the

@@ -31,7 +31,9 @@ The AUTHORS/Contributors are (and/or have been):
 * Jacek Kołodziej <kolodziejj@gmail.com>
 * Jonathan Vanasco <jonathan@findmeon.com>
 * Jon Dufresne <jon.dufresne@gmail.com>
+* Edward Ross <edward@skeptric.com>
 * Mike Borsetti
+* Gregory Anders <greg@gpanders.com>
 
 Maintainer:
 
