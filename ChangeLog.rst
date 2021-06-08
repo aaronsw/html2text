@@ -9,6 +9,7 @@ UNRELEASED
 * Fix #344: indent ``<ul>`` inside ``<ol>`` three spaces instead of two to comply with CommonMark, GFM, etc.
 * Fix #324: unnecessary spaces around ``<b>``, ``<em>``, and ``strike`` tags.
 * Don't wrap tables by default and add a ``--wrap-tables`` config option
+* Fix #320 padding empty tables and tables with no </tr> tags.
 
 2020.1.16
 =========
