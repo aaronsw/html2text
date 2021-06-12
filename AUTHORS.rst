@@ -34,6 +34,7 @@ The AUTHORS/Contributors are (and/or have been):
 * Edward Ross <edward@skeptric.com>
 * Mike Borsetti
 * Gregory Anders <greg@gpanders.com>
+* Maciej Podolski https://github.com/mpodolsk
 
 Maintainer:
 
