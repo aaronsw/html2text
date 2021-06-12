@@ -682,6 +682,8 @@ class HTML2Text(html.parser.HTMLParser):
                             self.o("  \n")
                     else:
                         if self.pad_tables:
+                            # add break in case the table is empty or its 1 row table
+                            self.soft_br()
                             self.o("</" + config.TABLE_MARKER_FOR_PAD + ">")
                             self.o("  \n")
                 if tag in ["td", "th"] and start:
