@@ -74,6 +74,13 @@ def main() -> None:
         help="don't include any formatting for links",
     )
     p.add_argument(
+        "--ignore-mailto-links",
+        action="store_true",
+        dest="ignore_mailto_links",
+        default=config.IGNORE_MAILTO_LINKS,
+        help="don't include mailto: links",
+    )
+    p.add_argument(
         "--protect-links",
         dest="protect_links",
         action="store_true",
@@ -286,6 +293,7 @@ def main() -> None:
     h.google_list_indent = args.list_indent
     h.ignore_emphasis = args.ignore_emphasis
     h.ignore_links = args.ignore_links
+    h.ignore_mailto_links = args.ignore_mailto_links
     h.protect_links = args.protect_links
     h.ignore_images = args.ignore_images
     h.images_as_html = args.images_as_html

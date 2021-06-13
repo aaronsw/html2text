@@ -62,6 +62,7 @@ class HTML2Text(html.parser.HTMLParser):
         self.protect_links = config.PROTECT_LINKS  # covered in cli
         self.google_list_indent = config.GOOGLE_LIST_INDENT  # covered in cli
         self.ignore_links = config.IGNORE_ANCHORS  # covered in cli
+        self.ignore_mailto_links = config.IGNORE_MAILTO_LINKS  # covered in cli
         self.ignore_images = config.IGNORE_IMAGES  # covered in cli
         self.images_as_html = config.IMAGES_AS_HTML  # covered in cli
         self.images_to_alt = config.IMAGES_TO_ALT  # covered in cli
@@ -497,6 +498,9 @@ class HTML2Text(html.parser.HTMLParser):
                     "href" in attrs
                     and attrs["href"] is not None
                     and not (self.skip_internal_links and attrs["href"].startswith("#"))
+                    and not (
+                        self.ignore_mailto_links and attrs["href"].startswith("mailto:")
+                    )
                 ):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs["href"]

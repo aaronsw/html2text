@@ -10,6 +10,8 @@ UNRELEASED
 * Fix #324: unnecessary spaces around ``<b>``, ``<em>``, and ``strike`` tags.
 * Don't wrap tables by default and add a ``--wrap-tables`` config option
 * Fix #320 padding empty tables and tables with no </tr> tags.
+* Add ``ignore_mailto_links`` config option to ignore ``mailto:`` style links.
+
 
 2020.1.16
 =========
