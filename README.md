@@ -1,7 +1,7 @@
 # [html2text](http://www.aaronsw.com/2002/html2text/)
 
 html2text is a Python script that converts a page of HTML into clean, easy-to-read plain ASCII text. Better yet, that ASCII also happens to be valid Markdown (a text-to-HTML format).
-html2text is a Python script that converts a page of HTML into clean, easy-to-read plain ASCII text. Better yet, that ASCII also happens to be valid Markdown (a text-to-HTML format).
+
 Usage: `html2text.py [(filename|url) [encoding]]`
 
     Options:
