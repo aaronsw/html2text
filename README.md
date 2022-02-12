@@ -35,7 +35,24 @@ Or you can use it from within `Python`:
 **Zed's** dead baby, _Zed's_ dead.
 
 ```
+Using it on a web link - 
 
+```
+import html2text
+from urllib.request import urlopen
+
+h = html2text.HTML2Text()
+
+h.ignore_links = True
+
+
+url = "https://en.wikipedia.org/wiki/Aaron_Swartz"
+html = urlopen(url).read()
+
+html = str(html)
+print(h.handle(html))
+
+```
 
 Or with some configuration options:
 ```
