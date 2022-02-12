@@ -1,6 +1,14 @@
 *.py[co]
 *.bak
-test/*output.md
 build
 dist
 *.egg-info
+.idea
+.coverage
+.coverage.*
+env/
+.c9/
+.vscode
+.tox/
+htmlcov/
+.mypy_cache/
