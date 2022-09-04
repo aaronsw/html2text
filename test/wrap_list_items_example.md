@@ -11,4 +11,3 @@ Text between lists.
     fourteen fifteen sixteen seventeen eighteen nineteen twenty.
 
 Text after list.
-

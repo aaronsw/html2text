@@ -1,1 +1,1 @@
-[This is a test](https://example.com)
+[This is a test](https://example.org/)

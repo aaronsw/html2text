@@ -174,11 +174,11 @@ def test_module(fn, module_args):
     for k, v in module_args.items():
         setattr(h, k, v)
 
-    result = get_baseline(fn)
+    expected = get_baseline(fn)
     with open(fn) as inf:
         actual = cleanup_eol(inf.read())
         actual = h.handle(actual)
-    assert result == actual
+    assert actual.rstrip() == expected.rstrip()
 
 
 @pytest.mark.parametrize("fn,cmdline_args", generate_command_testdata())
@@ -195,22 +195,22 @@ def test_command(fn, cmdline_args):
 
     cmd += [fn]
 
-    result = get_baseline(fn)
+    expected = get_baseline(fn)
     out = subprocess.check_output(cmd)
 
     actual = out.decode()
 
     actual = cleanup_eol(actual)
 
-    assert result == actual
+    assert actual.rstrip() == expected.rstrip()
 
 
 @pytest.mark.parametrize("fn,func_args", generate_function_testdata())
 def test_function(fn, func_args):
     with open(fn) as inf:
         actual = html2text.html2text(inf.read(), **func_args)
-    result = get_baseline(fn)
-    assert result == actual
+    expected = get_baseline(fn)
+    assert actual.rstrip() == expected.rstrip()
 
 
 def get_baseline_name(fn):
@@ -235,4 +235,4 @@ def test_tag_callback():
         'this is a <b>txt</b> and this is a <b class="skip">with text</b> and '
         "some <i>italics</i> too."
     )
-    assert ret == ("this is a txt and this is a with text and some _italics_ too.\n\n")
+    assert ret == "this is a txt and this is a with text and some _italics_ too.\n\n"

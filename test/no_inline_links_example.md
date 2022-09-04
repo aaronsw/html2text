@@ -6,4 +6,3 @@
    [2]: http://example.com (Example title)
 
    [3]: http://example.com (abc)
-

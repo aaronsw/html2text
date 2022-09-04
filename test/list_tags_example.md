@@ -35,4 +35,3 @@ Drums
 
   * something else here
   * some item
-
