@@ -6,6 +6,7 @@ dist
 .idea
 .coverage
 .coverage.*
+coverage.xml
 env/
 .c9/
 .vscode
