@@ -142,6 +142,7 @@ class HTML2Text(html.parser.HTMLParser):
         super().feed(data)
 
     def handle(self, data: str) -> str:
+        self.start = True
         self.feed(data)
         self.feed("")
         markdown = self.optwrap(self.finish())
