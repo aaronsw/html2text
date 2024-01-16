@@ -9,8 +9,8 @@ from textwrap import wrap
 from typing import Dict, List, Optional, Tuple, Union
 
 from . import config
+from ._typing import OutCallback
 from .elements import AnchorElement, ListElement
-from .typing import OutCallback
 from .utils import (
     dumb_css_parser,
     element_style,
@@ -93,20 +93,20 @@ class HTML2Text(html.parser.HTMLParser):
             self.out = out
 
         # empty list to store output characters before they are "joined"
-        self.outtextlist = []  # type: List[str]
+        self.outtextlist: List[str] = []
 
         self.quiet = 0
         self.p_p = 0  # number of newline character to print before next output
         self.outcount = 0
         self.start = True
         self.space = False
-        self.a = []  # type: List[AnchorElement]
-        self.astack = []  # type: List[Optional[Dict[str, Optional[str]]]]
-        self.maybe_automatic_link = None  # type: Optional[str]
+        self.a: List[AnchorElement] = []
+        self.astack: List[Optional[Dict[str, Optional[str]]]] = []
+        self.maybe_automatic_link: Optional[str] = None
         self.empty_link = False
         self.absolute_url_matcher = re.compile(r"^[a-zA-Z+]+://")
         self.acount = 0
-        self.list = []  # type: List[ListElement]
+        self.list: List[ListElement] = []
         self.blockquote = 0
         self.pre = False
         self.startpre = False
@@ -116,19 +116,17 @@ class HTML2Text(html.parser.HTMLParser):
         self.lastWasNL = False
         self.lastWasList = False
         self.style = 0
-        self.style_def = {}  # type: Dict[str, Dict[str, str]]
-        self.tag_stack = (
-            []
-        )  # type: List[Tuple[str, Dict[str, Optional[str]], Dict[str, str]]]
+        self.style_def: Dict[str, Dict[str, str]] = {}
+        self.tag_stack: List[Tuple[str, Dict[str, Optional[str]], Dict[str, str]]] = []
         self.emphasis = 0
         self.drop_white_space = 0
         self.inheader = False
         # Current abbreviation definition
-        self.abbr_title = None  # type: Optional[str]
+        self.abbr_title: Optional[str] = None
         # Last inner HTML (for abbr being defined)
-        self.abbr_data = None  # type: Optional[str]
+        self.abbr_data: Optional[str] = None
         # Stack of abbreviations to write later
-        self.abbr_list = {}  # type: Dict[str, str]
+        self.abbr_list: Dict[str, str] = {}
         self.baseurl = baseurl
         self.stressed = False
         self.preceding_stressed = False
@@ -324,7 +322,7 @@ class HTML2Text(html.parser.HTMLParser):
             # need the attributes of the parent nodes in order to get a
             # complete style description for the current element. we assume
             # that google docs export well formed html.
-            parent_style = {}  # type: Dict[str, str]
+            parent_style: Dict[str, str] = {}
             if start:
                 if self.tag_stack:
                     parent_style = self.tag_stack[-1][2]

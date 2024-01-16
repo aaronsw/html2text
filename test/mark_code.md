@@ -10,4 +10,3 @@ Normal text with 'pre' code block.
 [/code]
 
 Normal text continues.
-

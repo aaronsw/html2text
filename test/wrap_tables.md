@@ -13,4 +13,3 @@ Content 1 longer | Content 2 | Here is some really long text that will wrap to
 the next line. Because it's so long.  
 Content  | Content 2 | blah  
 t  | Content 2 | blah blah blah
-

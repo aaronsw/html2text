@@ -5,4 +5,3 @@
    [1]: http://example.com/img.png
 
    [2]: http://example.com
-
