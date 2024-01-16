@@ -537,8 +537,7 @@ class HTML2Text(html.parser.HTMLParser):
                             self.o("][" + str(a_props.count) + "]")
 
         if tag == "img" and start and not self.ignore_images:
-            if "src" in attrs:
-                assert attrs["src"] is not None
+            if "src" in attrs and attrs["src"] is not None:
                 if not self.images_to_alt:
                     attrs["href"] = attrs["src"]
                 alt = attrs.get("alt") or self.default_image_alt
@@ -549,11 +548,9 @@ class HTML2Text(html.parser.HTMLParser):
                     self.images_with_size and ("width" in attrs or "height" in attrs)
                 ):
                     self.o("<img src='" + attrs["src"] + "' ")
-                    if "width" in attrs:
-                        assert attrs["width"] is not None
+                    if "width" in attrs and attrs["width"] is not None:
                         self.o("width='" + attrs["width"] + "' ")
-                    if "height" in attrs:
-                        assert attrs["height"] is not None
+                    if "height" in attrs and attrs["height"] is not None:
                         self.o("height='" + attrs["height"] + "' ")
                     if alt:
                         self.o("alt='" + alt + "' ")
@@ -826,8 +823,7 @@ class HTML2Text(html.parser.HTMLParser):
                             + "]: "
                             + urlparse.urljoin(self.baseurl, link.attrs["href"])
                         )
-                        if "title" in link.attrs:
-                            assert link.attrs["title"] is not None
+                        if "title" in link.attrs and link.attrs["title"] is not None:
                             self.out(" (" + link.attrs["title"] + ")")
                         self.out("\n")
                     else:
