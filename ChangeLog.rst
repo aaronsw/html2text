@@ -8,6 +8,8 @@ UNRELEASED
 * Fix extra line breaks inside html link text (between '[' and ']')
 * Fix #344: indent ``<ul>`` inside ``<ol>`` three spaces instead of two to comply with CommonMark, GFM, etc.
 * Fix #324: unnecessary spaces around ``<b>``, ``<em>``, and ``strike`` tags.
+* Don't wrap tables by default and add a ``--wrap-tables`` config option.
+* Feature #198: Ignore ``<p>`` tags inside table rows.
 * Don't wrap tables by default and add a ``--wrap-tables`` config option
 * Remove support for Python ≤ 3.5. Now requires Python 3.6+.
 * Support for Python 3.10.

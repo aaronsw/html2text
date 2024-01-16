@@ -367,6 +367,8 @@ class HTML2Text(html.parser.HTMLParser):
                     self.soft_br()
             elif self.astack:
                 pass
+            elif self.split_next_td:
+                pass
             else:
                 self.p()
 
