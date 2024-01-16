@@ -38,5 +38,3 @@ something else entirely
 | A       | B+C   |
 | A+B     | C     |
 | A+B+C   |
-
-

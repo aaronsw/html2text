@@ -1,4 +1,3 @@
   * item
 
 text
-

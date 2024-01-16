@@ -39,4 +39,3 @@ Content 2
 ![200](http://lorempixel.com/200/200) Image!
 
 </td> </tr> </table>
-
