@@ -1,0 +1,2 @@
+According to the computations by Nakamura, Johnson, and Mason<sub>1</sub> this
+will result in the complete annihilation of both particles.

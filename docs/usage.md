@@ -136,6 +136,7 @@ Command line options
 | `--single-line-break`                                  | Use a single line break after a block element rather than two.
 | `--reference-links`                                    | Use reference links instead of inline links to create markdown
 | `--ignore-emphasis`                                    | Ignore all emphasis formatting in the html.
+| `--include-sup-sub`                                    | Include `<sub>` and `<sub>` tags.
 | `-e`, `--asterisk-emphasis`                            | Use asterisk rather than underscore to emphasize text
 | `--unicode-snob`                                       | Use unicode throughout instead of ASCII
 | `--no-automatic-links`                                 | Do not use automatic links like <https://www.google.com/>

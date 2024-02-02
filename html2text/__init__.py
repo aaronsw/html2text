@@ -86,6 +86,7 @@ class HTML2Text(html.parser.HTMLParser):
         self.tag_callback = None
         self.open_quote = config.OPEN_QUOTE  # covered in cli
         self.close_quote = config.CLOSE_QUOTE  # covered in cli
+        self.include_sup_sub = config.INCLUDE_SUP_SUB  # covered in cli
 
         if out is None:
             self.out = self.outtextf
@@ -715,6 +716,12 @@ class HTML2Text(html.parser.HTMLParser):
                 if self.mark_code:
                     self.out("\n[/code]")
             self.p()
+
+        if tag in ["sup", "sub"] and self.include_sup_sub:
+            if start:
+                self.o("<{}>".format(tag))
+            else:
+                self.o("</{}>".format(tag))
 
     # TODO: Add docstring for these one letter functions
     def pbr(self) -> None:

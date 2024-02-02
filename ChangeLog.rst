@@ -15,6 +15,7 @@ UNRELEASED
 * Support for Python 3.10.
 * Fix #320 padding empty tables and tables with no </tr> tags.
 * Add ``ignore_mailto_links`` config option to ignore ``mailto:`` style links.
+* Feature #407: Support the superscript and subscript tags.
 
 
 

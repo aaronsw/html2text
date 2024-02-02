@@ -264,6 +264,13 @@ def main() -> None:
     )
     p.add_argument("filename", nargs="?")
     p.add_argument("encoding", nargs="?", default="utf-8")
+    p.add_argument(
+        "--include-sup-sub",
+        dest="include_sup_sub",
+        action="store_true",
+        default=config.INCLUDE_SUP_SUB,
+        help="Include the sup and sub tags",
+    )
     args = p.parse_args()
 
     if args.filename and args.filename != "-":
@@ -318,5 +325,6 @@ def main() -> None:
     h.default_image_alt = args.default_image_alt
     h.open_quote = args.open_quote
     h.close_quote = args.close_quote
+    h.include_sup_sub = args.include_sup_sub
 
     sys.stdout.write(h.handle(html))

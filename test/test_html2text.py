@@ -140,6 +140,11 @@ def generate_testdata():
             # CLI doesn't support baseurl.
             cmdline_args = skip
 
+        if base_fn in ["sup_tag.html", "sub_tag.html"]:
+            module_args["include_sup_sub"] = True
+            cmdline_args.append("--include-sup-sub")
+            func_args = skip
+
         yield fn, module_args, cmdline_args, func_args
 
 
@@ -201,7 +206,6 @@ def test_command(fn, cmdline_args):
     actual = out.decode()
 
     actual = cleanup_eol(actual)
-
     assert actual.rstrip() == expected.rstrip()
 
 
