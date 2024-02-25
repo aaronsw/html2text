@@ -1,12 +1,8 @@
 # html2text
 
-[![Build Status](https://secure.travis-ci.org/Alir3z4/html2text.png)](https://travis-ci.org/Alir3z4/html2text)
-[![Coverage Status](https://coveralls.io/repos/Alir3z4/html2text/badge.png)](https://coveralls.io/r/Alir3z4/html2text)
-[![Downloads](http://badge.kloud51.com/pypi/d/html2text.png)](https://pypi.org/project/html2text/)
-[![Version](http://badge.kloud51.com/pypi/v/html2text.png)](https://pypi.org/project/html2text/)
-[![Wheel?](http://badge.kloud51.com/pypi/wheel/html2text.png)](https://pypi.org/project/html2text/)
-[![Format](http://badge.kloud51.com/pypi/format/html2text.png)](https://pypi.org/project/html2text/)
-[![License](http://badge.kloud51.com/pypi/license/html2text.png)](https://pypi.org/project/html2text/)
+[![CI](https://github.com/Alir3z4/html2text/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/Alir3z4/html2text/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/Alir3z4/html2text/graph/badge.svg?token=OoxiyymjgU)](https://codecov.io/gh/Alir3z4/html2text)
+
 
 
 html2text is a Python script that converts a page of HTML into clean, easy-to-read plain ASCII text. Better yet, that ASCII also happens to be valid Markdown (a text-to-HTML format).
