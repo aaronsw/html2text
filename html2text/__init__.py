@@ -438,6 +438,10 @@ class HTML2Text(html.parser.HTMLParser):
             if (
                 start
                 and self.preceding_data
+                # When `self.strong_mark` is set to empty, the next condition
+                # will cause IndexError since it's trying to match the data
+                # with the first character of the `self.strong_mark`.
+                and len(self.strong_mark) > 0
                 and self.preceding_data[-1] == self.strong_mark[0]
             ):
                 strong = " " + self.strong_mark

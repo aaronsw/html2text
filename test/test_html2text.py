@@ -240,3 +240,12 @@ def test_tag_callback():
         "some <i>italics</i> too."
     )
     assert ret == "this is a txt and this is a with text and some _italics_ too.\n\n"
+
+
+def test_strong_emptied() -> None:
+    """When strong is being set to empty, it should not mark it."""
+    h = html2text.HTML2Text()
+    h.emphasis_mark = "_"
+    h.strong_mark = ""
+    string = "A <b>B</b> <i>C</i>."
+    assert h.handle(string) == "A B _C_.\n\n"
