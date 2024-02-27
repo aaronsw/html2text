@@ -32,9 +32,14 @@ The AUTHORS/Contributors are (and/or have been):
 * Jonathan Vanasco <jonathan@findmeon.com>
 * Jon Dufresne <jon.dufresne@gmail.com>
 * Edward Ross <edward@skeptric.com>
-* Mike Borsetti
+* Mike Borsetti <gh: mborsetti>
 * Gregory Anders <greg@gpanders.com>
-* Maciej Podolski https://github.com/mpodolsk
+* Maciej Podolski <gh: mpodolsk>
+* Ludovic VAUGEOIS PEPIN <gh: ulodciv>
+* Ryan Barrett <gh: snarfed>
+* Edward Ross <gh: EdwardJRoss>
+* Gregory Anders <gh: gpanders>
+* Alex Vandiver <gh: alexmv>
 
 Maintainer:
 
