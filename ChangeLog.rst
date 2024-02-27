@@ -1,5 +1,5 @@
-Unreleased
-==========
+2024.2.26
+=========
 ----
 
 * Fixes #409: IndexError on empty strong mark.
